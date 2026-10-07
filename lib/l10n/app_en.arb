@@ -1,0 +1,266 @@
+{
+  "@@locale": "en",
+  "emptyProjectTitle": "A space for\nevery project.",
+  "emptyServerTitle": "Your next server\nstarts here.",
+  "emptyProjectBody": "Create a workspace to organise your SSH and Coolify instances.",
+  "createWorkspace": "Create workspace",
+  "addInstance": "Add instance",
+  "aboutDescription": "A dock for all your servers.\n\nEach workspace brings together your SSH and Coolify channels. Settings and credentials stay encrypted on this device. Connect directly via SSH or browse resources through the Coolify API.",
+  "aboutLicence": "Open source under GPL-3.0-only. You may redistribute and modify the app under the licence terms. No warranty, to the extent permitted by law.\n\nLicence texts, credits and trademark policy are available under View licences, even offline.",
+  "sourceCode": "Source code: https://github.com/zephyrushq/capidock-mobile",
+  "removeInstanceTitle": "Remove instance?",
+  "removeInstanceError": "Could not remove the instance. Try again.",
+  "preservedData": "Your saved data has been preserved.",
+  "retry": "Try again",
+  "openInstances": "Open instances",
+  "firstWorkspace": "Create your first workspace",
+  "instanceOptions": "Instance options",
+  "editInstance": "Edit instance",
+  "moveInstance": "Move to workspace",
+  "removeInstance": "Remove instance",
+  "aboutCapidock": "About Capidock",
+  "unnamedResource": "Unnamed",
+  "unavailableStatus": "Status unavailable",
+  "coolifyHttpsError": "Coolify requires a valid HTTPS URL.",
+  "apiTokenRequired": "Configure the API token.",
+  "invalidToken": "Invalid or expired token. Edit the instance credential.",
+  "coolifyAccessDenied": "Access denied. Check token permissions, the API and the IP allowlist.",
+  "apiNotFound": "API not found. Check the base URL and whether the API is enabled.",
+  "rateLimited": "Request limit reached. Wait and try again.",
+  "redirectError": "The server redirected the request. Configure the final HTTPS URL directly.",
+  "responseTooLarge": "The Coolify response exceeded the 4 MiB limit.",
+  "coolifyTimeout": "Coolify timed out. Check your network/VPN.",
+  "invalidApiResponse": "The API returned an unexpected response. Check the URL and Coolify version.",
+  "coolifyConnectionError": "Could not contact Coolify. Check your network and HTTPS certificate.",
+  "sshSessionEnded": "The SSH session ended. You can reconnect.",
+  "systemInfoError": "Could not retrieve system information. The terminal remains available. Summary commands require Linux/POSIX.",
+  "sshAuthError": "Authentication refused. Check the username and SSH credential.",
+  "sshHostKeyError": "The server identity was not accepted. The connection was stopped.",
+  "sshPrivateKeyError": "Could not read the private key. Check the key and passphrase.",
+  "sshTimeout": "The connection timed out. Check your network and SSH port.",
+  "serverUnreachable": "Server unreachable. Check the address, port and network/VPN.",
+  "sshConnectionError": "Could not open the SSH session. Check server access and try again.",
+  "confirmSshServer": "Confirm SSH server",
+  "serverKeyChanged": "The server key has changed",
+  "compareFingerprint": "Compare this fingerprint with your server's fingerprint before trusting it.",
+  "changedKeyWarning": "This may be a reinstallation or a connection to a different server. Only replace the key after verifying it independently.",
+  "savedKey": "Saved key:",
+  "verifyKeyCommand": "On the server: ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub (adjust for the displayed key type).",
+  "trustAndConnect": "Trust and connect",
+  "replaceKey": "Replace key",
+  "yourServer": "Your server",
+  "yourResources": "Your resources",
+  "connecting": "Connecting…",
+  "receivedData": "Data received",
+  "notConnected": "Not connected",
+  "addCredentials": "Add a credential to connect this instance. The saved address has been preserved.",
+  "configureAccess": "Configure access",
+  "connectInstance": "Connect to instance",
+  "editAccess": "Edit access",
+  "openTerminal": "Open terminal",
+  "connectForInfo": "Connect to check system information, uptime, memory and disk usage, or use the interactive terminal.",
+  "noCoolifyResources": "The API returned no resources for this token's team.",
+  "coolifyOverview": "Browse your team's applications, databases and services. Status comes directly from the Coolify API.",
+  "connectionPrivacy": "SSH connections close when you switch instances or put the app in the background. Credentials stay encrypted on your device.",
+  "activeSshSession": "Active SSH session",
+  "terminalDisconnected": "Terminal disconnected",
+  "connection": "Connection",
+  "openKeyboard": "Open keyboard",
+  "loadWorkspacesError": "Could not load saved workspaces.",
+  "secureSaveError": "Could not save to secure storage. Your fields have been preserved; try again.",
+  "welcomeTitle": "Your servers.\nYour dock.",
+  "firstServerTitle": "Make room for\nyour first server.",
+  "connectionTitle": "How shall we\nconnect?",
+  "welcomeBody": "Welcome to Capidock. Create a workspace to bring your project instances together.",
+  "workspaceName": "Workspace name",
+  "workspaceHint": "e.g. Personal, Company or Project",
+  "workspaceNameRequired": "Give your workspace a name.",
+  "saving": "Saving…",
+  "configureConnection": "Configure connection",
+  "createAndOpen": "Create and open instance",
+  "localByChoice": "Local by choice. No account, no sync.",
+  "manageWorkspaces": "Manage workspaces",
+  "newWorkspace": "New workspace",
+  "renameWorkspace": "Rename workspace",
+  "workspaceGrouping": "Group servers by project, client or environment.",
+  "workspaceEditorHint": "e.g. Personal, Work, Homelab",
+  "saveError": "Could not save. Try again.",
+  "yourWorkspaces": "Your workspaces",
+  "workspaceContexts": "A space for every context.",
+  "removeWorkspace": "Remove workspace",
+  "noWorkspaces": "No workspaces yet.",
+  "removeWorkspaceTitle": "Remove workspace?",
+  "removeWorkspaceError": "Could not remove the workspace. Try again.",
+  "moveInstanceError": "Could not move the instance. Try again.",
+  "sshDescription": "Server access through a terminal",
+  "coolifyDescription": "Applications and deployments",
+  "hostRequired": "Enter the instance address.",
+  "hostNoSpaces": "The address cannot contain spaces.",
+  "httpsRequired": "Use an HTTPS URL, such as https://coolify.example.com.",
+  "hostOnly": "Use only the server hostname or IP address.",
+  "privateKeyEmpty": "The private key is empty.",
+  "privateKeyFormatError": "Could not read the private key. Check its format and passphrase.",
+  "instanceName": "Instance name",
+  "instanceHint": "e.g. production-europe",
+  "instanceNameRequired": "Give your instance a name.",
+  "hostname": "Hostname or IP",
+  "coolifyUrl": "Coolify URL",
+  "invalidUsername": "Invalid username.",
+  "authentication": "Authentication",
+  "privateKey": "Private key",
+  "sshPassword": "SSH password",
+  "privateKeyLabel": "PEM / OpenSSH private key",
+  "privateKeyHint": "Paste the full key, including the BEGIN and END lines.",
+  "passphraseLabel": "Key passphrase (optional)",
+  "coolifyToken": "Coolify API token",
+  "coolifyTokenHint": "In Coolify, enable the API and create a read-only token under Keys & Tokens → API tokens. Use the base URL without /api/v1.",
+  "localCredentials": "Settings and credentials are encrypted on this device. Connect directly to your server without a Capidock account.",
+  "showCredential": "Show credential",
+  "hideCredential": "Hide credential",
+  "credentialRequired": "Enter the credential.",
+  "newInstanceTitle": "A new place in your dock.",
+  "saveConfiguration": "Save configuration",
+  "findInstance": "Find instance",
+  "emptyInstances": "This workspace has no instances yet.",
+  "noInstancesFound": "No instances found.",
+  "newInstance": "New instance",
+  "cancel": "Cancel",
+  "remove": "Remove",
+  "save": "Save",
+  "rename": "Rename",
+  "back": "Back",
+  "username": "Username",
+  "port": "Port",
+  "password": "Password",
+  "server": "Server",
+  "connected": "Connected",
+  "refresh": "Refresh",
+  "disconnect": "Disconnect",
+  "workspaceStep": "WORKSPACE",
+  "instanceStep": "INSTANCE",
+  "connectionStep": "CONNECTION",
+  "previousData": " · previous data",
+  "language": "Language",
+  "languageSaveError": "Could not save your language. Try again.",
+  "emptyWorkspaceBody": "Add an SSH or Coolify instance to workspace “{name}”.",
+  "@emptyWorkspaceBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "removeInstanceBody": "The configuration for “{name}” will be removed from this device. The server will not be changed.",
+  "@removeInstanceBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "firstInstanceBody": "Each instance is a channel in “{name}”. Start with your first one.",
+  "@firstInstanceBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "configureInstanceBody": "Configure access to “{name}”. You can edit these details later.",
+  "@configureInstanceBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingStep": "STEP {step} OF 3 · {name}",
+  "@onboardingStep": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "workspaceLabel": "Workspace {name}",
+  "@workspaceLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "workspaceOptions": "Options for {name}",
+  "@workspaceOptions": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "removeWorkspaceBody": "“{name}” and its instances ({count}) will be removed from this device. The servers will not be changed.",
+  "@removeWorkspaceBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inWorkspace": "In workspace “{name}”.",
+  "@inWorkspace": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "lastRead": "Last read: {time}{suffix}",
+  "@lastRead": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "httpError": "Coolify returned HTTP error {code}. Try again.",
+  "@httpError": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  },
+  "instanceCount": "{count, plural, =0{0 instances} one{1 instance} other{{count} instances}}",
+  "@instanceCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "workspaceCount": "{count, plural, =0{0 local workspaces} one{1 local workspace} other{{count} local workspaces}}",
+  "@workspaceCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resourceCount": "{count, plural, =0{0 resources} one{1 resource} other{{count} resources}}",
+  "@resourceCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}

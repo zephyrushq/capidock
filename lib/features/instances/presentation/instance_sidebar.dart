@@ -1,3 +1,5 @@
+import '../../../l10n/localization.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/app_theme.dart';
@@ -49,8 +51,8 @@ class _InstanceSidebarState extends State<InstanceSidebar> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'WORKSPACE',
+                            Text(
+                              context.l10n.workspaceStep,
                               style: TextStyle(
                                 fontSize: 8,
                                 letterSpacing: 1.4,
@@ -60,7 +62,7 @@ class _InstanceSidebarState extends State<InstanceSidebar> {
                             const SizedBox(height: 5),
                             Text(
                               widget.controller.activeWorkspace?.name ??
-                                  'Os seus workspaces',
+                                  context.l10n.yourWorkspaces,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
@@ -70,7 +72,9 @@ class _InstanceSidebarState extends State<InstanceSidebar> {
                             ),
                             const SizedBox(height: 3),
                             Text(
-                              '${widget.controller.instances.length} instâncias',
+                              context.l10n.instanceCount(
+                                widget.controller.instances.length,
+                              ),
                               style: const TextStyle(
                                 fontSize: 10,
                                 color: DockColors.muted,
@@ -96,8 +100,8 @@ class _InstanceSidebarState extends State<InstanceSidebar> {
             child: TextField(
               onChanged: (value) =>
                   setState(() => _query = value.toLowerCase()),
-              decoration: const InputDecoration(
-                hintText: 'Encontrar instância',
+              decoration: InputDecoration(
+                hintText: context.l10n.findInstance,
                 hintStyle: TextStyle(fontSize: 12, color: DockColors.muted),
                 prefixIcon: Icon(Icons.search, size: 18),
                 contentPadding: EdgeInsets.symmetric(
@@ -117,8 +121,8 @@ class _InstanceSidebarState extends State<InstanceSidebar> {
                     padding: const EdgeInsets.all(16),
                     child: Text(
                       widget.controller.instances.isEmpty
-                          ? 'Este workspace ainda não tem instâncias.'
-                          : 'Nenhuma instância encontrada.',
+                          ? context.l10n.emptyInstances
+                          : context.l10n.noInstancesFound,
                       style: const TextStyle(
                         color: DockColors.muted,
                         fontSize: 12,
@@ -131,14 +135,14 @@ class _InstanceSidebarState extends State<InstanceSidebar> {
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: OutlinedButton(
                       onPressed: widget.onAdd,
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.add, size: 18),
                           SizedBox(width: 8),
                           Flexible(
                             child: Text(
-                              'Nova instância',
+                              context.l10n.newInstance,
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -152,17 +156,17 @@ class _InstanceSidebarState extends State<InstanceSidebar> {
           const Divider(height: 1),
           ListTile(
             onTap: widget.onManageWorkspaces,
-            title: const Text(
-              'Gerir workspaces',
+            title: Text(
+              context.l10n.manageWorkspaces,
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
             ),
             subtitle: Text(
-              '${widget.controller.workspaces.length} espaços locais',
+              context.l10n.workspaceCount(widget.controller.workspaces.length),
               style: const TextStyle(fontSize: 10, color: DockColors.muted),
             ),
             trailing: IconButton(
               onPressed: widget.onAbout,
-              tooltip: 'Sobre o Capidock',
+              tooltip: context.l10n.aboutCapidock,
               icon: const Icon(
                 Icons.info_outline,
                 size: 18,

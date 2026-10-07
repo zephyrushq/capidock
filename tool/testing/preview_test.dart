@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:capidock/app.dart';
+import 'package:capidock/l10n/locale_controller.dart';
 import 'package:capidock/features/workspaces/domain/dock_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -41,7 +42,12 @@ void main() {
       await tester.pumpWidget(
         RepaintBoundary(
           key: boundaryKey,
-          child: CapidockApp(controller: controller),
+          child: CapidockApp(
+            controller: controller,
+            localeController: LocaleController(
+              preferences: MemoryPreferences(),
+            ),
+          ),
         ),
       );
       await tester.pumpAndSettle();

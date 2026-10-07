@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'app.dart';
+import 'l10n/locale_controller.dart';
 import 'features/workspaces/data/workspace_store.dart';
 import 'features/workspaces/domain/dock_controller.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -18,6 +19,8 @@ void main() {
     ),
   );
   final controller = DockController(SecureWorkspaceStore());
-  runApp(CapidockApp(controller: controller));
+  final locales = LocaleController();
+  await locales.initialize(WidgetsBinding.instance.platformDispatcher.locales);
+  runApp(CapidockApp(controller: controller, localeController: locales));
   unawaited(controller.initialize());
 }

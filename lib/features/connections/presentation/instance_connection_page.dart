@@ -1,3 +1,5 @@
+import '../../../l10n/localization.dart';
+
 import 'package:flutter/material.dart';
 import 'package:xterm/xterm.dart';
 
@@ -112,8 +114,8 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
           builder: (context) => AlertDialog(
             title: Text(
               previous == null
-                  ? 'Confirmar servidor SSH'
-                  : 'A chave do servidor mudou',
+                  ? context.l10n.confirmSshServer
+                  : context.l10n.serverKeyChanged,
             ),
             content: SingleChildScrollView(
               child: Column(
@@ -121,7 +123,7 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '${widget.instance.host}:${widget.instance.port}\n\n${previous == null ? 'Compare esta impressão digital com a do seu servidor antes de confiar.' : 'Pode ser uma reinstalação ou uma ligação a outro servidor. Só substitua a chave depois de a verificar por outro meio.'}',
+                    '${widget.instance.host}:${widget.instance.port}\n\n${previous == null ? context.l10n.compareFingerprint : context.l10n.changedKeyWarning}',
                   ),
                   const SizedBox(height: 16),
                   Text(type),
@@ -129,25 +131,25 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
                   SelectableText(fingerprint),
                   if (previous != null) ...[
                     const SizedBox(height: 16),
-                    const Text('Chave guardada:'),
+                    Text(context.l10n.savedKey),
                     SelectableText(previous),
                   ],
                   const SizedBox(height: 16),
-                  const Text(
-                    'No servidor: ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub (ajuste ao tipo de chave apresentado).',
-                  ),
+                  Text(context.l10n.verifyKeyCommand),
                 ],
               ),
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: const Text('Cancelar'),
+                child: Text(context.l10n.cancel),
               ),
               FilledButton(
                 onPressed: () => Navigator.pop(context, true),
                 child: Text(
-                  previous == null ? 'Confiar e ligar' : 'Substituir chave',
+                  previous == null
+                      ? context.l10n.trustAndConnect
+                      : context.l10n.replaceKey,
                 ),
               ),
             ],
@@ -166,10 +168,10 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
           NavigationBar(
             selectedIndex: _tab,
             onDestinationSelected: (value) => setState(() => _tab = value),
-            destinations: const [
+            destinations: [
               NavigationDestination(
                 icon: Icon(Icons.dns_outlined),
-                label: 'Servidor',
+                label: context.l10n.server,
               ),
               NavigationDestination(
                 icon: Icon(Icons.terminal),
@@ -195,8 +197,8 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
           Expanded(
             child: Text(
               widget.instance.type == InstanceType.ssh
-                  ? 'O seu servidor'
-                  : 'Os seus recursos',
+                  ? context.l10n.yourServer
+                  : context.l10n.yourResources,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),
@@ -212,23 +214,21 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
         alignment: Alignment.centerLeft,
         child: StatusPill(
           _busy
-              ? 'A ligar…'
+              ? context.l10n.connecting
               : _connected
-              ? (_isSsh ? 'Ligado' : 'Dados recebidos')
-              : 'Por ligar',
+              ? (_isSsh ? context.l10n.connected : context.l10n.receivedData)
+              : context.l10n.notConnected,
           color: _connected ? DockColors.green : DockColors.muted,
         ),
       ),
       const SizedBox(height: 20),
       if (!widget.instance.hasCredentials) ...[
-        const Text(
-          'Adicione uma credencial para ligar esta instância. O endereço guardado foi preservado.',
-        ),
+        Text(context.l10n.addCredentials),
         const SizedBox(height: 16),
         FilledButton.icon(
           onPressed: widget.onEdit,
           icon: const Icon(Icons.key),
-          label: const Text('Configurar acesso'),
+          label: Text(context.l10n.configureAccess),
         ),
       ] else
         Wrap(
@@ -251,26 +251,28 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
               icon: Icon(_connected ? Icons.refresh : Icons.power_settings_new),
               label: Text(
                 _busy
-                    ? 'A ligar…'
+                    ? context.l10n.connecting
                     : _connected
-                    ? 'Atualizar'
-                    : 'Ligar à instância',
+                    ? context.l10n.refresh
+                    : context.l10n.connectInstance,
               ),
             ),
             if (_busy || (_isSsh && _connected))
               OutlinedButton(
                 onPressed: _isSsh ? _ssh.disconnect : _cancelCoolify,
-                child: Text(_busy ? 'Cancelar' : 'Desligar'),
+                child: Text(
+                  _busy ? context.l10n.cancel : context.l10n.disconnect,
+                ),
               ),
             TextButton.icon(
               onPressed: _busy ? null : widget.onEdit,
               icon: const Icon(Icons.edit_outlined, size: 18),
-              label: const Text('Editar acesso'),
+              label: Text(context.l10n.editAccess),
             ),
           ],
         ),
       if (_busy)
-        const Padding(
+        Padding(
           padding: EdgeInsets.only(top: 20),
           child: LinearProgressIndicator(),
         ),
@@ -278,7 +280,7 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
         Padding(
           padding: const EdgeInsets.only(top: 20),
           child: Text(
-            error,
+            localizedMessage(context, error),
             style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         ),
@@ -288,12 +290,13 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
           FilledButton.tonalIcon(
             onPressed: () => setState(() => _tab = 1),
             icon: const Icon(Icons.terminal),
-            label: const Text('Abrir terminal'),
+            label: Text(context.l10n.openTerminal),
           ),
           const SizedBox(height: 24),
         ],
         if (_ssh.refreshing) const LinearProgressIndicator(),
-        if (_ssh.informationError != null) Text(_ssh.informationError!),
+        if (_ssh.informationError != null)
+          Text(localizedMessage(context, _ssh.informationError!)),
         if (_ssh.information != null) ...[
           _timestamp(_ssh.updatedAt),
           const SizedBox(height: 12),
@@ -307,22 +310,14 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
             ),
           ),
         ] else if (!_busy && !_connected)
-          const SurfaceCard(
-            child: Text(
-              'Ligue-se para consultar o sistema, uptime, memória e disco, ou usar o terminal interativo.',
-            ),
-          ),
+          SurfaceCard(child: Text(context.l10n.connectForInfo)),
       ] else ...[
         if (_resources != null) ...[
-          SectionTitle('${_resources!.length} recursos'),
+          SectionTitle(context.l10n.resourceCount(_resources!.length)),
           _timestamp(_updatedAt),
           const SizedBox(height: 16),
           if (_resources!.isEmpty)
-            const SurfaceCard(
-              child: Text(
-                'A API não devolveu recursos para a equipa deste token.',
-              ),
-            ),
+            SurfaceCard(child: Text(context.l10n.noCoolifyResources)),
           for (final resource in _resources!)
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
@@ -331,7 +326,7 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      resource.name,
+                      localizedMessage(context, resource.name),
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
@@ -340,21 +335,17 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
                       style: const TextStyle(color: DockColors.muted),
                     ),
                     const SizedBox(height: 8),
-                    Text(resource.status),
+                    Text(localizedMessage(context, resource.status)),
                   ],
                 ),
               ),
             ),
         ] else if (!_busy)
-          const SurfaceCard(
-            child: Text(
-              'Consulte as aplicações, bases de dados e serviços da sua equipa. Os estados vêm diretamente da API Coolify.',
-            ),
-          ),
+          SurfaceCard(child: Text(context.l10n.coolifyOverview)),
       ],
       const SizedBox(height: 24),
-      const Text(
-        'As ligações SSH encerram ao mudar de instância ou colocar a app em segundo plano. As credenciais ficam cifradas no dispositivo.',
+      Text(
+        context.l10n.connectionPrivacy,
         style: TextStyle(color: DockColors.muted, fontSize: 12),
       ),
     ],
@@ -363,7 +354,12 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
   Widget _timestamp(DateTime? time) => Text(
     time == null
         ? ''
-        : 'Última leitura: ${TimeOfDay.fromDateTime(time).format(context)}${!_connected || _coolifyError != null ? ' · dados anteriores' : ''}',
+        : context.l10n.lastRead(
+            TimeOfDay.fromDateTime(time).format(context),
+            !_connected || _coolifyError != null
+                ? context.l10n.previousData
+                : '',
+          ),
     style: const TextStyle(color: DockColors.muted, fontSize: 12),
   );
 
@@ -375,13 +371,15 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
           children: [
             Expanded(
               child: Text(
-                _connected ? 'Sessão SSH ativa' : 'Terminal desligado',
+                _connected
+                    ? context.l10n.activeSshSession
+                    : context.l10n.terminalDisconnected,
                 style: const TextStyle(color: DockColors.muted),
               ),
             ),
             TextButton(
               onPressed: () => setState(() => _tab = 0),
-              child: const Text('Ligação'),
+              child: Text(context.l10n.connection),
             ),
           ],
         ),
@@ -417,15 +415,15 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
                 ),
               TextButton(
                 onPressed: () => _ssh.terminal.onOutput?.call('\x03'),
-                child: const Text('Ctrl+C'),
+                child: Text('Ctrl+C'),
               ),
               TextButton(
                 onPressed: () => _ssh.terminal.onOutput?.call('\x04'),
-                child: const Text('Ctrl+D'),
+                child: Text('Ctrl+D'),
               ),
               IconButton(
                 onPressed: _terminalFocus.requestFocus,
-                tooltip: 'Abrir teclado',
+                tooltip: context.l10n.openKeyboard,
                 icon: const Icon(Icons.keyboard),
               ),
             ],

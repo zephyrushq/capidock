@@ -1,3 +1,5 @@
+import '../../../l10n/localization.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/app_theme.dart';
@@ -72,18 +74,18 @@ class WorkspaceRail extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Tooltip(
-                message: 'Gerir workspaces',
+                message: context.l10n.manageWorkspaces,
                 child: InkWell(
                   onTap: onManage,
                   borderRadius: BorderRadius.circular(14),
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.all(4),
                     child: DockLogo(size: 40),
                   ),
                 ),
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Divider(height: 1),
             ),
@@ -98,7 +100,7 @@ class WorkspaceRail extends StatelessWidget {
                         button: true,
                         selected:
                             controller.activeWorkspace?.id == workspace.id,
-                        label: 'Workspace ${workspace.name}',
+                        label: context.l10n.workspaceLabel(workspace.name),
                         child: Tooltip(
                           message: workspace.name,
                           excludeFromSemantics: true,
@@ -146,7 +148,7 @@ class WorkspaceRail extends StatelessWidget {
               child: IconButton.filledTonal(
                 key: const ValueKey('add-workspace'),
                 onPressed: controller.isSaving ? null : onCreate,
-                tooltip: 'Criar workspace',
+                tooltip: context.l10n.createWorkspace,
                 icon: const Icon(Icons.add_rounded, color: DockColors.purple),
               ),
             ),
@@ -192,7 +194,9 @@ class _WorkspaceNameDialogState extends State<_WorkspaceNameDialog> {
     child: AlertDialog(
       scrollable: true,
       title: Text(
-        widget.workspace == null ? 'Novo workspace' : 'Renomear workspace',
+        widget.workspace == null
+            ? context.l10n.newWorkspace
+            : context.l10n.renameWorkspace,
       ),
       content: Form(
         key: _form,
@@ -201,8 +205,8 @@ class _WorkspaceNameDialogState extends State<_WorkspaceNameDialog> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (widget.workspace == null) ...[
-              const Text(
-                'Agrupe os servidores de um projeto, cliente ou ambiente.',
+              Text(
+                context.l10n.workspaceGrouping,
                 style: TextStyle(color: DockColors.muted, fontSize: 13),
               ),
               const SizedBox(height: 20),
@@ -212,9 +216,9 @@ class _WorkspaceNameDialogState extends State<_WorkspaceNameDialog> {
               controller: _name,
               autofocus: true,
               enabled: !_saving,
-              decoration: const InputDecoration(
-                labelText: 'Nome do workspace',
-                hintText: 'ex.: Pessoal, Trabalho, Homelab',
+              decoration: InputDecoration(
+                labelText: context.l10n.workspaceName,
+                hintText: context.l10n.workspaceEditorHint,
               ),
               maxLength: 40,
               textCapitalization: TextCapitalization.sentences,
@@ -223,12 +227,12 @@ class _WorkspaceNameDialogState extends State<_WorkspaceNameDialog> {
                 if (!_saving) _save();
               },
               validator: (value) => value == null || value.trim().isEmpty
-                  ? 'Dê um nome ao workspace.'
+                  ? context.l10n.workspaceNameRequired
                   : null,
             ),
             if (_error != null)
               Text(
-                _error!,
+                localizedMessage(context, _error!),
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
           ],
@@ -237,17 +241,17 @@ class _WorkspaceNameDialogState extends State<_WorkspaceNameDialog> {
       actions: [
         TextButton(
           onPressed: _saving ? null : () => Navigator.pop(context, false),
-          child: const Text('Cancelar'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton(
           key: const ValueKey('save-workspace'),
           onPressed: _saving ? null : _save,
           child: Text(
             _saving
-                ? 'A guardar…'
+                ? context.l10n.saving
                 : widget.workspace == null
-                ? 'Criar workspace'
-                : 'Guardar',
+                ? context.l10n.createWorkspace
+                : context.l10n.save,
           ),
         ),
       ],
@@ -272,7 +276,7 @@ class _WorkspaceNameDialogState extends State<_WorkspaceNameDialog> {
       if (mounted) {
         setState(() {
           _saving = false;
-          _error = 'Não foi possível guardar. Tente novamente.';
+          _error = 'saveError';
         });
       }
     }
@@ -297,12 +301,12 @@ Future<void> showWorkspaceManager(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Os seus workspaces',
+              context.l10n.yourWorkspaces,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Um espaço para cada contexto.',
+            Text(
+              context.l10n.workspaceContexts,
               style: TextStyle(color: DockColors.muted),
             ),
             const SizedBox(height: 20),
@@ -340,7 +344,9 @@ Future<void> showWorkspaceManager(
                             ),
                           ),
                           subtitle: Text(
-                            '${workspace.instances.length} instâncias',
+                            context.l10n.instanceCount(
+                              workspace.instances.length,
+                            ),
                             style: const TextStyle(
                               fontSize: 11,
                               color: DockColors.muted,
@@ -348,7 +354,9 @@ Future<void> showWorkspaceManager(
                           ),
                           trailing: PopupMenuButton<String>(
                             key: ValueKey('workspace-options-${workspace.id}'),
-                            tooltip: 'Opções de ${workspace.name}',
+                            tooltip: context.l10n.workspaceOptions(
+                              workspace.name,
+                            ),
                             enabled: !controller.isSaving,
                             onSelected: (action) async {
                               if (action == 'rename') {
@@ -366,14 +374,14 @@ Future<void> showWorkspaceManager(
                                 );
                               }
                             },
-                            itemBuilder: (_) => const [
+                            itemBuilder: (_) => [
                               PopupMenuItem(
                                 value: 'rename',
-                                child: Text('Renomear'),
+                                child: Text(context.l10n.rename),
                               ),
                               PopupMenuItem(
                                 value: 'delete',
-                                child: Text('Remover workspace'),
+                                child: Text(context.l10n.removeWorkspace),
                               ),
                             ],
                           ),
@@ -381,10 +389,10 @@ Future<void> showWorkspaceManager(
                       ),
                     ),
                   if (controller.workspaces.isEmpty)
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.all(16),
                       child: Text(
-                        'Ainda não existem workspaces.',
+                        context.l10n.noWorkspaces,
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -405,7 +413,7 @@ Future<void> showWorkspaceManager(
                       }
                     },
               icon: const Icon(Icons.add_rounded),
-              label: const Text('Novo workspace'),
+              label: Text(context.l10n.newWorkspace),
             ),
           ],
         ),
@@ -422,18 +430,21 @@ Future<void> _removeWorkspace(
   final confirmed = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('Remover workspace?'),
+      title: Text(context.l10n.removeWorkspaceTitle),
       content: Text(
-        '“${workspace.name}” e as suas ${workspace.instances.length} instâncias serão removidos deste dispositivo. Os servidores não serão alterados.',
+        context.l10n.removeWorkspaceBody(
+          workspace.name,
+          workspace.instances.length,
+        ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          child: const Text('Cancelar'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(context, true),
-          child: const Text('Remover'),
+          child: Text(context.l10n.remove),
         ),
       ],
     ),
@@ -447,11 +458,7 @@ Future<void> _removeWorkspace(
   } catch (_) {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Não foi possível remover o workspace. Tente novamente.',
-          ),
-        ),
+        SnackBar(content: Text(context.l10n.removeWorkspaceError)),
       );
     }
   }
@@ -469,7 +476,7 @@ Future<void> showMoveInstance(
   final destination = await showDialog<String>(
     context: context,
     builder: (context) => SimpleDialog(
-      title: const Text('Mover para workspace'),
+      title: Text(context.l10n.moveInstance),
       children: [
         for (final workspace in targets)
           SimpleDialogOption(
@@ -493,11 +500,9 @@ Future<void> showMoveInstance(
     await controller.moveInstance(instance.id, destination);
   } catch (_) {
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Não foi possível mover a instância. Tente novamente.'),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.l10n.moveInstanceError)));
     }
   }
 }

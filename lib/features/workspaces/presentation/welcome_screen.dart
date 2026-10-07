@@ -1,3 +1,6 @@
+import '../../../l10n/language_selector.dart';
+import '../../../l10n/localization.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/app_theme.dart';
@@ -71,7 +74,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       if (mounted) {
         setState(() {
           _saving = false;
-          _error = 'Não foi possível guardar no armazenamento seguro. Os campos foram preservados; tente novamente.';
+          _error = 'secureSaveError';
         });
       }
     }
@@ -85,11 +88,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     },
     child: Scaffold(
       appBar: AppBar(
-        title: const Text('Capidock'),
+        title: Text('Capidock'),
         actions: [
+          const LanguageSelector(),
           IconButton(
             onPressed: widget.onAbout,
-            tooltip: 'Sobre o Capidock',
+            tooltip: context.l10n.aboutCapidock,
             icon: const Icon(Icons.info_outline),
           ),
         ],
@@ -111,24 +115,33 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   const SizedBox(height: 28),
                   Text(
                     _step == 0
-                        ? 'Os seus servidores.\nO seu dock.'
+                        ? context.l10n.welcomeTitle
                         : _step == 1
-                        ? 'Dê lugar ao seu\nprimeiro servidor.'
-                        : 'Como vamos\nligar-nos?',
+                        ? context.l10n.firstServerTitle
+                        : context.l10n.connectionTitle,
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
                   const SizedBox(height: 12),
                   Text(
                     _step == 0
-                        ? 'Bem-vindo ao Capidock. Crie um workspace para reunir as instâncias dos seus projetos.'
+                        ? context.l10n.welcomeBody
                         : _step == 1
-                        ? 'Cada instância é um canal dentro de “${_workspace.text.trim()}”. Comece pela primeira.'
-                        : 'Configure o acesso a “${_draft.name.text.trim()}”. Pode editar estes dados mais tarde.',
+                        ? context.l10n.firstInstanceBody(_workspace.text.trim())
+                        : context.l10n.configureInstanceBody(
+                            _draft.name.text.trim(),
+                          ),
                     style: const TextStyle(color: DockColors.muted),
                   ),
                   const SizedBox(height: 28),
                   Text(
-                    'PASSO ${_step + 1} DE 3 · ${['WORKSPACE', 'INSTÂNCIA', 'LIGAÇÃO'][_step]}',
+                    context.l10n.onboardingStep(
+                      _step + 1,
+                      [
+                        context.l10n.workspaceStep,
+                        context.l10n.instanceStep,
+                        context.l10n.connectionStep,
+                      ][_step],
+                    ),
                     style: const TextStyle(
                       color: DockColors.purple,
                       fontSize: 11,
@@ -152,13 +165,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           controller: _workspace,
                           enabled: !_saving,
                           maxLength: 40,
-                          decoration: const InputDecoration(
-                            labelText: 'Nome do workspace',
-                            hintText: 'ex.: Pessoal, Empresa ou Projeto',
+                          decoration: InputDecoration(
+                            labelText: context.l10n.workspaceName,
+                            hintText: context.l10n.workspaceHint,
                           ),
                           validator: (value) =>
                               value == null || value.trim().isEmpty
-                              ? 'Dê um nome ao workspace.'
+                              ? context.l10n.workspaceNameRequired
                               : null,
                         ),
                         1 => InstanceNameField(
@@ -176,7 +189,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: 16),
                       child: Text(
-                        _error!,
+                        localizedMessage(context, _error!),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.error,
                         ),
@@ -191,22 +204,22 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                     label: Text(
                       _saving
-                          ? 'A guardar…'
+                          ? context.l10n.saving
                           : [
-                              'Criar workspace',
-                              'Configurar ligação',
-                              'Criar e abrir instância',
+                              context.l10n.createWorkspace,
+                              context.l10n.configureConnection,
+                              context.l10n.createAndOpen,
                             ][_step],
                     ),
                   ),
                   if (_step > 0)
                     TextButton(
                       onPressed: _saving ? null : () => _go(_step - 1),
-                      child: const Text('Voltar'),
+                      child: Text(context.l10n.back),
                     ),
                   const SizedBox(height: 20),
-                  const Text(
-                    'Local por escolha. Sem conta, sem sincronização.',
+                  Text(
+                    context.l10n.localByChoice,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: DockColors.muted, fontSize: 12),
                   ),

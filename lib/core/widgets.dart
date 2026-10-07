@@ -1,3 +1,5 @@
+import '../l10n/localization.dart';
+
 import 'package:flutter/material.dart';
 
 import '../features/instances/domain/server_instance.dart';
@@ -13,7 +15,7 @@ class DockLogo extends StatelessWidget {
     decoration: BoxDecoration(
       color: DockColors.primary,
       borderRadius: BorderRadius.circular(size * .3),
-      boxShadow: const [
+      boxShadow: [
         BoxShadow(
           color: Color(0x228B5CF6),
           blurRadius: 18,
@@ -131,16 +133,16 @@ class EmptyWorkspace extends StatelessWidget {
           const SizedBox(height: 28),
           Text(
             workspaceName == null
-                ? 'Um espaço para\ncada projeto.'
-                : 'O seu próximo servidor\ncomeça aqui.',
+                ? context.l10n.emptyProjectTitle
+                : context.l10n.emptyServerTitle,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: 12),
           Text(
             workspaceName == null
-                ? 'Crie um workspace para organizar as suas instâncias SSH e Coolify.'
-                : 'Adicione uma instância SSH ou Coolify ao workspace “$workspaceName”.',
+                ? context.l10n.emptyProjectBody
+                : context.l10n.emptyWorkspaceBody(workspaceName!),
             textAlign: TextAlign.center,
             style: TextStyle(color: DockColors.muted),
           ),
@@ -149,7 +151,9 @@ class EmptyWorkspace extends StatelessWidget {
             onPressed: onAdd,
             icon: const Icon(Icons.add),
             label: Text(
-              workspaceName == null ? 'Criar workspace' : 'Adicionar instância',
+              workspaceName == null
+                  ? context.l10n.createWorkspace
+                  : context.l10n.addInstance,
             ),
           ),
         ],

@@ -167,3 +167,24 @@ CAPIDOCK_TEST_PYTHON=/tmp/capidock-ssh-tests/bin/python bash tool/testing/run_ss
 The helper binds only to loopback, creates temporary credentials, permits only its read-only test operations, and cleans up after the run. Coolify HTTP tests use controlled responses; validate with your own Coolify installation before relying on it operationally.
 
 To regenerate the UI previews, set `FLUTTER_ROOT` to your Flutter SDK directory and run `flutter test tool/testing/preview_test.dart`.
+
+## Interface languages
+
+Capidock supports English (United Kingdom and United States), Portuguese
+(Portugal and Brazil), and Spanish (Spain). Use the language selector with country
+flags in the welcome screen or the workspace header. Changing languages keeps
+your onboarding draft and does not modify workspace names, credentials or server
+output. The preference is saved locally; on first launch, the app uses a supported
+device language, falling back to British English.
+
+Translations live in `lib/l10n/app_*.arb` and use Flutter's `gen-l10n` tooling,
+including placeholders and plural forms. The language-only bundles provide
+base translations; the five regional variants are the selectable languages.
+After editing a catalogue, run `flutter gen-l10n`. Add new regional languages to
+`AppLanguage.values` and the flag painter in `lib/l10n/language_selector.dart`.
+
+Google Play assets can be regenerated with:
+
+```bash
+FLUTTER_ROOT=/path/to/flutter bash tool/testing/export_play_store_assets.sh
+```

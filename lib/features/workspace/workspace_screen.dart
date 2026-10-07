@@ -1,3 +1,6 @@
+import '../../l10n/language_selector.dart';
+import '../../l10n/localization.dart';
+
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -49,18 +52,12 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
       applicationVersion: version,
       applicationIcon: const DockLogo(size: 54),
       applicationLegalese: '© 2026 ZEPHYRUS PROSPERITY - UNIPESSOAL LDA',
-      children: const [
-        Text(
-          'Um dock para todos os seus servidores.\n\nCada workspace reúne os seus próprios canais SSH e Coolify. As configurações e credenciais ficam cifradas neste dispositivo. Ligue-se diretamente por SSH ou consulte os recursos da API Coolify.',
-        ),
+      children: [
+        Text(context.l10n.aboutDescription),
         SizedBox(height: 16),
-        Text(
-          'Código aberto sob GPL-3.0-only. Pode redistribuir e modificar a app nos termos da licença. Sem garantia, nos limites da lei.\n\nOs textos da licença, créditos e política de marca estão disponíveis em Ver licenças, mesmo sem internet.',
-        ),
+        Text(context.l10n.aboutLicence),
         SizedBox(height: 12),
-        SelectableText(
-          'Código-fonte: https://github.com/zephyrushq/capidock-mobile',
-        ),
+        SelectableText(context.l10n.sourceCode),
       ],
     );
   }
@@ -70,18 +67,16 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Remover instância?'),
-        content: Text(
-          'A configuração de “${instance.name}” será removida deste dispositivo. O servidor não será alterado.',
-        ),
+        title: Text(context.l10n.removeInstanceTitle),
+        content: Text(context.l10n.removeInstanceBody(instance.name)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Remover'),
+            child: Text(context.l10n.remove),
           ),
         ],
       ),
@@ -92,11 +87,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Não foi possível remover a instância. Tente novamente.',
-            ),
-          ),
+          SnackBar(content: Text(context.l10n.removeInstanceError)),
         );
       }
     }
@@ -151,16 +142,19 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
                       color: DockColors.purple,
                     ),
                     const SizedBox(height: 20),
-                    Text(controller.loadError!, textAlign: TextAlign.center),
+                    Text(
+                      localizedMessage(context, controller.loadError!),
+                      textAlign: TextAlign.center,
+                    ),
                     const SizedBox(height: 12),
-                    const Text(
-                      'Os dados guardados foram preservados.',
+                    Text(
+                      context.l10n.preservedData,
                       style: TextStyle(color: DockColors.muted),
                     ),
                     const SizedBox(height: 24),
                     FilledButton(
                       onPressed: controller.initialize,
-                      child: const Text('Tentar novamente'),
+                      child: Text(context.l10n.retry),
                     ),
                   ],
                 ),
@@ -230,7 +224,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
         if (!wide)
           IconButton(
             onPressed: () => _scaffold.currentState!.openDrawer(),
-            tooltip: 'Abrir instâncias',
+            tooltip: context.l10n.openInstances,
             icon: const Icon(Icons.menu_rounded, color: DockColors.muted),
           ),
         if (!wide) ...[const DockLogo(size: 29), const SizedBox(width: 9)],
@@ -254,7 +248,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
               if (!wide)
                 Text(
                   controller.activeWorkspace?.name ??
-                      'Crie o seu primeiro workspace',
+                      context.l10n.firstWorkspace,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontSize: 10, color: DockColors.muted),
@@ -262,16 +256,17 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
             ],
           ),
         ),
+        const LanguageSelector(compact: true),
         IconButton(
           onPressed: _add,
           tooltip: controller.activeWorkspace == null
-              ? 'Criar workspace'
-              : 'Adicionar instância',
+              ? context.l10n.createWorkspace
+              : context.l10n.addInstance,
           icon: const Icon(Icons.add_rounded, color: DockColors.muted),
         ),
         if (instance != null)
           PopupMenuButton<String>(
-            tooltip: 'Opções da instância',
+            tooltip: context.l10n.instanceOptions,
             enabled: !controller.isSaving,
             icon: const Icon(Icons.more_horiz_rounded, color: DockColors.muted),
             onSelected: (value) {
@@ -281,22 +276,22 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
               if (value == 'about') _about();
             },
             itemBuilder: (_) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'edit',
-                child: Text('Editar instância'),
+                child: Text(context.l10n.editInstance),
               ),
               if (controller.workspaces.length > 1)
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'move',
-                  child: Text('Mover para workspace'),
+                  child: Text(context.l10n.moveInstance),
                 ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'delete',
-                child: Text('Remover instância'),
+                child: Text(context.l10n.removeInstance),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'about',
-                child: Text('Sobre o Capidock'),
+                child: Text(context.l10n.aboutCapidock),
               ),
             ],
           ),
@@ -333,7 +328,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
                 ),
               ),
               if (!wide)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(left: 6),
                   child: Icon(
                     Icons.expand_more,

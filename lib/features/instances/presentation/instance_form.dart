@@ -1,3 +1,5 @@
+import '../../../l10n/localization.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -103,13 +105,13 @@ class InstanceNameField extends StatelessWidget {
     enabled: enabled,
     maxLength: 32,
     textInputAction: TextInputAction.next,
-    decoration: const InputDecoration(
-      labelText: 'Nome da instância',
-      hintText: 'ex.: produção-europa',
+    decoration: InputDecoration(
+      labelText: context.l10n.instanceName,
+      hintText: context.l10n.instanceHint,
       prefixIcon: Icon(Icons.tag),
     ),
     validator: (value) => value == null || value.trim().isEmpty
-        ? 'Dê um nome à instância.'
+        ? context.l10n.instanceNameRequired
         : null,
   );
 }
@@ -163,14 +165,17 @@ class _InstanceConnectionFieldsState extends State<InstanceConnectionFields> {
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
           labelText: draft.type == InstanceType.ssh
-              ? 'Hostname ou IP'
-              : 'URL do Coolify',
+              ? context.l10n.hostname
+              : context.l10n.coolifyUrl,
           hintText: draft.type == InstanceType.ssh
-              ? 'servidor.exemplo.pt'
-              : 'https://coolify.exemplo.pt',
+              ? 'server.example.com'
+              : 'https://coolify.example.com',
           prefixIcon: const Icon(Icons.language),
         ),
-        validator: (value) => ServerInstance.validateHost(value, draft.type),
+        validator: (value) {
+          final error = ServerInstance.validateHost(value, draft.type);
+          return error == null ? null : localizedMessage(context, error);
+        },
       ),
       const SizedBox(height: 20),
       if (draft.type == InstanceType.ssh) ...[
@@ -186,10 +191,10 @@ class _InstanceConnectionFieldsState extends State<InstanceConnectionFields> {
                 autocorrect: false,
                 enableSuggestions: false,
                 textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(labelText: 'Utilizador'),
+                decoration: InputDecoration(labelText: context.l10n.username),
                 validator: (value) =>
                     !RegExp(r'^[a-zA-Z0-9_.-]+$').hasMatch(value?.trim() ?? '')
-                    ? 'Utilizador inválido.'
+                    ? context.l10n.invalidUsername
                     : null,
               ),
             ),
@@ -200,7 +205,7 @@ class _InstanceConnectionFieldsState extends State<InstanceConnectionFields> {
                 controller: draft.port,
                 enabled: widget.enabled,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Porta'),
+                decoration: InputDecoration(labelText: context.l10n.port),
                 validator: (value) {
                   final port = int.tryParse(value?.trim() ?? '');
                   return port == null || port < 1 || port > 65535
@@ -216,15 +221,15 @@ class _InstanceConnectionFieldsState extends State<InstanceConnectionFields> {
           key: ValueKey(draft.authentication),
           initialValue: draft.authentication,
           isExpanded: true,
-          decoration: const InputDecoration(labelText: 'Autenticação'),
-          items: const [
+          decoration: InputDecoration(labelText: context.l10n.authentication),
+          items: [
             DropdownMenuItem(
               value: SshAuthentication.password,
-              child: Text('Palavra-passe'),
+              child: Text(context.l10n.password),
             ),
             DropdownMenuItem(
               value: SshAuthentication.privateKey,
-              child: Text('Chave privada'),
+              child: Text(context.l10n.privateKey),
             ),
           ],
           onChanged: widget.enabled
@@ -236,23 +241,23 @@ class _InstanceConnectionFieldsState extends State<InstanceConnectionFields> {
           SecretField(
             fieldKey: 'instance-password',
             controller: draft.password,
-            label: 'Palavra-passe SSH',
+            label: context.l10n.sshPassword,
             enabled: widget.enabled,
           )
         else ...[
           SecretField(
             fieldKey: 'instance-private-key',
             controller: draft.privateKey,
-            label: 'Chave privada PEM / OpenSSH',
+            label: context.l10n.privateKeyLabel,
             enabled: widget.enabled,
           ),
           const SizedBox(height: 8),
-          const Text('Cole a chave completa, incluindo as linhas BEGIN e END.'),
+          Text(context.l10n.privateKeyHint),
           const SizedBox(height: 16),
           SecretField(
             fieldKey: 'instance-passphrase',
             controller: draft.passphrase,
-            label: 'Frase-passe da chave (opcional)',
+            label: context.l10n.passphraseLabel,
             enabled: widget.enabled,
             requiredValue: false,
           ),
@@ -261,20 +266,16 @@ class _InstanceConnectionFieldsState extends State<InstanceConnectionFields> {
         SecretField(
           fieldKey: 'instance-token',
           controller: draft.apiToken,
-          label: 'Token da API Coolify',
+          label: context.l10n.coolifyToken,
           enabled: widget.enabled,
         ),
         const SizedBox(height: 12),
-        const Text(
-          'No Coolify, ative a API e crie um token com permissão de leitura em Keys & Tokens → API tokens. Use a URL base, sem /api/v1.',
-        ),
+        Text(context.l10n.coolifyTokenHint),
       ],
       const SizedBox(height: 20),
-      const SurfaceCard(
+      SurfaceCard(
         padding: EdgeInsets.all(14),
-        child: Text(
-          'Configuração e credenciais cifradas neste dispositivo. A ligação é feita diretamente ao seu servidor, sem conta Capidock.',
-        ),
+        child: Text(context.l10n.localCredentials),
       ),
     ],
   );
@@ -310,7 +311,9 @@ class _SecretFieldState extends State<SecretField> {
     decoration: InputDecoration(
       labelText: widget.label,
       suffixIcon: IconButton(
-        tooltip: _hidden ? 'Mostrar credencial' : 'Ocultar credencial',
+        tooltip: _hidden
+            ? context.l10n.showCredential
+            : context.l10n.hideCredential,
         onPressed: () => setState(() => _hidden = !_hidden),
         icon: Icon(
           _hidden ? Icons.visibility_outlined : Icons.visibility_off_outlined,
@@ -319,7 +322,7 @@ class _SecretFieldState extends State<SecretField> {
     ),
     validator: (value) =>
         widget.requiredValue && (value == null || value.trim().isEmpty)
-        ? 'Informe a credencial.'
+        ? context.l10n.credentialRequired
         : null,
   );
 }

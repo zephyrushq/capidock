@@ -1,3 +1,5 @@
+import '../../../l10n/localization.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../workspaces/domain/dock_controller.dart';
@@ -63,12 +65,12 @@ class _InstanceEditorState extends State<InstanceEditor> {
           children: [
             Text(
               widget.instance == null
-                  ? 'Um novo lugar no seu dock.'
-                  : 'Editar instância',
+                  ? context.l10n.newInstanceTitle
+                  : context.l10n.editInstance,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 8),
-            Text('No workspace “$_workspaceName”.'),
+            Text(context.l10n.inWorkspace(_workspaceName)),
             const SizedBox(height: 24),
             InstanceNameField(controller: _draft.name, enabled: !_saving),
             const SizedBox(height: 12),
@@ -81,7 +83,7 @@ class _InstanceEditorState extends State<InstanceEditor> {
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: Text(
-                  _error!,
+                  localizedMessage(context, _error!),
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               ),
@@ -90,11 +92,13 @@ class _InstanceEditorState extends State<InstanceEditor> {
               key: const ValueKey('save-instance'),
               onPressed: _saving ? null : _save,
               icon: const Icon(Icons.lock_outline),
-              label: Text(_saving ? 'A guardar…' : 'Guardar configuração'),
+              label: Text(
+                _saving ? context.l10n.saving : context.l10n.saveConfiguration,
+              ),
             ),
             TextButton(
               onPressed: _saving ? null : () => Navigator.pop(context),
-              child: const Text('Cancelar'),
+              child: Text(context.l10n.cancel),
             ),
           ],
         ),
@@ -126,7 +130,7 @@ class _InstanceEditorState extends State<InstanceEditor> {
     } catch (_) {
       if (mounted) {
         setState(() {
-          _error = 'Não foi possível guardar. Tente novamente.';
+          _error = 'saveError';
           _saving = false;
         });
       }

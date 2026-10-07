@@ -1,4 +1,5 @@
 import 'package:capidock/app.dart';
+import 'package:capidock/l10n/locale_controller.dart';
 import 'package:capidock/features/workspaces/domain/dock_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -72,7 +73,14 @@ void main() {
         expect(find.text('Por ligar'), findsOneWidget);
         final reopened = DockController(store);
         await reopened.initialize();
-        await tester.pumpWidget(CapidockApp(controller: reopened));
+        await tester.pumpWidget(
+          CapidockApp(
+            controller: reopened,
+            localeController: LocaleController(
+              preferences: MemoryPreferences(),
+            ),
+          ),
+        );
         await tester.pumpAndSettle();
         expect(
           find.byKey(const ValueKey('onboarding-workspace')),
