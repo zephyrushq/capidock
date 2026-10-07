@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The mark stays in the central safe area of the adaptive icon. -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:inset="16.6667%">
+    <bitmap
+        android:src="@drawable/capidock_mark"
+        android:gravity="fill"
+        android:filter="true" />
+</inset>

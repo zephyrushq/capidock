@@ -1,0 +1,32 @@
+name: capidock
+description: Your dock for managing servers and applications.
+publish_to: none
+version: 0.2.1+3
+
+environment:
+  sdk: ^3.13.5
+
+dependencies:
+  dartssh2: ^4.1.0
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_secure_storage: ^11.2.0
+  http: ^1.6.0
+  package_info_plus: ^10.2.2
+  shared_preferences: ^2.5.6
+  xterm: ^4.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  licenses:
+    - COPYRIGHT
+    - LICENSE-TRADEMARKS
+  assets:
+    - assets/branding/capidock-mark.png

@@ -1,0 +1,83 @@
+name: Bug report
+description: Report a reproducible problem with the Android app or its tooling.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the issue in English. Capidock currently stores data locally;
+        SSH and Coolify connect to your servers. Never include passwords, tokens, private keys, or sensitive terminal output.
+
+        For suspected vulnerabilities, follow the [security policy](https://github.com/zephyrushq/capidock-mobile/blob/release/SECURITY.md)
+        instead of posting details here. Remove credentials, private addresses,
+        device identifiers, and personal data from logs and screenshots.
+  - type: checkboxes
+    id: existing-issues
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues for the same problem.
+          required: true
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: What happened?
+      description: Describe the problem and its impact.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include the smallest example that reproduces the issue using sample data.
+      placeholder: |
+        1. Open a workspace...
+        2. Select an instance...
+        3. Observe...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: App version or commit
+      description: Copy the version from About, or provide the commit SHA for a local build.
+      placeholder: "0.2.1+2001, or a commit SHA"
+    validations:
+      required: true
+  - type: dropdown
+    id: build-source
+    attributes:
+      label: Build source
+      options:
+        - GitHub Release APK
+        - Local debug build
+        - Local release build
+        - GitHub Actions or build tooling only
+        - Other or unknown
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include Android version and device model or emulator. For build issues, include host OS, Flutter/Dart, and JDK versions. Omit serial numbers.
+      placeholder: "Android 16, physical device; or Fedora, Flutter version, JDK version"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Paste only the relevant, redacted output. Leave empty if unavailable.
+      render: text
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or additional context
+      description: Optional. Hide private instance metadata before attaching images.

@@ -1,0 +1,23 @@
+name: Request a private security contact
+description: Request a private channel when GitHub private reporting is unavailable. Do not disclose a vulnerability here.
+title: "[Security contact]: Request a private reporting channel"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **This issue is public. It is only a request for a private contact.**
+
+        Please enable GitHub private vulnerability reporting or provide a private
+        channel for a security report. Do not add technical details, affected
+        components, logs, attachments, or proof-of-concept code to this issue.
+
+        If the **Report a vulnerability** button is already available on the
+        [Security page](https://github.com/zephyrushq/capidock-mobile/security),
+        use it instead. See the [security policy](https://github.com/zephyrushq/capidock-mobile/blob/release/SECURITY.md).
+  - type: checkboxes
+    id: contact-request
+    attributes:
+      label: Private contact request
+      options:
+        - label: I am requesting a private reporting channel and have not included vulnerability details in this public issue.
+          required: true

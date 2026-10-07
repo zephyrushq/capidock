@@ -1,0 +1,70 @@
+capidock
+
+CAPIDOCK TRADEMARK POLICY
+
+Published by ZEPHYRUS PROSPERITY - UNIPESSOAL LDA
+Effective date: 2026-10-07
+
+1. Scope
+
+This policy concerns the Capidock name, the robot-capybara logo and app icon,
+and the company's names and branding when used to identify the origin of a
+product or service. It reserves only trademark and related rights that the
+company actually holds under applicable law. It does not claim that any mark
+is registered or that the company has exclusive rights to all similar images
+or uses of these words.
+
+The code and copyrightable project assets remain subject to LICENSE and the
+applicability notice in COPYRIGHT. This policy does not change GPL permissions
+to use, study, modify, copy, distribute or sell the software. As contemplated
+by section 7(e) of GPLv3, the software license does not grant trademark rights.
+This policy grants the limited trademark permissions below; all lawful uses
+that do not require permission remain unaffected.
+
+2. Uses permitted without separate permission
+
+- Private use and private modifications of the app, including its branding.
+- Redistribution of unmodified official releases with their original names,
+  logos and notices, provided the distributor is clearly identified and no
+  endorsement, official support or warranty from the company is implied.
+  The distributor must also comply with the software license.
+- Truthful references to Capidock in documentation, tutorials, reviews,
+  compatibility statements and discussion, including screenshots of the app.
+- Accurate attribution in forks, such as "Based on Capidock", provided the
+  fork's own identity is prominent and its independent status is clear.
+- Retaining names and logos in source history, legal notices and documentation
+  to identify the original project accurately.
+
+3. Branding a modified distribution
+
+Without separate written permission, use a distinct product name, logo and
+launcher icon for a publicly distributed modified app when those elements
+serve as its product branding. Identify the app as an independent fork and
+avoid branding that misleadingly suggests an official Capidock release or
+affiliation with the company. Preserve the original copyright and attribution
+notices and the modification notices required by the GPL.
+
+This does not require removing truthful historical references or copyright
+notices, prevent source-code forks, restrict private modifications, or limit
+uses permitted by law. It is a trademark policy, not an additional restriction
+on the GPL copyright permissions.
+
+4. Endorsement and other products
+
+Do not use the names or artwork to misrepresent the origin of a product,
+service, website or store listing, or to imply sponsorship, approval or support
+by the company. Use as the brand of another product or service, or as branding
+on merchandise, requires separate written permission where the company's
+trademark rights apply. Truthful descriptive references remain permitted.
+
+5. Permission requests
+
+Contact the maintainer through https://github.com/zephyrushq/capidock-mobile
+with the proposed use, distribution name and examples of the intended presentation.
+Silence does not grant permission. A separate written agreement may authorize
+additional uses without changing the license of the software.
+
+6. Third-party marks
+
+Third-party names and marks mentioned by Capidock belong to their respective
+holders. This policy does not license those marks or imply their endorsement.

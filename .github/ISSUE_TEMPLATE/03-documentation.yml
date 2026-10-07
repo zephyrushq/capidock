@@ -1,0 +1,29 @@
+name: Documentation improvement
+description: Report missing, incorrect, or unclear documentation or setup instructions.
+title: "[Docs]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Write in English and check for an existing issue first.
+        For suspected vulnerabilities, follow the [security policy](https://github.com/zephyrushq/capidock-mobile/blob/release/SECURITY.md).
+  - type: input
+    id: location
+    attributes:
+      label: Document or topic
+      description: Link to the file and section, or name the missing topic.
+      placeholder: "docs/releases.md — Initial signing setup"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What needs improvement?
+      description: Explain what is incorrect, missing, or difficult to follow.
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested correction
+      description: Optional wording, example, or clarification.

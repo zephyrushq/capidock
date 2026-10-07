@@ -1,0 +1,31 @@
+name: Flutter checks
+
+on:
+  push:
+    branches-ignore: [release]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - run: python3 -m unittest discover -s tool/tests -v
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          flutter-version: '3.47.6'
+          channel: stable
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+      - run: flutter test
+
+      - name: Verify real SSH transport
+        run: |
+          python3 -m venv "$RUNNER_TEMP/ssh-tests"
+          "$RUNNER_TEMP/ssh-tests/bin/pip" install -r tool/testing/requirements.txt
+          CAPIDOCK_TEST_PYTHON="$RUNNER_TEMP/ssh-tests/bin/python" bash tool/testing/run_ssh_smoke.sh

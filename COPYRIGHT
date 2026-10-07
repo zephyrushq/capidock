@@ -1,0 +1,55 @@
+capidock
+
+COPYRIGHT AND ATTRIBUTION NOTICE
+
+Copyright (C) 2026 ZEPHYRUS PROSPERITY - UNIPESSOAL LDA
+
+Capidock is maintained by ZEPHYRUS PROSPERITY - UNIPESSOAL LDA.
+Project and source code: https://github.com/zephyrushq/capidock-mobile
+
+License: GPL-3.0-only
+
+Except where a file or third-party component carries a separate notice, the
+original Capidock code, documentation and assets are licensed under the GNU
+General Public License, version 3 only, to the extent that the company holds
+copyright in them. The complete, unmodified license text is in LICENSE.
+COPYRIGHT is an attribution notice, not a second software license.
+
+Capidock is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, version 3 of the License.
+
+Capidock is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+Capidock. If not, see https://www.gnu.org/licenses/.
+
+Attribution and modified versions
+
+Preserve applicable copyright, license and warranty notices as required by
+the GPL. Distributed modified versions must carry the change notices required
+by the GPL. Do not attribute third-party modifications, support commitments
+or warranties to the original authors or maintainer.
+
+No assignment of contributors' copyrights is implied by this notice.
+Flutter, Dart, plugins, dependencies and other third-party materials remain
+the work of their respective authors under their respective licenses.
+Their notices must be preserved. The app's About > View licenses screen
+includes the notices collected by Flutter from its packages, together with
+these project notices.
+
+Branding and artwork
+
+Trademark rights are addressed separately in LICENSE-TRADEMARKS. Copyright
+permission to use an asset does not imply permission to use it as a trademark.
+The robot-capybara artwork was generated using image_gen; its provenance is
+recorded in assets/branding/README.md. This notice does not assert that every
+AI-generated element is independently copyrightable or exclusively owned.
+
+Warranty and liability
+
+The exclusions of warranty and limitations of liability in sections 15 and
+16 of LICENSE apply only to the extent permitted by applicable law. This
+notice does not exclude liability that the law does not allow to be excluded.
