@@ -10,6 +10,9 @@ import '../../instances/domain/server_instance.dart';
 import 'host_key_store.dart';
 import 'ssh_identity.dart';
 import 'ssh_security_policy.dart';
+import '../../coolify/terminal/container_target.dart';
+
+enum SshFailure { authentication, identity, unreachable, other }
 
 enum ConnectionStatus { disconnected, connecting, connected, failed }
 
@@ -21,15 +24,18 @@ class SshConnection extends ChangeNotifier {
   final terminal = Terminal(maxLines: 3000);
   SSHClient? _client;
   SSHSession? _shell;
+  bool _openingShell = false;
   final List<StreamSubscription<String>> _streams = [];
   int _generation = 0;
   bool _disposed = false;
   ConnectionStatus status = ConnectionStatus.disconnected;
   String? error;
+  SshFailure? failureKind;
   String? information;
   String? informationError;
   DateTime? updatedAt;
   bool refreshing = false;
+  bool get hasShell => _shell != null;
 
   bool _active(int generation) => !_disposed && generation == _generation;
   void _notify() {
@@ -41,6 +47,7 @@ class SshConnection extends ChangeNotifier {
     final generation = _generation;
     status = ConnectionStatus.connecting;
     error = null;
+    failureKind = null;
     information = null;
     informationError = null;
     updatedAt = null;
@@ -98,53 +105,156 @@ class SshConnection extends ChangeNotifier {
         _notify();
         return;
       }
-      final shell = await client
-          .shell(
-            pty: SSHPtyConfig(
-              type: 'xterm-256color',
-              width: terminal.viewWidth,
-              height: terminal.viewHeight,
-            ),
-          )
-          .timeout(const Duration(seconds: 15));
-      if (!_active(generation)) {
-        shell.close();
-        return;
-      }
-      _shell = shell;
-      terminal.onOutput = (data) {
-        if (_active(generation)) shell.write(utf8.encode(data));
-      };
-      terminal.onResize = (width, height, pixelWidth, pixelHeight) {
-        if (_active(generation)) {
-          shell.resizeTerminal(width, height, pixelWidth, pixelHeight);
-        }
-      };
-      for (final stream in [shell.stdout, shell.stderr]) {
-        _streams.add(
-          stream
-              .cast<List<int>>()
-              .transform(const Utf8Decoder(allowMalformed: true))
-              .listen((data) {
-                if (_active(generation)) terminal.write(data);
-              }, onError: (Object error) => _closed(generation)),
-        );
-      }
-      unawaited(
-        shell.done.then(
-          (_) => _closed(generation),
-          onError: (Object error, StackTrace stack) => _closed(generation),
-        ),
-      );
-      status = ConnectionStatus.connected;
-      _notify();
+      await openTerminal();
+      if (!_active(generation)) return;
       unawaited(refreshInformation());
     } catch (exception) {
       if (!_active(generation)) return;
       disconnect();
       status = ConnectionStatus.failed;
+      final cause = sshErrorCause(exception);
+      failureKind = cause is SSHAuthError
+          ? SshFailure.authentication
+          : cause is SSHHostkeyError
+          ? SshFailure.identity
+          : cause is SocketException ||
+                cause is SSHSocketError ||
+                cause is TimeoutException
+          ? SshFailure.unreachable
+          : SshFailure.other;
       error = sshErrorMessage(exception);
       _notify();
+    }
+  }
+
+  /// A bounded read-only Docker listing; never includes container environments.
+  Future<String> discoverContainers() async {
+    final client = _client;
+    if (client == null || status != ConnectionStatus.connected) {
+      throw StateError('SSH disconnected');
+    }
+    final generation = _generation;
+    SSHSession? probe;
+    var accepting = true;
+    final opening = client.execute(discoverContainersCommand);
+    unawaited(
+      opening.then((value) {
+        if (!accepting || !_active(generation)) value.close();
+      }, onError: (Object e, StackTrace s) {}),
+    );
+    try {
+      probe = await opening.timeout(const Duration(seconds: 10));
+      final bytes = <int>[];
+      // Drain both channels to avoid a remote stderr window blocking stdout.
+      final stderr = probe.stderr.fold<int>(0, (count, chunk) {
+        if (count + chunk.length > 65536) {
+          throw const FormatException('Response too large');
+        }
+        return count + chunk.length;
+      });
+      final stdout = probe.stdout.forEach((chunk) {
+        if (bytes.length + chunk.length > 262144) {
+          throw const FormatException('Response too large');
+        }
+        bytes.addAll(chunk);
+      });
+      await Future.wait([stdout, stderr]).timeout(const Duration(seconds: 15));
+      await probe.done.timeout(const Duration(seconds: 5));
+      if (!_active(generation) || probe.exitCode != 0) {
+        throw StateError('Docker discovery failed');
+      }
+      return utf8.decode(bytes);
+    } finally {
+      accepting = false;
+      probe?.close();
+    }
+  }
+
+  Future<void> openTerminal({String? containerId, String shell = 'sh'}) async {
+    final command = containerId == null
+        ? null
+        : containerShellCommand(containerId, shell);
+    if (_openingShell) return;
+    final client = _client;
+    if (client == null || _shell != null) {
+      throw StateError('SSH terminal unavailable');
+    }
+    final generation = _generation;
+    final pty = SSHPtyConfig(
+      type: 'xterm-256color',
+      width: terminal.viewWidth > 0 ? terminal.viewWidth : 80,
+      height: terminal.viewHeight > 0 ? terminal.viewHeight : 24,
+    );
+    var accepting = true;
+    final opening = command == null
+        ? client.shell(pty: pty)
+        : client.execute(command, pty: pty);
+    unawaited(
+      opening.then((value) {
+        if (!accepting || !_active(generation)) value.close();
+      }, onError: (Object e, StackTrace s) {}),
+    );
+    SSHSession session;
+    _openingShell = true;
+    try {
+      session = await opening.timeout(const Duration(seconds: 15));
+    } finally {
+      accepting = false;
+      if (_active(generation)) _openingShell = false;
+    }
+    if (!_active(generation)) {
+      session.close();
+      return;
+    }
+    _shell = session;
+    terminal.onOutput = (data) {
+      if (_active(generation)) session.write(utf8.encode(data));
+    };
+    terminal.onResize = (w, h, pw, ph) {
+      if (_active(generation)) session.resizeTerminal(w, h, pw, ph);
+    };
+    for (final stream in [session.stdout, session.stderr]) {
+      _streams.add(
+        stream
+            .cast<List<int>>()
+            .transform(const Utf8Decoder(allowMalformed: true))
+            .listen((data) {
+              if (_active(generation)) terminal.write(data);
+            }, onError: (Object e) => _closed(generation)),
+      );
+    }
+    unawaited(
+      session.done.then(
+        (_) => _closed(generation),
+        onError: (Object e, StackTrace s) => _closed(generation),
+      ),
+    );
+    status = ConnectionStatus.connected;
+    _notify();
+  }
+
+  Future<SftpClient> openSftp() async {
+    final client = _client;
+    final generation = _generation;
+    if (client == null || status != ConnectionStatus.connected) {
+      throw StateError('SSH disconnected');
+    }
+    var accepting = true;
+    final opening = client.sftp();
+    unawaited(
+      opening.then((sftp) {
+        if (!accepting || !_active(generation)) unawaited(sftp.close());
+      }, onError: (Object e, StackTrace s) {}),
+    );
+    try {
+      final sftp = await opening.timeout(const Duration(seconds: 15));
+      if (!_active(generation)) {
+        await sftp.close();
+        throw StateError('SSH disconnected');
+      }
+      return sftp;
+    } finally {
+      accepting = false;
     }
   }
 
@@ -215,6 +325,7 @@ class SshConnection extends ChangeNotifier {
     _streams.clear();
     _shell?.close();
     _shell = null;
+    _openingShell = false;
     _client?.close();
     _client = null;
     terminal.mainBuffer.clear();
@@ -238,7 +349,18 @@ class SshConnection extends ChangeNotifier {
   }
 }
 
+/// dartssh2 wraps transport failures occurring before authentication. Preserve
+/// their real category instead of labelling a rejected host key as bad credentials.
+Object sshErrorCause(Object error) {
+  for (var depth = 0; depth < 8; depth++) {
+    if (error is! SSHAuthAbortError || error.reason == null) break;
+    error = error.reason!;
+  }
+  return error;
+}
+
 String sshErrorMessage(Object error) {
+  error = sshErrorCause(error);
   if (error is SSHAuthError) {
     return 'Autenticação recusada. Verifique o utilizador e a credencial SSH.';
   }

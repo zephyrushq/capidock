@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import 'dart:math';
+
 import '../../instances/domain/server_instance.dart';
 import '../data/workspace_store.dart';
 import 'dock_workspace.dart';
@@ -96,6 +98,33 @@ class DockController extends ChangeNotifier {
       ..._workspaces,
       workspace,
     ], () => _workspaceId = workspace.id);
+  }
+
+  /// Add imported copies atomically. Fresh IDs prevent imported credentials from
+  /// matching an existing instance's trusted SSH fingerprint or live session.
+  Future<void> importWorkspaces(List<DockWorkspace> imported) async {
+    final random = Random.secure();
+    String id(String prefix) =>
+        '$prefix-${List.generate(16, (_) => random.nextInt(256).toRadixString(16).padLeft(2, '0')).join()}';
+    final copies = imported
+        .map(
+          (workspace) => DockWorkspace(
+            id: id('workspace'),
+            name: _validName(workspace.name),
+            instances: workspace.instances
+                .map(
+                  (instance) => ServerInstance.fromJson({
+                    ...instance.toJson(),
+                    'id': id('instance'),
+                  }),
+                )
+                .toList(),
+          ),
+        )
+        .toList();
+    await _persist([..._workspaces, ...copies], () {
+      if (copies.isNotEmpty) _workspaceId = copies.first.id;
+    });
   }
 
   Future<void> createFirstWorkspace(

@@ -31,10 +31,12 @@ class CoolifyException implements Exception {
   const CoolifyException(
     this.message, {
     this.statusCode,
+    this.transportFailure = false,
     this.missingPermissions = const {},
   });
   final String message;
   final int? statusCode;
+  final bool transportFailure;
   final Set<String> missingPermissions;
 }
 
@@ -199,14 +201,17 @@ class CoolifyClient {
     } on TimeoutException {
       throw const CoolifyException(
         'O Coolify excedeu o tempo limite. Verifique a rede/VPN.',
+        transportFailure: true,
       );
     } on FormatException {
       throw const CoolifyException(
         'A API devolveu uma resposta inesperada. Verifique a URL e a versão do Coolify.',
       );
-    } catch (_) {
-      throw const CoolifyException(
+    } catch (error) {
+      throw CoolifyException(
         'Não foi possível contactar o Coolify. Verifique a rede e o certificado HTTPS.',
+        transportFailure:
+            error is SocketException || error is http.ClientException,
       );
     }
   }

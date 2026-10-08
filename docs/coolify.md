@@ -82,11 +82,35 @@ responses have timeouts and a 4 MiB limit, and unexpected HTML is rejected.
 ## Terminal access
 
 The public REST catalogue has log endpoints but no interactive terminal endpoint.
-**Open terminal** offers existing SSH connections from the user's workspaces.
-The user selects the correct server and explicitly connects using the normal SSH
-host-key verification and credentials. Coolify's token is never used as an SSH
-password. Container access can then be performed using the server's own tools in
-that SSH terminal. No web-dashboard cookies or private WebSocket protocols are used.
+**Open terminal** now opens a native SSH terminal flow for a server or resource.
+Select the Coolify server and associate an existing SSH instance from a workspace.
+The association is kept in the encrypted vault and bound to both endpoints;
+changing the SSH host, port or username invalidates it. SSH credentials and API
+credentials remain separate. No dashboard cookies or private WebSocket protocols
+are used.
+
+Resource terminals query running containers over SSH using a fixed `docker ps`
+command, without inspecting environment variables. Ownership is matched by
+`coolify.applicationUuid`, `coolify.serviceUuid` or `coolify.databaseUuid`, with
+legacy compose-project/stack-namespace matches where an appropriate Coolify label
+exists. Numeric resource IDs alone are never sufficient. Service components use
+their parent service UUID. A resource without identifiable running containers
+shows an empty state instead of silently listing unrelated containers.
+
+Select a container and `sh` (default) or `bash` (must be installed). Before opening,
+the app refreshes the running list and rechecks ownership. Only a validated full
+64-character hexadecimal Docker ID and a fixed shell name reach `docker exec -it`.
+The session has a PTY, resizing, keyboard, arrows, Tab, Ctrl+C and Ctrl+D. Server
+shell access is a separate explicit action. No automatic sudo or software
+installation is performed. Docker must already be available to the SSH user.
+
+Host-key verification and the existing SSH algorithm policy apply. SSH/Docker
+privileges are independent of a read-only Coolify API token; Docker access may
+grant full server control. Backgrounding, removing/changing the associated SSH
+instance, or closing the page clears and closes the connection. Associations are
+excluded from portable workspace backups and are recreated on the new device.
+
+The ownership convention follows [Coolify docker helpers](https://github.com/coollabsio/coolify/blob/main/bootstrap/helpers/docker.php).
 
 ## Catalogue source and regeneration
 

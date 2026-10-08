@@ -11,6 +11,8 @@ import '../legal/legal_page.dart';
 import '../workspaces/data/secret_store.dart';
 import '../workspaces/domain/dock_controller.dart';
 import 'app_preferences.dart';
+import '../monitoring/monitor_page.dart';
+import '../backups/presentation/backup_page.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({
@@ -109,6 +111,16 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           const Divider(),
           ListTile(
+            leading: const Icon(Icons.monitor_heart_outlined),
+            title: Text(context.l10n.monitorTitle),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => MonitorPage(controller: widget.controller),
+              ),
+            ),
+          ),
+          ListTile(
             leading: const Icon(Icons.lock_outline),
             title: Text(context.l10n.lockNow),
             onTap: controls?.lock,
@@ -142,6 +154,16 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             title: Text(context.l10n.eraseLocalData),
             onTap: controls == null ? null : _erase,
+          ),
+          ListTile(
+            leading: const Icon(Icons.backup_outlined),
+            title: Text(context.l10n.backupTitle),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => BackupPage(controller: widget.controller),
+              ),
+            ),
           ),
           const Divider(),
           ListTile(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'core/app_theme.dart';
+import 'features/monitoring/foreground_monitor.dart';
+import 'features/monitoring/monitor_alert_overlay.dart';
 import 'features/settings/app_preferences.dart';
 import 'features/workspaces/domain/dock_controller.dart';
 import 'features/workspace/workspace_screen.dart';
@@ -42,6 +44,8 @@ class _CapidockAppState extends State<CapidockApp> {
         listenable: _locales,
         builder: (context, _) => MaterialApp(
           title: 'Capidock',
+          builder: (context, child) =>
+              MonitorAlertOverlay(child: child ?? const SizedBox()),
           debugShowCheckedModeBanner: false,
           theme: buildTheme(),
           themeMode: ThemeMode.dark,
@@ -51,7 +55,10 @@ class _CapidockAppState extends State<CapidockApp> {
             (language) => language.locale,
           ),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
-          home: WorkspaceScreen(controller: widget.controller),
+          home: ForegroundMonitor(
+            controller: widget.controller,
+            child: WorkspaceScreen(controller: widget.controller),
+          ),
         ),
       ),
     ),

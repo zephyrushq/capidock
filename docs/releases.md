@@ -48,7 +48,7 @@ The Android `versionCode` is `major × 1000000 + minor × 1000 + patch`: version
 values outside Android's limit and histories that do not descend from the latest
 release tag.
 
-Tags are the source of truth after the first release. The workflow passes the
+Tags determine the automatic bump after the first release. For a new release, a higher stable version explicitly set in `pubspec.yaml` acts as a minimum, so local Play Store builds can be reconciled without inventing historical tags. Reruns of an existing tag retain its version. The workflow passes the
 version to Flutter with `--build-name` and `--build-number`; it does not create
 bot commits or edit `pubspec.yaml` on the branch. The About dialog reads the
 installed APK version. Local builds without these flags use the development

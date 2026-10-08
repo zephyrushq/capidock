@@ -85,11 +85,15 @@ def plan_release():
     elif previous:
         version = bump(previous[0], [c["message"] for c in commits])
     else:
+        version = (0, 0, 0)
+    # An explicit development version is a floor for new releases, allowing
+    # locally distributed Play builds to be reconciled without fake Git tags.
+    if not existing_version:
         source = Path("pubspec.yaml").read_text()
         match = re.search(r"^version:\s*([0-9.]+)(?:\+\d+)?\s*$", source, re.MULTILINE)
         if not match:
             raise ValueError("pubspec.yaml must contain a stable initial version")
-        version = parse_version(match.group(1))
+        version = max(version, parse_version(match.group(1)))
     name = ".".join(map(str, version))
     return {
         "version": name,

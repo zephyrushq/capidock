@@ -12,6 +12,8 @@ import '../../connections/data/coolify_client.dart';
 import '../data/coolify_catalog.dart';
 import '../data/coolify_session.dart';
 import 'coolify_cards.dart';
+import 'coolify_logs_panel.dart';
+import 'coolify_activity_list.dart';
 
 String coolifyOperationTitle(BuildContext context, CoolifyOperation op) {
   final strings = context.l10n;
@@ -168,6 +170,8 @@ class _CoolifyOperationPageState extends State<CoolifyOperationPage> {
   final Map<String, bool?> _booleans = {};
   final Map<String, bool> _reveal = {};
   Object? _result;
+  String? _resultPath;
+  Map<String, String> _resultQuery = {};
   bool _completed = false, _busy = false, _confirming = false;
   String? _error;
   XFile? _file;
@@ -487,8 +491,13 @@ class _CoolifyOperationPageState extends State<CoolifyOperationPage> {
       setState(() {
         _busy = true;
         _error = null;
-        _result = null;
-        _completed = false;
+        if (op.mutates ||
+            path != _resultPath ||
+            op.path.endsWith('/logs') ||
+            op.path == '/deployments/{uuid}') {
+          _result = null;
+          _completed = false;
+        }
       });
       try {
         final result = await widget.session.request(
@@ -501,6 +510,8 @@ class _CoolifyOperationPageState extends State<CoolifyOperationPage> {
         if (!mounted || request != _request) return;
         setState(() {
           _result = result;
+          _resultPath = path;
+          _resultQuery = Map.of(query);
           _completed = true;
         });
       } on CoolifyException catch (error) {
@@ -695,11 +706,68 @@ class _CoolifyOperationPageState extends State<CoolifyOperationPage> {
             const SizedBox(height: 16),
             Text(context.l10n.coolifySuccess),
             if (_result != null) ...[
-              CoolifyPayload(
-                data: _result,
-                sensitive: op.path.endsWith('/logs'),
-              ),
-              if (op.path.endsWith('/executions') && _result is List)
+              if (op.method == 'GET' &&
+                  _resultPath != null &&
+                  (op.path.endsWith('/logs') ||
+                      op.path == '/deployments/{uuid}')) ...[
+                if (!op.path.endsWith('/logs') && _result is Map)
+                  CoolifyActivityCard(
+                    item: Map<String, dynamic>.from(_result as Map),
+                    kind: 'deployments',
+                  ),
+                CoolifyLogsPanel(
+                  key: ValueKey('$_resultPath:$_request'),
+                  session: widget.session,
+                  path: _resultPath!,
+                  query: _resultQuery,
+                  data: _result,
+                  onData: op.path == '/deployments/{uuid}'
+                      ? (data) {
+                          if (mounted) setState(() => _result = data);
+                        }
+                      : null,
+                ),
+              ] else if (op.method == 'GET' &&
+                  op.path.contains('/backups/') &&
+                  op.path.endsWith('/executions')) ...[
+                CoolifyActivityList(
+                  items: coolifyActivityEntries(_result),
+                  busy: _busy || _confirming,
+                  itemBuilder: (entry) => CoolifyActivityCard(
+                    item: entry,
+                    kind: 'executions',
+                    actions: [
+                      if (entry['uuid'] != null &&
+                          widget.catalog?.find(
+                                'DELETE',
+                                '${op.path}/{execution_uuid}',
+                              ) !=
+                              null)
+                        TextButton.icon(
+                          onPressed:
+                              _busy ||
+                                  _confirming ||
+                                  !widget.session.access.allows(
+                                    'DELETE',
+                                    '${op.path}/{execution_uuid}',
+                                  )
+                              ? null
+                              : () =>
+                                    _deleteExecution(entry['uuid'].toString()),
+                          icon: const Icon(Icons.delete_outline, size: 18),
+                          label: Text(context.l10n.remove),
+                        ),
+                    ],
+                  ),
+                ),
+              ] else
+                CoolifyPayload(
+                  data: _result,
+                  sensitive: op.path.endsWith('/logs'),
+                ),
+              if (!op.path.contains('/backups/') &&
+                  op.path.endsWith('/executions') &&
+                  _result is List)
                 for (final entry
                     in (_result as List).whereType<Map<String, dynamic>>())
                   if (entry['uuid'] != null &&

@@ -1,3 +1,5 @@
+import '../terminal/container_target.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/widgets.dart';
@@ -13,6 +15,8 @@ import 'coolify_operation_page.dart';
 import 'coolify_cards.dart';
 import 'coolify_variable_widgets.dart';
 import 'coolify_hierarchy_page.dart';
+import 'coolify_logs_panel.dart';
+import 'coolify_activity_list.dart';
 
 class CoolifyWorkspacePage extends StatefulWidget {
   const CoolifyWorkspacePage({
@@ -20,10 +24,12 @@ class CoolifyWorkspacePage extends StatefulWidget {
     required this.instance,
     required this.onEdit,
     required this.onTerminal,
+    this.onResourceTerminal,
     this.createClient,
   });
   final ServerInstance instance;
   final VoidCallback onEdit, onTerminal;
+  final OpenResourceTerminal? onResourceTerminal;
   final CoolifyClient Function()? createClient;
   @override
   State<CoolifyWorkspacePage> createState() => _CoolifyWorkspacePageState();
@@ -141,6 +147,7 @@ class _CoolifyWorkspacePageState extends State<CoolifyWorkspacePage> {
                 uuid: '${item['uuid']}',
                 name: '${item['name'] ?? item['uuid']}',
                 onTerminal: widget.onTerminal,
+                onResourceTerminal: widget.onResourceTerminal,
               )
             : CoolifyResourcePage(
                 session: _session,
@@ -149,6 +156,7 @@ class _CoolifyWorkspacePageState extends State<CoolifyWorkspacePage> {
                 uuid: '${item['uuid']}',
                 name: '${item['name'] ?? item['uuid']}',
                 onTerminal: widget.onTerminal,
+                onResourceTerminal: widget.onResourceTerminal,
               ),
       ),
     );
@@ -447,18 +455,21 @@ class CoolifyResourcePage extends StatefulWidget {
     required this.uuid,
     required this.name,
     required this.onTerminal,
+    this.onResourceTerminal,
     this.parentServiceUuid,
   });
   final CoolifySession session;
   final CoolifyCatalog catalog;
   final String collection, uuid, name;
   final VoidCallback onTerminal;
+  final OpenResourceTerminal? onResourceTerminal;
   final String? parentServiceUuid;
   @override
   State<CoolifyResourcePage> createState() => _CoolifyResourcePageState();
 }
 
 class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
+  int _deploymentPage = 0;
   int _tab = 0, _request = 0;
   String? _loadedSection;
   Object? _data;
@@ -529,7 +540,8 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
     super.dispose();
   }
 
-  Future<void> _load() async {
+  Future<void> _load({int? page}) async {
+    final deploymentPage = page ?? _deploymentPage;
     final request = ++_request;
     setState(() {
       _busy = true;
@@ -554,12 +566,17 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
       final result = await widget.session.request(
         'GET',
         path,
-        query: section == 'logs' ? {'lines': '200'} : {},
+        query: section == 'logs'
+            ? {'lines': '200'}
+            : section == 'deployments'
+            ? {'skip': '${deploymentPage * 20}', 'take': '21'}
+            : {},
       );
       if (mounted && request == _request) {
         setState(() {
           _data = result;
           _loadedSection = section;
+          if (section == 'deployments') _deploymentPage = deploymentPage;
           if (section == 'details' && result is Map<String, dynamic>) {
             _overview = result;
           }
@@ -737,6 +754,27 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
             icon: const Icon(Icons.settings_outlined),
             label: Text(context.l10n.coolifySettings),
           ),
+        OutlinedButton.icon(
+          onPressed: _busy || _confirming
+              ? null
+              : () {
+                  if (widget.onResourceTerminal case final open?) {
+                    open(
+                      CoolifyTerminalTarget(
+                        kind: widget.collection,
+                        uuid: widget.uuid,
+                        name: widget.name,
+                        details: _overview ?? {},
+                        parentServiceUuid: widget.parentServiceUuid,
+                      ),
+                    );
+                  } else {
+                    widget.onTerminal();
+                  }
+                },
+          icon: const Icon(Icons.terminal),
+          label: Text(context.l10n.openTerminal),
+        ),
         PopupMenuButton<String>(
           enabled: !_busy && !_confirming,
           tooltip: context.l10n.coolifyOtherSettings,
@@ -750,7 +788,19 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
               case 'operations':
                 _advanced();
               case 'terminal':
-                widget.onTerminal();
+                if (widget.onResourceTerminal case final open?) {
+                  open(
+                    CoolifyTerminalTarget(
+                      kind: widget.collection,
+                      uuid: widget.uuid,
+                      name: widget.name,
+                      details: _overview ?? {},
+                      parentServiceUuid: widget.parentServiceUuid,
+                    ),
+                  );
+                } else {
+                  widget.onTerminal();
+                }
             }
           },
           itemBuilder: (_) => [
@@ -765,10 +815,6 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
                 value: 'stop',
                 child: Text(context.l10n.coolifyStop),
               ),
-            PopupMenuItem(
-              value: 'terminal',
-              child: Text(context.l10n.openTerminal),
-            ),
             PopupMenuItem(
               value: 'operations',
               child: Text(context.l10n.coolifyOperations),
@@ -800,7 +846,129 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
   }
 
   Widget _entry(Map<String, dynamic> item) {
-    final id = '${item['uuid'] ?? item['id'] ?? ''}';
+    final id = '${item['deployment_uuid'] ?? item['uuid'] ?? item['id'] ?? ''}';
+    if (section == 'deployments' || section == 'backups') {
+      Widget action(
+        String method,
+        String route,
+        String label,
+        IconData icon,
+        VoidCallback run, {
+        Map<String, String>? values,
+      }) {
+        final operation = widget.catalog.find(method, route);
+        final allowed =
+            operation != null &&
+            widget.session.access.allows(
+              method,
+              operation.resolvePath(values ?? paths),
+            );
+        return TextButton.icon(
+          onPressed: _busy || _confirming || !allowed ? null : run,
+          icon: Icon(icon, size: 18),
+          label: Text(label),
+        );
+      }
+
+      final backupValues = {...paths, 'scheduled_backup_uuid': id};
+      final activeDeployment = [
+        'queued',
+        'pending',
+        'in_progress',
+        'running',
+      ].contains(item['status']);
+      return CoolifyActivityCard(
+        item: item,
+        kind: section,
+        actions: [
+          if (section == 'deployments' && id.isNotEmpty) ...[
+            action(
+              'GET',
+              '/deployments/{uuid}',
+              context.l10n.coolifyLogs,
+              Icons.terminal,
+              () => _operation(
+                widget.catalog.find('GET', '/deployments/{uuid}'),
+                values: {'uuid': id},
+              ),
+              values: {'uuid': id},
+            ),
+            if (activeDeployment)
+              action(
+                'POST',
+                '/deployments/{uuid}/cancel',
+                context.l10n.cancel,
+                Icons.cancel_outlined,
+                () => _perform(
+                  widget.catalog.find('POST', '/deployments/{uuid}/cancel'),
+                  values: {'uuid': id},
+                ),
+                values: {'uuid': id},
+              ),
+          ],
+          if (section == 'backups' && id.isNotEmpty) ...[
+            action(
+              'PATCH',
+              '$template/backups/{scheduled_backup_uuid}',
+              context.l10n.coolifyRunBackup,
+              Icons.play_arrow,
+              () => _perform(
+                widget.catalog.find(
+                  'PATCH',
+                  '$template/backups/{scheduled_backup_uuid}',
+                ),
+                values: backupValues,
+                body: {'backup_now': true},
+              ),
+              values: backupValues,
+            ),
+            action(
+              'GET',
+              '$template/backups/{scheduled_backup_uuid}/executions',
+              context.l10n.listHistory,
+              Icons.history,
+              () => _operation(
+                widget.catalog.find(
+                  'GET',
+                  '$template/backups/{scheduled_backup_uuid}/executions',
+                ),
+                values: backupValues,
+              ),
+              values: backupValues,
+            ),
+            action(
+              'PATCH',
+              '$template/backups/{scheduled_backup_uuid}',
+              context.l10n.coolifyEdit,
+              Icons.edit_outlined,
+              () => _operation(
+                widget.catalog.find(
+                  'PATCH',
+                  '$template/backups/{scheduled_backup_uuid}',
+                ),
+                values: backupValues,
+                initial: item,
+              ),
+              values: backupValues,
+            ),
+            action(
+              'DELETE',
+              '$template/backups/{scheduled_backup_uuid}',
+              context.l10n.remove,
+              Icons.delete_outline,
+              () => _operation(
+                widget.catalog.find(
+                  'DELETE',
+                  '$template/backups/{scheduled_backup_uuid}',
+                ),
+                values: backupValues,
+              ),
+              values: backupValues,
+            ),
+          ],
+        ],
+      );
+    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: SurfaceCard(
@@ -812,57 +980,16 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             ...[
-              CoolifyInfoFields(data: item, sensitive: section == 'logs'),
+              CoolifyInfoFields(
+                data: {
+                  for (final entry in item.entries)
+                    if (entry.key != 'logs') entry.key: entry.value,
+                },
+              ),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  if (section == 'backups' && id.isNotEmpty) ...[
-                    TextButton(
-                      onPressed: _busy
-                          ? null
-                          : () => _perform(
-                              widget.catalog.find(
-                                'PATCH',
-                                '$template/backups/{scheduled_backup_uuid}',
-                              ),
-                              values: {...paths, 'scheduled_backup_uuid': id},
-                              body: {'backup_now': true},
-                            ),
-                      child: Text(context.l10n.coolifyRunBackup),
-                    ),
-                    TextButton(
-                      onPressed: () => _operation(
-                        widget.catalog.find(
-                          'PATCH',
-                          '$template/backups/{scheduled_backup_uuid}',
-                        ),
-                        values: {...paths, 'scheduled_backup_uuid': id},
-                        initial: item,
-                      ),
-                      child: Text(context.l10n.coolifyEdit),
-                    ),
-                    TextButton(
-                      onPressed: () => _operation(
-                        widget.catalog.find(
-                          'GET',
-                          '$template/backups/{scheduled_backup_uuid}/executions',
-                        ),
-                        values: {...paths, 'scheduled_backup_uuid': id},
-                      ),
-                      child: Text(context.l10n.coolifyExecutions),
-                    ),
-                    TextButton(
-                      onPressed: () => _operation(
-                        widget.catalog.find(
-                          'DELETE',
-                          '$template/backups/{scheduled_backup_uuid}',
-                        ),
-                        values: {...paths, 'scheduled_backup_uuid': id},
-                      ),
-                      child: Text(context.l10n.remove),
-                    ),
-                  ],
                   if (section == 'storages' && id.isNotEmpty) ...[
                     TextButton(
                       onPressed: () => _operation(
@@ -903,25 +1030,6 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
                         values: {...paths, 'storage_uuid': id},
                       ),
                       child: Text(context.l10n.remove),
-                    ),
-                  ],
-                  if (section == 'deployments' && id.isNotEmpty) ...[
-                    TextButton(
-                      onPressed: () => _operation(
-                        widget.catalog.find('GET', '/deployments/{uuid}'),
-                        values: {'uuid': id},
-                      ),
-                      child: Text(context.l10n.coolifyLogs),
-                    ),
-                    TextButton(
-                      onPressed: () => _operation(
-                        widget.catalog.find(
-                          'POST',
-                          '/deployments/{uuid}/cancel',
-                        ),
-                        values: {'uuid': id},
-                      ),
-                      child: Text(context.l10n.cancel),
                     ),
                   ],
                 ],
@@ -1001,6 +1109,7 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
                                 uuid: '${item['uuid']}',
                                 name: '${item['name'] ?? ''}',
                                 onTerminal: widget.onTerminal,
+                                onResourceTerminal: widget.onResourceTerminal,
                                 parentServiceUuid: widget.uuid,
                               ),
                             ),
@@ -1028,7 +1137,10 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
                               )
                           ? null
                           : (_) {
-                              setState(() => _tab = _tab == i ? 0 : i);
+                              setState(() {
+                                _tab = _tab == i ? 0 : i;
+                                _deploymentPage = 0;
+                              });
                               _load();
                             },
                     ),
@@ -1068,8 +1180,12 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
           if (_data != null) ...[
             const SizedBox(height: 16),
             if (section == 'logs')
-              SurfaceCard(
-                child: CoolifyInfoFields(data: _data, sensitive: true),
+              CoolifyLogsPanel(
+                key: ValueKey('$base/logs'),
+                session: widget.session,
+                path: '$base/logs',
+                data: _data,
+                query: const {'lines': '200'},
               )
             else if (section == 'envs')
               CoolifyVariableGroups(
@@ -1105,12 +1221,26 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
                         },
                       ),
               )
+            else if (section == 'deployments' || section == 'backups')
+              CoolifyActivityList(
+                key: ValueKey('$base/$section'),
+                items: section == 'deployments'
+                    ? entries.take(20).toList()
+                    : entries,
+                itemBuilder: _entry,
+                busy: _busy,
+                remotePage: section == 'deployments' ? _deploymentPage : null,
+                onPrevious: _deploymentPage > 0
+                    ? () => _load(page: _deploymentPage - 1)
+                    : null,
+                onNext: entries.length > 20
+                    ? () => _load(page: _deploymentPage + 1)
+                    : null,
+              )
             else if (entries.isNotEmpty)
               for (final item in entries) _entry(item)
             else if (_data is List)
               Text(context.l10n.coolifyEmpty)
-            else if (section == 'logs')
-              CoolifyInfoFields(data: _data, sensitive: true)
             else if (section == 'details')
               ExpansionTile(
                 title: Text(context.l10n.coolifyConfiguration),

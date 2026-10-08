@@ -1,3 +1,5 @@
+import '../../sftp/sftp_panel.dart';
+import '../../coolify/terminal/container_target.dart';
 import '../../../l10n/localization.dart';
 
 import 'package:flutter/material.dart';
@@ -17,10 +19,12 @@ class InstanceConnectionPage extends StatefulWidget {
     required this.instance,
     required this.onEdit,
     this.onTerminal,
+    this.onResourceTerminal,
   });
   final ServerInstance instance;
   final VoidCallback onEdit;
   final VoidCallback? onTerminal;
+  final OpenResourceTerminal? onResourceTerminal;
   @override
   State<InstanceConnectionPage> createState() => _InstanceConnectionPageState();
 }
@@ -59,6 +63,18 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
     super.dispose();
   }
 
+  Future<void> _selectTab(int value) async {
+    setState(() => _tab = value);
+    if (value == 1 && _connected && !_ssh.hasShell) {
+      try {
+        setState(() => _ssh.error = null);
+        await _ssh.openTerminal();
+      } catch (e) {
+        if (mounted) setState(() => _ssh.error = sshErrorMessage(e));
+      }
+    }
+  }
+
   Future<bool> _confirmHostKey(
     String type,
     String fingerprint,
@@ -80,17 +96,27 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
           instance: widget.instance,
           onEdit: widget.onEdit,
           onTerminal: widget.onTerminal ?? widget.onEdit,
+          onResourceTerminal: widget.onResourceTerminal,
         )
       : ListenableBuilder(
           listenable: _ssh,
           builder: (context, _) => Column(
             children: [
-              Expanded(child: _isSsh && _tab == 1 ? _terminal() : _overview()),
+              Expanded(
+                child: switch (_tab) {
+                  1 => _terminal(),
+                  2 => SftpPanel(
+                    connection: _ssh,
+                    connect: () =>
+                        _ssh.connect(_confirmHostKey, openShell: false),
+                  ),
+                  _ => _overview(),
+                },
+              ),
               if (_isSsh)
                 NavigationBar(
                   selectedIndex: _tab,
-                  onDestinationSelected: (value) =>
-                      setState(() => _tab = value),
+                  onDestinationSelected: _selectTab,
                   destinations: [
                     NavigationDestination(
                       icon: Icon(Icons.dns_outlined),
@@ -99,6 +125,10 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
                     NavigationDestination(
                       icon: Icon(Icons.terminal),
                       label: 'Terminal',
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.folder_outlined),
+                      label: context.l10n.sftpFiles,
                     ),
                   ],
                 ),
@@ -207,7 +237,7 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
       if (_isSsh) ...[
         if (_connected) ...[
           FilledButton.tonalIcon(
-            onPressed: () => setState(() => _tab = 1),
+            onPressed: () => _selectTab(1),
             icon: const Icon(Icons.terminal),
             label: Text(context.l10n.openTerminal),
           ),
@@ -257,7 +287,9 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
           children: [
             Expanded(
               child: Text(
-                _connected
+                _ssh.error != null
+                    ? localizedMessage(context, _ssh.error!)
+                    : _connected
                     ? context.l10n.activeSshSession
                     : context.l10n.terminalDisconnected,
                 style: const TextStyle(color: DockColors.muted),
@@ -278,12 +310,12 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
                 AppPreferencesScope.maybeOf(context)?.terminalFontSize ?? 14,
           ),
           focusNode: _terminalFocus,
-          readOnly: !_connected,
-          autofocus: _connected,
+          readOnly: !_connected || !_ssh.hasShell,
+          autofocus: _connected && _ssh.hasShell,
           padding: const EdgeInsets.all(12),
         ),
       ),
-      if (_connected)
+      if (_connected && _ssh.hasShell)
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(

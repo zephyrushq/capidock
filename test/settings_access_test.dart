@@ -25,6 +25,9 @@ import 'package:http/testing.dart';
 
 import 'connections_test.dart' show coolify;
 import 'test_support.dart';
+import 'monitor_support.dart';
+
+import 'package:capidock/features/monitoring/monitor_service.dart';
 
 class GatedSecureStore extends SecureWorkspaceStore {
   GatedSecureStore(MemorySecretStore secrets, MemoryPreferences preferences)
@@ -280,7 +283,16 @@ void main() {
       preferences: MemoryPreferences(),
     );
     await tester.pumpWidget(
-      DeviceLock(controller: controller, locales: locales, authenticator: auth),
+      DeviceLock(
+        controller: controller,
+        locales: locales,
+        authenticator: auth,
+        monitoring: MonitorService(
+          secrets: secrets,
+          bridge: FakeMonitorBridge(),
+          cancelJobs: () async {},
+        ),
+      ),
     );
     await tester.tap(find.text('Unlock'));
     await tester.pumpAndSettle();

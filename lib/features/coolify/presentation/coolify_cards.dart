@@ -31,6 +31,11 @@ String coolifyKind(
 String coolifyLabel(BuildContext context, String key) {
   final l = context.l10n;
   return switch (key) {
+    'frequency' => l.listSchedule,
+    'size' => l.activitySize,
+    'finished_at' => l.activityFinished,
+    'enabled' => l.activityEnabled,
+    'commit_message' => l.activityCommit,
     'resources' => l.coolifyResources,
     'applications' => l.coolifyApplications,
     'databases' => l.coolifyDatabases,
@@ -48,8 +53,6 @@ String coolifyLabel(BuildContext context, String key) {
     'ip' => l.coolifyAddress,
     'port' => l.coolifyPort,
     'user' => l.coolifyUser,
-    'frequency' => l.coolifyFrequency,
-    'enabled' => l.coolifyEnabled,
     'mount_path' => l.coolifyMountPath,
     'host_path' => l.coolifyHostPath,
     'created_at' => l.coolifyCreated,
@@ -87,8 +90,12 @@ Widget coolifyStatus(BuildContext context, String status) {
   };
   return StatusPill(
     label,
-    color: state == 'running' && !status.contains('unhealthy')
+    color: status.contains('unhealthy') || ['failed', 'error'].contains(state)
+        ? Theme.of(context).colorScheme.error
+        : ['running', 'finished', 'success', 'completed'].contains(state)
         ? DockColors.green
+        : ['queued', 'pending', 'in_progress'].contains(state)
+        ? DockColors.purple
         : DockColors.muted,
   );
 }

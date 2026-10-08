@@ -1,0 +1,15 @@
+name: capidock_monitor_bridge
+description: Private Android bridge for local monitoring coordination and notifications.
+version: 1.0.0
+publish_to: none
+environment:
+  sdk: ^3.13.5
+dependencies:
+  flutter:
+    sdk: flutter
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.zephyrushq.capidock.monitor
+        pluginClass: MonitorBridge

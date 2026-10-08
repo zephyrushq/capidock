@@ -1,0 +1,11 @@
+{
+  "format": "capidock-backup",
+  "version": 1,
+  "cipher": "AES-256-GCM",
+  "kdf": "PBKDF2-HMAC-SHA256",
+  "iterations": 600000,
+  "salt": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=",
+  "nonce": "AAECAwQFBgcICQoL",
+  "mac": "4g2jDRQezwu01Txg0SXmWg==",
+  "ciphertext": "jJVU56OGBIla+SDYrsk7HjgfXfmWzb4LifVWM+gDqyVc1MkmH6+QJiLjQnija/9SbYsuArmw6/DoNR40HI8dPmo5M5d1v+kZoLvmch6spKQeIXlFyXL343wcgyUSHhYd16vA6R70na9HcUiMsJuru6GJ/qcvkXC6U9+wy3PhphWi6T09ddd+XmRHvIsqcBz51e1l6oFp+v/V2o9EAf/1q5xwoXnJXgIXrOXQzjNAZMV0Gs0nqRQ15ihZGsNi9QVFkkHOwyZqsVeA9oQZbNKIjkaYo2bF/9ToEz5oay6GdGt18U4mlc0p7KA3F/1NfOQVAGjW6hMsRmtX4ayeCAxvRKTaUKwyhXRU6Ng78raNJort8gbRrNsPWJ80pyTHJqJRGeaiBnn3nn1/hQ34XnWE64VPjL16318mgyU1nLl70YMm"
+}

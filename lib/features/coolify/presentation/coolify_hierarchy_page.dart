@@ -1,3 +1,5 @@
+import '../terminal/container_target.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/app_theme.dart';
@@ -23,6 +25,7 @@ class CoolifyHierarchyPage extends StatefulWidget {
     required this.uuid,
     required this.name,
     required this.onTerminal,
+    this.onResourceTerminal,
     this.projectUuid,
     this.projectName,
   });
@@ -31,6 +34,7 @@ class CoolifyHierarchyPage extends StatefulWidget {
   final String kind, uuid, name;
   final String? projectUuid, projectName;
   final VoidCallback onTerminal;
+  final OpenResourceTerminal? onResourceTerminal;
   @override
   State<CoolifyHierarchyPage> createState() => _CoolifyHierarchyPageState();
 }
@@ -178,6 +182,7 @@ class _CoolifyHierarchyPageState extends State<CoolifyHierarchyPage> {
                 projectUuid: widget.uuid,
                 projectName: widget.name,
                 onTerminal: widget.onTerminal,
+                onResourceTerminal: widget.onResourceTerminal,
               )
             : CoolifyResourcePage(
                 session: widget.session,
@@ -186,6 +191,7 @@ class _CoolifyHierarchyPageState extends State<CoolifyHierarchyPage> {
                 uuid: id,
                 name: '${item['name'] ?? id}',
                 onTerminal: widget.onTerminal,
+                onResourceTerminal: widget.onResourceTerminal,
               ),
       ),
     );
@@ -208,6 +214,27 @@ class _CoolifyHierarchyPageState extends State<CoolifyHierarchyPage> {
       appBar: AppBar(
         title: Text(widget.name),
         actions: [
+          if (widget.kind == 'servers')
+            IconButton(
+              onPressed: _busy
+                  ? null
+                  : () {
+                      if (widget.onResourceTerminal case final open?) {
+                        open(
+                          CoolifyTerminalTarget(
+                            kind: 'servers',
+                            uuid: widget.uuid,
+                            name: widget.name,
+                            details: _details ?? {},
+                          ),
+                        );
+                      } else {
+                        widget.onTerminal();
+                      }
+                    },
+              icon: const Icon(Icons.terminal),
+              tooltip: context.l10n.openTerminal,
+            ),
           IconButton(
             onPressed: _busy ? null : _load,
             icon: const Icon(Icons.refresh),

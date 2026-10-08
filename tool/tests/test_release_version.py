@@ -76,6 +76,19 @@ class GitHistoryTests(unittest.TestCase):
         self.assertEqual(repeated["commits"], result["commits"])
         self.assertEqual(repeated["build_number"], result["build_number"])
 
+    def test_explicit_version_floor_reconciles_local_play_builds(self):
+        self.git("tag", "v0.2.1")
+        Path("pubspec.yaml").write_text("name: capidock\nversion: 0.7.0+7000\n")
+        self.git("add", "pubspec.yaml")
+        self.commit("feat: prepare server management release")
+        result = plan_release()
+        self.assertEqual(result["version"], "0.7.0")
+        self.assertEqual(result["build_number"], 7000)
+        self.git("tag", result["tag"])
+        self.assertEqual(plan_release()["version"], "0.7.0")
+        self.commit("fix: follow-up")
+        self.assertEqual(plan_release()["version"], "0.7.1")
+
     def test_cannot_release_old_or_rewritten_history(self):
         original = self.git("rev-parse", "HEAD")
         self.commit("feat: future")

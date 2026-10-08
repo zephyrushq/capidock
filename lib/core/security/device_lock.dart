@@ -1,3 +1,5 @@
+import '../../features/monitoring/monitor_service.dart';
+
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -30,10 +32,12 @@ class DeviceLock extends StatefulWidget {
     required this.controller,
     required this.locales,
     required this.authenticator,
+    this.monitoring,
   });
   final DockController controller;
   final LocaleController locales;
   final DeviceAuthenticator authenticator;
+  final MonitorService? monitoring;
   @override
   State<DeviceLock> createState() => _DeviceLockState();
 }
@@ -45,6 +49,72 @@ class _DeviceLockState extends State<DeviceLock> with WidgetsBindingObserver {
   final _preferences = AppPreferences();
   String? _resetError;
   bool _erasing = false;
+  bool _pickingDocument = false;
+
+  Future<bool> _reauthenticate(String reason) async {
+    if (!_unlocked || _authenticating || _busy || _erasing) return false;
+    final current = _generation;
+    _authenticating = true;
+    bool accepted = false;
+    try {
+      accepted = await widget.authenticator.unlock(reason);
+    } catch (_) {}
+    _authenticating = false;
+    final state = WidgetsBinding.instance.lifecycleState;
+    if (!mounted || current != _generation) return false;
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden ||
+        state == AppLifecycleState.detached) {
+      _lockNow();
+      return false;
+    }
+    return accepted;
+  }
+
+  /// A deliberate OS document chooser keeps the navigator behind a privacy
+  /// curtain. Sessions still observe backgrounding and close. Reauthenticate
+  /// before returning even ciphertext to the backup page. No other background
+  /// flow receives this exemption; failure/cancellation locks the vault.
+  Future<T?> _documentAction<T>(
+    String reason,
+    Future<T?> Function() action,
+  ) async {
+    if (!_unlocked || _pickingDocument || _authenticating || _busy) return null;
+    final current = _generation;
+    _pickingDocument = true;
+    setState(() => _obscured = true);
+    try {
+      final result = await action().timeout(const Duration(minutes: 5));
+      // Android may finish the platform result just before onResume.
+      for (
+        var i = 0;
+        i < 100 &&
+            mounted &&
+            WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed;
+        i++
+      ) {
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+      }
+      if (!mounted ||
+          current != _generation ||
+          WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed ||
+          !await _reauthenticate(reason)) {
+        if (mounted && current == _generation) _lockNow();
+        return null;
+      }
+      return result;
+    } catch (_) {
+      if (mounted && current == _generation) {
+        _lockNow();
+        setState(() => _resetError = 'backupFileFailed');
+      }
+      rethrow;
+    } finally {
+      _pickingDocument = false;
+      if (mounted) setState(() => _obscured = false);
+    }
+  }
+
   void _lockNow() {
     _generation++;
     widget.controller.lock();
@@ -81,7 +151,9 @@ class _DeviceLockState extends State<DeviceLock> with WidgetsBindingObserver {
     // Dispose navigators, terminals and trust dialogs before erasing their storage.
     await WidgetsBinding.instance.endOfFrame;
     try {
-      await widget.controller.clearLocalData();
+      await (widget.monitoring ?? MonitorService()).erase(
+        widget.controller.clearLocalData,
+      );
     } catch (_) {
       if (mounted) setState(() => _resetError = 'localEraseFailed');
     }
@@ -106,6 +178,7 @@ class _DeviceLockState extends State<DeviceLock> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (_pickingDocument) return;
     // OS authentication itself can temporarily make the activity inactive.
     if (_authenticating) return;
     if (state == AppLifecycleState.paused ||
@@ -165,6 +238,8 @@ class _DeviceLockState extends State<DeviceLock> with WidgetsBindingObserver {
               child: SecurityControls(
                 lock: _lockNow,
                 clearData: _clearData,
+                reauthenticate: _reauthenticate,
+                documentAction: _documentAction,
                 child: CapidockApp(
                   controller: widget.controller,
                   localeController: widget.locales,

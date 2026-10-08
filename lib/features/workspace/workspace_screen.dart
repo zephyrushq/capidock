@@ -1,3 +1,6 @@
+import '../coolify/terminal/container_target.dart';
+import '../coolify/terminal/coolify_terminal_page.dart';
+import '../coolify/data/coolify_session.dart';
 import '../../l10n/localization.dart';
 
 import 'package:flutter/material.dart';
@@ -381,73 +384,24 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
     ),
   );
 
-  Future<void> _openCoolifyTerminal() async {
-    final choices = [
-      for (final workspace in controller.workspaces)
-        for (final instance in workspace.instances)
-          if (instance.type == InstanceType.ssh)
-            (workspace: workspace, instance: instance),
-    ];
-    final selected = await showModalBottomSheet<ServerInstance>(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) => SafeArea(
-        child: ListView(
-          shrinkWrap: true,
-          padding: const EdgeInsets.all(20),
-          children: [
-            Text(context.l10n.coolifySshTerminal),
-            const SizedBox(height: 16),
-            if (choices.isEmpty) Text(context.l10n.coolifyNoSsh),
-            for (final choice in choices)
-              ListTile(
-                leading: const Icon(Icons.terminal),
-                title: Text(choice.instance.name),
-                subtitle: Text(
-                  '${choice.workspace.name} · ${choice.instance.address}',
-                ),
-                onTap: () => Navigator.pop(context, choice.instance),
-              ),
-          ],
+  Future<void> _openCoolifyTerminal([CoolifyTerminalTarget? target]) async {
+    final instance = controller.selected;
+    if (instance == null || instance.type != InstanceType.coolify) return;
+    final session = CoolifySession(instance);
+    try {
+      await Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (_) => CoolifyTerminalPage(
+            session: session,
+            controller: controller,
+            target: target,
+          ),
         ),
-      ),
-    );
-    if (!mounted || selected == null) return;
-    final workspaceId = choices
-        .firstWhere((choice) => choice.instance.id == selected.id)
-        .workspace
-        .id;
-    await Navigator.push(
-      context,
-      MaterialPageRoute<void>(
-        builder: (_) => ListenableBuilder(
-          listenable: controller,
-          builder: (routeContext, _) {
-            final current = controller.workspaces
-                .where((w) => w.id == workspaceId)
-                .firstOrNull
-                ?.instances
-                .where((i) => i.id == selected.id)
-                .firstOrNull;
-            return Scaffold(
-              appBar: AppBar(title: Text(current?.name ?? selected.name)),
-              body: current == null
-                  ? Center(child: Text(routeContext.l10n.coolifyNoSsh))
-                  : InstanceConnectionPage(
-                      key: ObjectKey(current),
-                      instance: current,
-                      onEdit: () => showInstanceEditor(
-                        routeContext,
-                        controller,
-                        instance: current,
-                        workspaceId: workspaceId,
-                      ),
-                    ),
-            );
-          },
-        ),
-      ),
-    );
+      );
+    } finally {
+      session.dispose();
+    }
   }
 
   Widget _content(ServerInstance instance) => InstanceConnectionPage(
@@ -455,5 +409,6 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
     instance: instance,
     onEdit: _edit,
     onTerminal: _openCoolifyTerminal,
+    onResourceTerminal: _openCoolifyTerminal,
   );
 }

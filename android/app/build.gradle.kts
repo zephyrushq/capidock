@@ -2,7 +2,7 @@ import java.util.Properties
 
 plugins {
     id("com.android.application")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    // AGP provides built-in Kotlin; apply the Flutter plugin after Android.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -51,6 +51,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Isolate device smoke tests from the user's real app and vault.
+            if (System.getenv("CAPIDOCK_MONITOR_SMOKE") == "1") {
+                applicationIdSuffix = ".monitorcheck"
+            }
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true

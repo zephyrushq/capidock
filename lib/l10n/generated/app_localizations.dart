@@ -1748,6 +1748,678 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No matching resources.'**
   String get noSearchResults;
+
+  /// No description provided for @logsPause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause live logs'**
+  String get logsPause;
+
+  /// No description provided for @logsResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume live logs'**
+  String get logsResume;
+
+  /// No description provided for @logsFollow.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow latest logs'**
+  String get logsFollow;
+
+  /// No description provided for @backupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypted backup'**
+  String get backupTitle;
+
+  /// No description provided for @backupEncrypted.
+  ///
+  /// In en, this message translates to:
+  /// **'Password-protected file'**
+  String get backupEncrypted;
+
+  /// No description provided for @backupContents.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspaces and connection credentials'**
+  String get backupContents;
+
+  /// No description provided for @backupExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export backup'**
+  String get backupExport;
+
+  /// No description provided for @backupImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import backup'**
+  String get backupImport;
+
+  /// No description provided for @backupPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup password'**
+  String get backupPassword;
+
+  /// No description provided for @backupConfirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get backupConfirmPassword;
+
+  /// No description provided for @backupPasswordWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least 12 characters.'**
+  String get backupPasswordWeak;
+
+  /// No description provided for @backupPasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'The passwords do not match.'**
+  String get backupPasswordMismatch;
+
+  /// No description provided for @backupPasswordHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep this password safe. Capidock cannot recover it.'**
+  String get backupPasswordHelp;
+
+  /// No description provided for @backupHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Backups include saved workspaces and credentials. AES-256-GCM encryption uses a key derived from your password. The password is not saved. SSH trust, app preferences and server data are excluded. The chosen file provider may sync the encrypted file. Import adds copies and requires verifying SSH identities again.'**
+  String get backupHelp;
+
+  /// No description provided for @backupImportWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'These workspaces will be added as new copies. Existing data stays in place. Verify SSH fingerprints before connecting.'**
+  String get backupImportWarning;
+
+  /// No description provided for @backupAuthReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Authenticate to manage encrypted backups.'**
+  String get backupAuthReason;
+
+  /// No description provided for @backupExported.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypted backup saved.'**
+  String get backupExported;
+
+  /// No description provided for @backupImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspaces imported.'**
+  String get backupImported;
+
+  /// No description provided for @backupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to complete the backup operation. Your saved data has not been replaced.'**
+  String get backupFailed;
+
+  /// No description provided for @backupInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid or unsupported backup.'**
+  String get backupInvalid;
+
+  /// No description provided for @backupUnlockFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect password or altered backup.'**
+  String get backupUnlockFailed;
+
+  /// No description provided for @backupTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'The backup exceeds the size limit.'**
+  String get backupTooLarge;
+
+  /// No description provided for @backupFileFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to access the backup file.'**
+  String get backupFileFailed;
+
+  /// No description provided for @listSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get listSearch;
+
+  /// No description provided for @listAllStatuses.
+  ///
+  /// In en, this message translates to:
+  /// **'All statuses'**
+  String get listAllStatuses;
+
+  /// No description provided for @listPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get listPrevious;
+
+  /// No description provided for @listNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get listNext;
+
+  /// No description provided for @listNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching entries.'**
+  String get listNoMatches;
+
+  /// No description provided for @listPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page}'**
+  String listPage(int page);
+
+  /// No description provided for @logsLevelAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All levels'**
+  String get logsLevelAll;
+
+  /// No description provided for @logsLevelErrors.
+  ///
+  /// In en, this message translates to:
+  /// **'Errors'**
+  String get logsLevelErrors;
+
+  /// No description provided for @logsLevelWarnings.
+  ///
+  /// In en, this message translates to:
+  /// **'Warnings'**
+  String get logsLevelWarnings;
+
+  /// No description provided for @logsLineLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Log lines'**
+  String get logsLineLimit;
+
+  /// No description provided for @listHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get listHistory;
+
+  /// No description provided for @listSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule'**
+  String get listSchedule;
+
+  /// No description provided for @listDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get listDetails;
+
+  /// No description provided for @listPageFilterHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Search and status filters apply to the current server page. Use the arrows to browse older deployments.'**
+  String get listPageFilterHelp;
+
+  /// No description provided for @activitySize.
+  ///
+  /// In en, this message translates to:
+  /// **'File size'**
+  String get activitySize;
+
+  /// No description provided for @activityCommit.
+  ///
+  /// In en, this message translates to:
+  /// **'Commit message'**
+  String get activityCommit;
+
+  /// No description provided for @activityFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get activityFinished;
+
+  /// No description provided for @activityEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get activityEnabled;
+
+  /// No description provided for @logsShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show logs'**
+  String get logsShow;
+
+  /// No description provided for @logsHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide logs'**
+  String get logsHide;
+
+  /// No description provided for @coolifyTerminalServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Coolify server'**
+  String get coolifyTerminalServer;
+
+  /// No description provided for @coolifyTerminalContainer.
+  ///
+  /// In en, this message translates to:
+  /// **'Container terminal'**
+  String get coolifyTerminalContainer;
+
+  /// No description provided for @coolifyTerminalHost.
+  ///
+  /// In en, this message translates to:
+  /// **'Server terminal'**
+  String get coolifyTerminalHost;
+
+  /// No description provided for @coolifyTerminalNoContainers.
+  ///
+  /// In en, this message translates to:
+  /// **'No running containers found for this resource.'**
+  String get coolifyTerminalNoContainers;
+
+  /// No description provided for @coolifyTerminalServersFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load servers. Check API permissions and connectivity.'**
+  String get coolifyTerminalServersFailed;
+
+  /// No description provided for @coolifyTerminalLinkFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read the saved SSH association.'**
+  String get coolifyTerminalLinkFailed;
+
+  /// No description provided for @coolifyTerminalConnectFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not connect or save the SSH association. Check your credentials and secure storage.'**
+  String get coolifyTerminalConnectFailed;
+
+  /// No description provided for @coolifyTerminalDockerFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not list containers. Check Docker access for this SSH user.'**
+  String get coolifyTerminalDockerFailed;
+
+  /// No description provided for @coolifyTerminalContainerGone.
+  ///
+  /// In en, this message translates to:
+  /// **'This container is no longer running or no longer belongs to this resource. Refresh the list.'**
+  String get coolifyTerminalContainerGone;
+
+  /// No description provided for @coolifyTerminalShellFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the terminal. Check that the selected shell is installed. Reconnect to try again.'**
+  String get coolifyTerminalShellFailed;
+
+  /// No description provided for @coolifyTerminalHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Associate the correct SSH connection with the selected Coolify server. Credentials remain encrypted on your device. The API token is not an SSH credential. SSH and Docker permissions apply independently of the token: Docker access can grant full server control. Only running containers belonging to this resource are listed. Close the session when finished; sessions also close in the background.'**
+  String get coolifyTerminalHelp;
+
+  /// No description provided for @sftpFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Files'**
+  String get sftpFiles;
+
+  /// No description provided for @sftpUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload file'**
+  String get sftpUpload;
+
+  /// No description provided for @sftpDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get sftpDownload;
+
+  /// No description provided for @sftpReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace remote file?'**
+  String get sftpReplace;
+
+  /// No description provided for @sftpNewFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'New folder'**
+  String get sftpNewFolder;
+
+  /// No description provided for @sftpRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get sftpRename;
+
+  /// No description provided for @sftpEditText.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit text'**
+  String get sftpEditText;
+
+  /// No description provided for @sftpParent.
+  ///
+  /// In en, this message translates to:
+  /// **'Parent folder'**
+  String get sftpParent;
+
+  /// No description provided for @sftpEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'This folder is empty.'**
+  String get sftpEmpty;
+
+  /// No description provided for @sftpInvalidName.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a filename without slashes or control characters.'**
+  String get sftpInvalidName;
+
+  /// No description provided for @sftpPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission denied by the server.'**
+  String get sftpPermissionDenied;
+
+  /// No description provided for @sftpFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'SFTP failed. Check access, permissions and subsystem support; reconnect to try again.'**
+  String get sftpFailed;
+
+  /// No description provided for @sftpDirectoryLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'This folder exceeds the 5,000 entry limit.'**
+  String get sftpDirectoryLimit;
+
+  /// No description provided for @sftpRegularOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'This action supports regular files only, not symbolic links.'**
+  String get sftpRegularOnly;
+
+  /// No description provided for @sftpTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer limit: 16 MiB. Text editor limit: 256 KiB.'**
+  String get sftpTooLarge;
+
+  /// No description provided for @sftpTextOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'The editor supports UTF-8 text without null bytes.'**
+  String get sftpTextOnly;
+
+  /// No description provided for @sftpExists.
+  ///
+  /// In en, this message translates to:
+  /// **'The destination already exists or is not a regular file.'**
+  String get sftpExists;
+
+  /// No description provided for @sftpChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'The remote file changed. Reload it before saving.'**
+  String get sftpChanged;
+
+  /// No description provided for @sftpLocalFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not access the selected local document.'**
+  String get sftpLocalFailed;
+
+  /// No description provided for @sftpHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'SFTP uses this verified SSH connection and your server permissions. Transfers are limited to 16 MiB; UTF-8 editing to 256 KiB. Files are not cached on the phone. Downloads are saved to the location you choose and may be synced by that provider. SSH closes while the document picker is open; uploads reconnect after device authentication. Delete removes only files, links or empty folders. Interrupted transfers may leave a partial remote file. Replacing a file requires overwrite-rename support; the original is preserved when replacement fails.'**
+  String get sftpHelp;
+
+  /// No description provided for @sftpConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get sftpConfirm;
+
+  /// No description provided for @monitorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Monitoring'**
+  String get monitorTitle;
+
+  /// No description provided for @monitorHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Checks run locally on this phone. Android may delay them while asleep or after force stop. A failed connection can be caused by your network or VPN; it does not prove the server is down. Two consecutive failures trigger an alert. Availability is the percentage of reachable checks over the last 30 days, not continuous uptime. Offline and unknown checks are excluded. Coolify checks inspect the latest 20 deployments and resource health; existing failures form the initial baseline. SSH must already have a trusted host key.'**
+  String get monitorHelp;
+
+  /// No description provided for @monitorEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable monitoring'**
+  String get monitorEnable;
+
+  /// No description provided for @monitorConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Capidock to use this instance’s encrypted credentials for read-only checks in the background, even while the app is locked? History stays encrypted locally.'**
+  String get monitorConsent;
+
+  /// No description provided for @monitorInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Background check interval'**
+  String get monitorInterval;
+
+  /// No description provided for @monitorPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications allowed'**
+  String get monitorPermission;
+
+  /// No description provided for @monitorPermissionOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are disabled'**
+  String get monitorPermissionOff;
+
+  /// No description provided for @monitorRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications'**
+  String get monitorRequest;
+
+  /// No description provided for @monitorCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Check soon'**
+  String get monitorCheck;
+
+  /// No description provided for @monitorScheduled.
+  ///
+  /// In en, this message translates to:
+  /// **'Check scheduled. Android decides when it runs.'**
+  String get monitorScheduled;
+
+  /// No description provided for @monitorEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an instance to start monitoring.'**
+  String get monitorEmpty;
+
+  /// No description provided for @monitorNoChecks.
+  ///
+  /// In en, this message translates to:
+  /// **'No checks yet'**
+  String get monitorNoChecks;
+
+  /// No description provided for @monitorObserved.
+  ///
+  /// In en, this message translates to:
+  /// **'Observed availability'**
+  String get monitorObserved;
+
+  /// No description provided for @monitorHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Check history · last 30 days'**
+  String get monitorHistory;
+
+  /// No description provided for @monitorAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts'**
+  String get monitorAlerts;
+
+  /// No description provided for @monitorAlertConnections.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection and access problems'**
+  String get monitorAlertConnections;
+
+  /// No description provided for @monitorAlertDeployments.
+  ///
+  /// In en, this message translates to:
+  /// **'Deployment events'**
+  String get monitorAlertDeployments;
+
+  /// No description provided for @monitorAlertResources.
+  ///
+  /// In en, this message translates to:
+  /// **'Resource state changes'**
+  String get monitorAlertResources;
+
+  /// No description provided for @monitorAlertRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery'**
+  String get monitorAlertRecovery;
+
+  /// No description provided for @monitorUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Reachable'**
+  String get monitorUp;
+
+  /// No description provided for @monitorDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection failed'**
+  String get monitorDown;
+
+  /// No description provided for @monitorOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone offline'**
+  String get monitorOffline;
+
+  /// No description provided for @monitorAuthentication.
+  ///
+  /// In en, this message translates to:
+  /// **'Check credentials or permissions'**
+  String get monitorAuthentication;
+
+  /// No description provided for @monitorIdentity.
+  ///
+  /// In en, this message translates to:
+  /// **'SSH identity not verified'**
+  String get monitorIdentity;
+
+  /// No description provided for @monitorUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Check incomplete'**
+  String get monitorUnknown;
+
+  /// No description provided for @monitorStale.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for a fresh check'**
+  String get monitorStale;
+
+  /// No description provided for @monitorLatency.
+  ///
+  /// In en, this message translates to:
+  /// **'Latency'**
+  String get monitorLatency;
+
+  /// No description provided for @monitorLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'You can monitor up to 20 instances.'**
+  String get monitorLimit;
+
+  /// No description provided for @monitorFastTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast Coolify monitoring'**
+  String get monitorFastTitle;
+
+  /// No description provided for @monitorFastHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Checks enabled Coolify instances while the app is open and unlocked. Pauses in the background. Checks may take longer on slow connections; brief events can be missed.'**
+  String get monitorFastHelp;
+
+  /// No description provided for @monitorFastInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'App open check interval'**
+  String get monitorFastInterval;
+
+  /// No description provided for @monitorDeploymentStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deployment started'**
+  String get monitorDeploymentStarted;
+
+  /// No description provided for @monitorDeploymentSucceeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Deployment completed'**
+  String get monitorDeploymentSucceeded;
+
+  /// No description provided for @monitorDeploymentCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Deployment cancelled'**
+  String get monitorDeploymentCancelled;
+
+  /// No description provided for @monitorResourceChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Resource state changed'**
+  String get monitorResourceChanged;
+
+  /// No description provided for @monitorDeploymentFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Deployment failed'**
+  String get monitorDeploymentFailed;
+
+  /// No description provided for @monitorResourceUnhealthy.
+  ///
+  /// In en, this message translates to:
+  /// **'Resource unhealthy'**
+  String get monitorResourceUnhealthy;
 }
 
 class _AppLocalizationsDelegate

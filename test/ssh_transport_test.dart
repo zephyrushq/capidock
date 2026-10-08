@@ -1,3 +1,8 @@
+import 'dart:typed_data';
+
+import 'package:capidock/features/sftp/sftp_browser.dart';
+import 'package:capidock/features/coolify/terminal/container_target.dart';
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -22,6 +27,140 @@ Future<void> until(bool Function() condition) async {
 }
 
 void main() {
+  test(
+    'Real SFTP shares SSH transport and confines file operations to test root',
+    () async {
+      final config = jsonDecode(
+        File(configPath).readAsStringSync(),
+      ) as Map<String, dynamic>;
+      final instance = ServerInstance(
+        id: 'sftp-test',
+        name: 'Loopback',
+        type: InstanceType.ssh,
+        host: '127.0.0.1',
+        port: config['port'] as int,
+        username: config['username'] as String,
+        password: config['password'] as String,
+      );
+      final connection = SshConnection(
+        instance,
+        hostKeys: HostKeyStore(secrets: MemorySecretStore()),
+      );
+      addTearDown(connection.dispose);
+      await connection.connect((_, _, _) async => true, openShell: false);
+      final browser = SftpBrowser(await connection.openSftp());
+      addTearDown(browser.close);
+      expect(await browser.home(), '/');
+      expect(
+        (await browser.list('/')).map((e) => e.filename),
+        contains('hello.txt'),
+      );
+      expect(
+        sftpDecodeText(await browser.read('/hello.txt')),
+        'SFTP fixture only\n',
+      );
+      await expectLater(browser.read('/link'), throwsFormatException);
+      await expectLater(
+        browser.read('/hello.txt', limit: 4),
+        throwsFormatException,
+      );
+      final original = Uint8List.fromList(utf8.encode('new content'));
+      await browser.upload('/new.txt', original);
+      await expectLater(
+        browser.upload('/new.txt', original),
+        throwsFormatException,
+      );
+      await browser.upload(
+        '/new.txt',
+        Uint8List.fromList(utf8.encode('edited')),
+        overwrite: true,
+        original: original,
+      );
+      expect(sftpDecodeText(await browser.read('/new.txt')), 'edited');
+      await expectLater(
+        browser.upload(
+          '/new.txt',
+          original,
+          overwrite: true,
+          original: original,
+        ),
+        throwsFormatException,
+      );
+      await browser.rename('/new.txt', '/renamed.txt');
+      await browser.createFolder('/new-folder');
+      await browser.rename('/renamed.txt', '/new-folder/renamed.txt');
+      await expectLater(browser.delete('/new-folder'), throwsA(anything));
+      await browser.delete('/new-folder/renamed.txt');
+      await browser.delete('/new-folder');
+      expect(await browser.stat('/new-folder'), isNull);
+      connection.disconnect();
+      await expectLater(browser.list('/'), throwsA(anything));
+    },
+    skip: configPath.isEmpty
+        ? 'Set SSH_TEST_CONFIG to run isolated SFTP checks'
+        : false,
+  );
+
+  test(
+    'Real SSH container discovery and interactive exec PTY',
+    () async {
+      final config = jsonDecode(
+        File(configPath).readAsStringSync(),
+      ) as Map<String, dynamic>;
+      final instance = ServerInstance(
+        id: 'container-transport',
+        name: 'Loopback',
+        type: InstanceType.ssh,
+        host: '127.0.0.1',
+        port: config['port'] as int,
+        username: config['username'] as String,
+        password: config['password'] as String,
+      );
+      final connection = SshConnection(
+        instance,
+        hostKeys: HostKeyStore(secrets: MemorySecretStore()),
+      );
+      addTearDown(connection.dispose);
+      await connection.connect((_, _, _) async => true, openShell: false);
+      expect(
+        connection.status,
+        ConnectionStatus.connected,
+        reason: connection.error,
+      );
+      final containers = resourceContainers(
+        await connection.discoverContainers(),
+        const CoolifyTerminalTarget(
+          kind: 'applications',
+          uuid: 'smoke-resource',
+          name: 'Smoke',
+        ),
+      );
+      expect(containers, hasLength(1));
+      await expectLater(
+        connection.openTerminal(containerId: 'unsafe;id'),
+        throwsFormatException,
+      );
+      await connection.openTerminal(containerId: containers.single.id);
+      await until(
+        () => connection.terminal.buffer.getText().contains(
+          'SSH transport test ready',
+        ),
+      );
+      connection.terminal.onOutput!('printf capidock-transport-ok\n');
+      await until(
+        () => connection.terminal.buffer.getText().contains(
+          'capidock-transport-ok',
+        ),
+      );
+      connection.terminal.onOutput!('exit\n');
+      await until(() => connection.status == ConnectionStatus.disconnected);
+      expect(connection.terminal.onOutput, isNull);
+    },
+    skip: configPath.isEmpty
+        ? 'Set SSH_TEST_CONFIG to run loopback transport checks'
+        : false,
+  );
+
   for (final keyAuth in [false, true]) {
     test(
       'Real SSH ${keyAuth ? 'encrypted private key' : 'password'} auth, PTY, output and probe',
@@ -142,9 +281,11 @@ void main() {
     await connection.connect((_, _, _) async => false);
     expect(connection.status, ConnectionStatus.failed);
     expect(secrets.values, isEmpty);
+    expect(connection.failureKind, SshFailure.identity);
     await connection.connect((_, _, _) async => true);
     expect(connection.status, ConnectionStatus.failed);
     expect(connection.error, contains('Autenticação recusada'));
+    expect(connection.failureKind, SshFailure.authentication);
     expect(connection.terminal.onOutput, isNull);
   }, skip: configPath.isEmpty);
 }

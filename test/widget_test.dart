@@ -45,9 +45,19 @@ void main() {
         buildSignature: '',
       );
       await launch(tester, size: const Size(1024, 800));
-      await tester.tap(find.byTooltip('Sobre o Capidock'));
+      await tester.tap(find.byKey(const ValueKey('sidebar-app-settings')));
       await tester.pumpAndSettle();
-      expect(find.text('0.3.0+3000'), findsOneWidget);
+      final about = find.widgetWithText(ListTile, 'Capidock');
+      await tester.ensureVisible(about);
+      await tester.tap(about);
+      await tester.pumpAndSettle();
+      expect(
+        find.descendant(
+          of: find.byType(AboutDialog),
+          matching: find.text('0.3.0+3000'),
+        ),
+        findsOneWidget,
+      );
       expect(tester.takeException(), isNull);
       expect(
         find.text('© 2026 ZEPHYRUS PROSPERITY - UNIPESSOAL LDA'),

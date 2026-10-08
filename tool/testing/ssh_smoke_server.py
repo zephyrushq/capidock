@@ -1,7 +1,8 @@
 """Temporary loopback SSH server for transport tests; requires AsyncSSH.
 
 Creates fresh credentials in a private directory. Never exposes a shell: the
-only accepted operations are the fixed read-only probe and a printf challenge.
+only accepted operations are a read-only probe, a synthetic container listing,
+a fixed container PTY command and a printf challenge. No Docker daemon is used.
 Run with --config /tmp/<private-directory>/connection.json, then use that path
 as SSH_TEST_CONFIG when running test/ssh_transport_test.dart.
 """
@@ -21,6 +22,11 @@ args.config.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
 password = secrets.token_urlsafe(32)
 passphrase = secrets.token_urlsafe(32)
 client_key = asyncssh.generate_private_key('ssh-ed25519')
+remote_root = args.config.parent / 'sftp-root'
+remote_root.mkdir(mode=0o700, exist_ok=True)
+(remote_root / 'hello.txt').write_text('SFTP fixture only\n')
+(remote_root / 'folder').mkdir(exist_ok=True)
+(remote_root / 'link').symlink_to('hello.txt')
 activity_path = Path(str(args.config) + '.activity')
 channel_requests = 0
 activity_path.write_text('0')
@@ -49,7 +55,17 @@ async def handle(process):
         channel_requests += 1
         activity_path.write_text(str(channel_requests))
     try:
-        if process.command:
+        if process.command == "docker ps --no-trunc --format '{{json .}}'":
+            process.stdout.write(json.dumps(dict(ID='a' * 64, Names='smoke-container',
+                Labels='coolify.applicationUuid=smoke-resource', Image='fixture')) + '\n')
+            process.exit(0)
+            return
+        container_command = 'docker exec -it ' + 'a' * 64 + ' sh'
+        if process.command == container_command and process.term_type != 'xterm-256color':
+            process.stderr.write('Interactive container requires PTY\n')
+            process.exit(1)
+            return
+        if process.command and process.command != container_command:
             # Actual system information without accepting arbitrary shell input.
             for title, command in [
                 ('SYSTEM', ['uname', '-snr']), ('UPTIME', ['uptime']),
@@ -79,7 +95,8 @@ async def handle(process):
 async def main():
     server = await asyncssh.create_server(Server, '127.0.0.1', 0,
         server_host_keys=[asyncssh.generate_private_key('ssh-ed25519')],
-        process_factory=handle)
+        process_factory=handle,
+        sftp_factory=lambda channel: asyncssh.SFTPServer(channel, chroot=str(remote_root)))
     config = dict(port=server.get_port(), username='capidock-test', password=password,
         privateKey=client_key.export_private_key('openssh', passphrase=passphrase).decode(),
         passphrase=passphrase)

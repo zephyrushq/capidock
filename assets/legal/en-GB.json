@@ -1,7 +1,7 @@
 {
   "locale": "en-GB",
   "date": "2026-10-08",
-  "revision": "1",
+  "revision": "5",
   "terms": {
     "sections": [
       {
@@ -34,7 +34,7 @@
       },
       {
         "title": "2. Data stored on your device",
-        "body": "The app stores workspace and instance names, endpoint addresses and ports, SSH usernames, passwords, private keys and passphrases, Coolify API tokens and accepted SSH host fingerprints locally. Workspace records and host fingerprints use AES-GCM encryption with a key protected by Android Keystore. The language and terminal text size are stored separately as ordinary preferences. Android device authentication returns an authentication result; Capidock does not receive your device PIN or biometric templates."
+        "body": "The app stores workspace and instance names, endpoint addresses and ports, SSH usernames, passwords, private keys and passphrases, Coolify API tokens and accepted SSH host fingerprints locally. Workspace records and host fingerprints use AES-GCM encryption with a key protected by Android Keystore. The language and terminal text size are stored separately as ordinary preferences. Android device authentication returns an authentication result; Capidock does not receive your device PIN or biometric templates. You can export a password-encrypted backup of workspaces and credentials through the Android document picker. The chosen file provider may store or sync that encrypted file independently. The password is not saved by Capidock. SSH trust and server content are not included."
       },
       {
         "title": "3. Data sent to your servers",
@@ -42,15 +42,19 @@
       },
       {
         "title": "4. Session data and third parties",
-        "body": "Terminal output, server information and API responses are processed for display during the session and are not intentionally saved as a response history. The official app contains no advertising, analytics or developer crash-reporting SDK and does not sell user data. Android, Google Play, keyboards, accessibility tools and external server operators may process data independently under their own settings and policies. If you email us, the company receives the information you choose to send to respond to your request."
+        "body": "Terminal output, server information and API responses are processed for display during the session and are not intentionally saved as a response history. The official app contains no advertising, analytics or developer crash-reporting SDK and does not sell user data. Android, Google Play, keyboards, accessibility tools and external server operators may process data independently under their own settings and policies. If you email us, the company receives the information you choose to send to respond to your request. SFTP file contents are transferred only when you request a file operation and are held in memory without an app file cache. Downloads are saved as ordinary files in your chosen document provider, which may store or sync them; they are not automatically encrypted by the workspace vault and are not removed by clearing Capidock data."
       },
       {
         "title": "5. Retention and deletion",
-        "body": "Local workspace data is retained until you remove it or clear the app data. Removing a workspace or instance updates the workspace vault but does not necessarily erase previously accepted SSH host fingerprints. You can forget individual identities in App settings, or erase all saved workspaces, credentials and SSH identities there after device authentication. This in-app erasure preserves language and terminal preferences. Clear Android app storage to remove the local vault, host fingerprints and preferences. Android backup is disabled for these records. Local deletion does not delete remote resources, server logs or revoke credentials; use the server controls for those actions. Losing app data or Keystore access can make credentials unrecoverable. Correspondence is retained only as needed to handle the request and applicable legal obligations."
+        "body": "Local workspace data is retained until you remove it or clear the app data. Removing a workspace or instance updates the workspace vault but does not necessarily erase previously accepted SSH host fingerprints. You can forget individual identities in App settings, or erase all saved workspaces, credentials and SSH identities there after device authentication. This in-app erasure preserves language and terminal preferences. Clear Android app storage to remove the local vault, host fingerprints and preferences. Android backup is disabled for these records. Local deletion does not delete remote resources, server logs or revoke credentials; use the server controls for those actions. Losing app data or Keystore access can make credentials unrecoverable. Correspondence is retained only as needed to handle the request and applicable legal obligations. Erasing app data does not delete exported backup files. Manage those copies through the file or storage provider you selected."
       },
       {
         "title": "6. Security, rights and contact",
         "body": "Only provide credentials and upload files you are authorised to use. Prefer least-privilege server accounts. Encryption and screen protection cannot guarantee confidentiality on a compromised device or against a malicious keyboard/accessibility service. Where applicable, you may request access, correction, deletion, restriction, objection or portability of personal data held by the company, and complain to a competent data protection authority. The company cannot retrieve a vault that remains only on your device. Contact legal@zephyrushq.com for privacy requests. Policy updates are included with app updates and display their revision date."
+      },
+      {
+        "title": "7. Optional local monitoring",
+        "body": "Monitoring is disabled until you enable it for an instance after device authentication. If enabled, Capidock uses that instance’s saved encrypted credentials for read-only SSH authentication and Coolify API checks in the background, including while the app interface is locked. It stores only check times, connection states, latency, opaque resource/deployment identifiers and alert events in encrypted local storage, for up to 30 days with fixed entry limits. Raw logs, server responses and environment values are not stored in monitoring history. Notifications are local, contain generic text and open the normal locked app. Android controls their visibility and delivery and may delay or stop background checks. Checks connect directly to your chosen servers; no monitoring backend, Firebase or external notification service is used. Disabling an instance removes its monitoring history. Erasing saved server data stops monitoring and clears its settings, history and app notifications. Monitoring data and settings are not included in workspace exports. Observed availability is based on completed checks from your phone; it is not a guarantee of continuous uptime. While the app is open and unlocked, fast Coolify monitoring checks enabled instances every 10, 30 or 60 seconds after each round completes. It pauses when the app leaves the foreground. Slow connections can extend the interval. The latest observation and events update on each check; availability samples follow the background interval. Short events between checks can be missed."
       }
     ]
   }

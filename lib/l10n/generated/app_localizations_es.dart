@@ -954,6 +954,370 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get noSearchResults => 'Ningún recurso coincide con la búsqueda.';
+
+  @override
+  String get logsPause => 'Pausar registros en directo';
+
+  @override
+  String get logsResume => 'Reanudar registros en directo';
+
+  @override
+  String get logsFollow => 'Seguir los últimos registros';
+
+  @override
+  String get backupTitle => 'Copia cifrada';
+
+  @override
+  String get backupEncrypted => 'Archivo protegido con contraseña';
+
+  @override
+  String get backupContents => 'Workspaces y credenciales de conexión';
+
+  @override
+  String get backupExport => 'Exportar copia';
+
+  @override
+  String get backupImport => 'Importar copia';
+
+  @override
+  String get backupPassword => 'Contraseña de la copia';
+
+  @override
+  String get backupConfirmPassword => 'Confirmar contraseña';
+
+  @override
+  String get backupPasswordWeak => 'Usa al menos 12 caracteres.';
+
+  @override
+  String get backupPasswordMismatch => 'Las contraseñas no coinciden.';
+
+  @override
+  String get backupPasswordHelp =>
+      'Guarda esta contraseña. Capidock no puede recuperarla.';
+
+  @override
+  String get backupHelp =>
+      'Las copias incluyen workspaces y credenciales guardados. El cifrado AES-256-GCM usa una clave derivada de la contraseña, que no se guarda. No incluyen identidades SSH de confianza, preferencias ni datos de los servidores. El proveedor de archivos elegido puede sincronizar el archivo cifrado. La importación añade copias y requiere verificar de nuevo las identidades SSH.';
+
+  @override
+  String get backupImportWarning =>
+      'Estos workspaces se añadirán como nuevas copias. Se conservarán los datos existentes. Verifica las huellas SSH antes de conectarte.';
+
+  @override
+  String get backupAuthReason => 'Autentícate para gestionar copias cifradas.';
+
+  @override
+  String get backupExported => 'Copia cifrada guardada.';
+
+  @override
+  String get backupImported => 'Workspaces importados.';
+
+  @override
+  String get backupFailed =>
+      'No se pudo completar la operación. Los datos guardados no se han sustituido.';
+
+  @override
+  String get backupInvalid => 'Copia inválida o no compatible.';
+
+  @override
+  String get backupUnlockFailed => 'Contraseña incorrecta o copia alterada.';
+
+  @override
+  String get backupTooLarge => 'La copia supera el límite de tamaño.';
+
+  @override
+  String get backupFileFailed => 'No se pudo acceder al archivo de la copia.';
+
+  @override
+  String get listSearch => 'Buscar';
+
+  @override
+  String get listAllStatuses => 'Todos los estados';
+
+  @override
+  String get listPrevious => 'Anterior';
+
+  @override
+  String get listNext => 'Siguiente';
+
+  @override
+  String get listNoMatches =>
+      'No hay resultados que coincidan con los filtros.';
+
+  @override
+  String listPage(int page) {
+    return 'Página $page';
+  }
+
+  @override
+  String get logsLevelAll => 'Todos los niveles';
+
+  @override
+  String get logsLevelErrors => 'Errores';
+
+  @override
+  String get logsLevelWarnings => 'Avisos';
+
+  @override
+  String get logsLineLimit => 'Líneas de registros';
+
+  @override
+  String get listHistory => 'Historial';
+
+  @override
+  String get listSchedule => 'Programación';
+
+  @override
+  String get listDetails => 'Detalles';
+
+  @override
+  String get listPageFilterHelp =>
+      'La búsqueda y los filtros se aplican a la página actual del servidor. Usa las flechas para consultar despliegues anteriores.';
+
+  @override
+  String get activitySize => 'Tamaño del archivo';
+
+  @override
+  String get activityCommit => 'Mensaje del commit';
+
+  @override
+  String get activityFinished => 'Finalizado';
+
+  @override
+  String get activityEnabled => 'Activo';
+
+  @override
+  String get logsShow => 'Mostrar registros';
+
+  @override
+  String get logsHide => 'Ocultar registros';
+
+  @override
+  String get coolifyTerminalServer => 'Servidor Coolify';
+
+  @override
+  String get coolifyTerminalContainer => 'Terminal del contenedor';
+
+  @override
+  String get coolifyTerminalHost => 'Terminal del servidor';
+
+  @override
+  String get coolifyTerminalNoContainers =>
+      'No se encontraron contenedores en ejecución para este recurso.';
+
+  @override
+  String get coolifyTerminalServersFailed =>
+      'No se pudieron cargar los servidores. Comprueba los permisos de la API y la conexión.';
+
+  @override
+  String get coolifyTerminalLinkFailed =>
+      'No se pudo leer la asociación SSH guardada.';
+
+  @override
+  String get coolifyTerminalConnectFailed =>
+      'No se pudo conectar o guardar la asociación SSH. Comprueba las credenciales y el almacenamiento seguro.';
+
+  @override
+  String get coolifyTerminalDockerFailed =>
+      'No se pudieron listar los contenedores. Comprueba el acceso a Docker de este usuario SSH.';
+
+  @override
+  String get coolifyTerminalContainerGone =>
+      'El contenedor ya no está en ejecución o ya no pertenece a este recurso. Actualiza la lista.';
+
+  @override
+  String get coolifyTerminalShellFailed =>
+      'No se pudo abrir el terminal. Comprueba si la shell seleccionada está instalada. Vuelve a conectar para intentarlo.';
+
+  @override
+  String get coolifyTerminalHelp =>
+      'Asocia la conexión SSH correcta al servidor Coolify seleccionado. Las credenciales permanecen cifradas en el dispositivo. El token de la API no es una credencial SSH. Los permisos SSH y Docker son independientes del token: el acceso a Docker puede dar control total del servidor. La lista muestra solo contenedores en ejecución de este recurso. Cierra la sesión al terminar; las sesiones también se cierran en segundo plano.';
+
+  @override
+  String get sftpFiles => 'Archivos';
+
+  @override
+  String get sftpUpload => 'Subir archivo';
+
+  @override
+  String get sftpDownload => 'Descargar';
+
+  @override
+  String get sftpReplace => '¿Reemplazar el archivo remoto?';
+
+  @override
+  String get sftpNewFolder => 'Nueva carpeta';
+
+  @override
+  String get sftpRename => 'Renombrar';
+
+  @override
+  String get sftpEditText => 'Editar texto';
+
+  @override
+  String get sftpParent => 'Carpeta superior';
+
+  @override
+  String get sftpEmpty => 'Esta carpeta está vacía.';
+
+  @override
+  String get sftpInvalidName =>
+      'Usa un nombre sin barras ni caracteres de control.';
+
+  @override
+  String get sftpPermissionDenied => 'El servidor denegó el permiso.';
+
+  @override
+  String get sftpFailed =>
+      'SFTP falló. Comprueba el acceso, los permisos y el soporte del subsistema; vuelve a conectar.';
+
+  @override
+  String get sftpDirectoryLimit =>
+      'Esta carpeta supera el límite de 5.000 entradas.';
+
+  @override
+  String get sftpRegularOnly =>
+      'Esta acción admite archivos regulares, no enlaces simbólicos.';
+
+  @override
+  String get sftpTooLarge =>
+      'Límite de transferencia: 16 MiB. Límite del editor: 256 KiB.';
+
+  @override
+  String get sftpTextOnly => 'El editor admite texto UTF-8 sin bytes nulos.';
+
+  @override
+  String get sftpExists => 'El destino ya existe o no es un archivo regular.';
+
+  @override
+  String get sftpChanged =>
+      'El archivo remoto ha cambiado. Vuelve a cargarlo antes de guardar.';
+
+  @override
+  String get sftpLocalFailed =>
+      'No se pudo acceder al documento local seleccionado.';
+
+  @override
+  String get sftpHelp =>
+      'SFTP usa esta conexión SSH verificada y los permisos del servidor. Transferencias de hasta 16 MiB; edición UTF-8 de hasta 256 KiB. No se guardan archivos en caché. Las descargas se guardan donde elijas y el proveedor puede sincronizarlas. SSH se cierra mientras el selector está abierto; las subidas reconectan tras autenticar el dispositivo. Solo se eliminan archivos, enlaces o carpetas vacías. Una transferencia interrumpida puede dejar un archivo remoto parcial. Reemplazar requiere soporte para renombrar sobre el destino; si falla, se conserva el original.';
+
+  @override
+  String get sftpConfirm => 'Confirmar';
+
+  @override
+  String get monitorTitle => 'Supervisión';
+
+  @override
+  String get monitorHelp =>
+      'Las comprobaciones se realizan en este teléfono. Android puede retrasarlas en reposo o tras un cierre forzado. Una conexión fallida puede deberse a la red o VPN; no demuestra que el servidor esté caído. Dos fallos consecutivos generan una alerta. La disponibilidad es el porcentaje de comprobaciones accesibles de los últimos 30 días, no un uptime continuo. Se excluyen comprobaciones sin red o desconocidas. Coolify analiza los últimos 20 despliegues y la salud de los recursos; los fallos existentes son la referencia inicial. SSH requiere una clave de servidor ya verificada.';
+
+  @override
+  String get monitorEnable => 'Activar supervisión';
+
+  @override
+  String get monitorConsent =>
+      '¿Permitir que Capidock utilice las credenciales cifradas de esta instancia para comprobaciones de solo lectura en segundo plano, incluso con la app bloqueada? El historial permanece cifrado localmente.';
+
+  @override
+  String get monitorInterval => 'Intervalo en segundo plano';
+
+  @override
+  String get monitorPermission => 'Notificaciones permitidas';
+
+  @override
+  String get monitorPermissionOff => 'Las notificaciones están desactivadas';
+
+  @override
+  String get monitorRequest => 'Permitir notificaciones';
+
+  @override
+  String get monitorCheck => 'Comprobar pronto';
+
+  @override
+  String get monitorScheduled =>
+      'Comprobación programada. Android decide cuándo ejecutarla.';
+
+  @override
+  String get monitorEmpty => 'Crea una instancia para iniciar la supervisión.';
+
+  @override
+  String get monitorNoChecks => 'Sin comprobaciones todavía';
+
+  @override
+  String get monitorObserved => 'Disponibilidad observada';
+
+  @override
+  String get monitorHistory => 'Historial · últimos 30 días';
+
+  @override
+  String get monitorAlerts => 'Alertas';
+
+  @override
+  String get monitorAlertConnections => 'Problemas de conexión y acceso';
+
+  @override
+  String get monitorAlertDeployments => 'Eventos de deployments';
+
+  @override
+  String get monitorAlertResources => 'Cambios de estado de los recursos';
+
+  @override
+  String get monitorAlertRecovery => 'Recuperación';
+
+  @override
+  String get monitorUp => 'Accesible';
+
+  @override
+  String get monitorDown => 'Conexión fallida';
+
+  @override
+  String get monitorOffline => 'Teléfono sin red';
+
+  @override
+  String get monitorAuthentication => 'Revisa credenciales o permisos';
+
+  @override
+  String get monitorIdentity => 'Identidad SSH no verificada';
+
+  @override
+  String get monitorUnknown => 'Comprobación incompleta';
+
+  @override
+  String get monitorStale => 'Esperando una nueva comprobación';
+
+  @override
+  String get monitorLatency => 'Latencia';
+
+  @override
+  String get monitorLimit => 'Puedes supervisar hasta 20 instancias.';
+
+  @override
+  String get monitorFastTitle => 'Supervisión rápida de Coolify';
+
+  @override
+  String get monitorFastHelp =>
+      'Comprueba las instancias Coolify activadas mientras la app está abierta y desbloqueada. Se pausa en segundo plano. Las conexiones lentas pueden retrasar las comprobaciones; los eventos breves pueden pasar desapercibidos.';
+
+  @override
+  String get monitorFastInterval => 'Intervalo con la app abierta';
+
+  @override
+  String get monitorDeploymentStarted => 'Deployment iniciado';
+
+  @override
+  String get monitorDeploymentSucceeded => 'Deployment completado';
+
+  @override
+  String get monitorDeploymentCancelled => 'Deployment cancelado';
+
+  @override
+  String get monitorResourceChanged => 'Estado del recurso modificado';
+
+  @override
+  String get monitorDeploymentFailed => 'El despliegue ha fallado';
+
+  @override
+  String get monitorResourceUnhealthy => 'Recurso con problemas';
 }
 
 /// The translations for Spanish Castilian, as used in Spain (`es_ES`).
@@ -1905,4 +2269,368 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get noSearchResults => 'Ningún recurso coincide con la búsqueda.';
+
+  @override
+  String get logsPause => 'Pausar registros en directo';
+
+  @override
+  String get logsResume => 'Reanudar registros en directo';
+
+  @override
+  String get logsFollow => 'Seguir los últimos registros';
+
+  @override
+  String get backupTitle => 'Copia cifrada';
+
+  @override
+  String get backupEncrypted => 'Archivo protegido con contraseña';
+
+  @override
+  String get backupContents => 'Workspaces y credenciales de conexión';
+
+  @override
+  String get backupExport => 'Exportar copia';
+
+  @override
+  String get backupImport => 'Importar copia';
+
+  @override
+  String get backupPassword => 'Contraseña de la copia';
+
+  @override
+  String get backupConfirmPassword => 'Confirmar contraseña';
+
+  @override
+  String get backupPasswordWeak => 'Usa al menos 12 caracteres.';
+
+  @override
+  String get backupPasswordMismatch => 'Las contraseñas no coinciden.';
+
+  @override
+  String get backupPasswordHelp =>
+      'Guarda esta contraseña. Capidock no puede recuperarla.';
+
+  @override
+  String get backupHelp =>
+      'Las copias incluyen workspaces y credenciales guardados. El cifrado AES-256-GCM usa una clave derivada de la contraseña, que no se guarda. No incluyen identidades SSH de confianza, preferencias ni datos de los servidores. El proveedor de archivos elegido puede sincronizar el archivo cifrado. La importación añade copias y requiere verificar de nuevo las identidades SSH.';
+
+  @override
+  String get backupImportWarning =>
+      'Estos workspaces se añadirán como nuevas copias. Se conservarán los datos existentes. Verifica las huellas SSH antes de conectarte.';
+
+  @override
+  String get backupAuthReason => 'Autentícate para gestionar copias cifradas.';
+
+  @override
+  String get backupExported => 'Copia cifrada guardada.';
+
+  @override
+  String get backupImported => 'Workspaces importados.';
+
+  @override
+  String get backupFailed =>
+      'No se pudo completar la operación. Los datos guardados no se han sustituido.';
+
+  @override
+  String get backupInvalid => 'Copia inválida o no compatible.';
+
+  @override
+  String get backupUnlockFailed => 'Contraseña incorrecta o copia alterada.';
+
+  @override
+  String get backupTooLarge => 'La copia supera el límite de tamaño.';
+
+  @override
+  String get backupFileFailed => 'No se pudo acceder al archivo de la copia.';
+
+  @override
+  String get listSearch => 'Buscar';
+
+  @override
+  String get listAllStatuses => 'Todos los estados';
+
+  @override
+  String get listPrevious => 'Anterior';
+
+  @override
+  String get listNext => 'Siguiente';
+
+  @override
+  String get listNoMatches =>
+      'No hay resultados que coincidan con los filtros.';
+
+  @override
+  String listPage(int page) {
+    return 'Página $page';
+  }
+
+  @override
+  String get logsLevelAll => 'Todos los niveles';
+
+  @override
+  String get logsLevelErrors => 'Errores';
+
+  @override
+  String get logsLevelWarnings => 'Avisos';
+
+  @override
+  String get logsLineLimit => 'Líneas de registros';
+
+  @override
+  String get listHistory => 'Historial';
+
+  @override
+  String get listSchedule => 'Programación';
+
+  @override
+  String get listDetails => 'Detalles';
+
+  @override
+  String get listPageFilterHelp =>
+      'La búsqueda y los filtros se aplican a la página actual del servidor. Usa las flechas para consultar despliegues anteriores.';
+
+  @override
+  String get activitySize => 'Tamaño del archivo';
+
+  @override
+  String get activityCommit => 'Mensaje del commit';
+
+  @override
+  String get activityFinished => 'Finalizado';
+
+  @override
+  String get activityEnabled => 'Activo';
+
+  @override
+  String get logsShow => 'Mostrar registros';
+
+  @override
+  String get logsHide => 'Ocultar registros';
+
+  @override
+  String get coolifyTerminalServer => 'Servidor Coolify';
+
+  @override
+  String get coolifyTerminalContainer => 'Terminal del contenedor';
+
+  @override
+  String get coolifyTerminalHost => 'Terminal del servidor';
+
+  @override
+  String get coolifyTerminalNoContainers =>
+      'No se encontraron contenedores en ejecución para este recurso.';
+
+  @override
+  String get coolifyTerminalServersFailed =>
+      'No se pudieron cargar los servidores. Comprueba los permisos de la API y la conexión.';
+
+  @override
+  String get coolifyTerminalLinkFailed =>
+      'No se pudo leer la asociación SSH guardada.';
+
+  @override
+  String get coolifyTerminalConnectFailed =>
+      'No se pudo conectar o guardar la asociación SSH. Comprueba las credenciales y el almacenamiento seguro.';
+
+  @override
+  String get coolifyTerminalDockerFailed =>
+      'No se pudieron listar los contenedores. Comprueba el acceso a Docker de este usuario SSH.';
+
+  @override
+  String get coolifyTerminalContainerGone =>
+      'El contenedor ya no está en ejecución o ya no pertenece a este recurso. Actualiza la lista.';
+
+  @override
+  String get coolifyTerminalShellFailed =>
+      'No se pudo abrir el terminal. Comprueba si la shell seleccionada está instalada. Vuelve a conectar para intentarlo.';
+
+  @override
+  String get coolifyTerminalHelp =>
+      'Asocia la conexión SSH correcta al servidor Coolify seleccionado. Las credenciales permanecen cifradas en el dispositivo. El token de la API no es una credencial SSH. Los permisos SSH y Docker son independientes del token: el acceso a Docker puede dar control total del servidor. La lista muestra solo contenedores en ejecución de este recurso. Cierra la sesión al terminar; las sesiones también se cierran en segundo plano.';
+
+  @override
+  String get sftpFiles => 'Archivos';
+
+  @override
+  String get sftpUpload => 'Subir archivo';
+
+  @override
+  String get sftpDownload => 'Descargar';
+
+  @override
+  String get sftpReplace => '¿Reemplazar el archivo remoto?';
+
+  @override
+  String get sftpNewFolder => 'Nueva carpeta';
+
+  @override
+  String get sftpRename => 'Renombrar';
+
+  @override
+  String get sftpEditText => 'Editar texto';
+
+  @override
+  String get sftpParent => 'Carpeta superior';
+
+  @override
+  String get sftpEmpty => 'Esta carpeta está vacía.';
+
+  @override
+  String get sftpInvalidName =>
+      'Usa un nombre sin barras ni caracteres de control.';
+
+  @override
+  String get sftpPermissionDenied => 'El servidor denegó el permiso.';
+
+  @override
+  String get sftpFailed =>
+      'SFTP falló. Comprueba el acceso, los permisos y el soporte del subsistema; vuelve a conectar.';
+
+  @override
+  String get sftpDirectoryLimit =>
+      'Esta carpeta supera el límite de 5.000 entradas.';
+
+  @override
+  String get sftpRegularOnly =>
+      'Esta acción admite archivos regulares, no enlaces simbólicos.';
+
+  @override
+  String get sftpTooLarge =>
+      'Límite de transferencia: 16 MiB. Límite del editor: 256 KiB.';
+
+  @override
+  String get sftpTextOnly => 'El editor admite texto UTF-8 sin bytes nulos.';
+
+  @override
+  String get sftpExists => 'El destino ya existe o no es un archivo regular.';
+
+  @override
+  String get sftpChanged =>
+      'El archivo remoto ha cambiado. Vuelve a cargarlo antes de guardar.';
+
+  @override
+  String get sftpLocalFailed =>
+      'No se pudo acceder al documento local seleccionado.';
+
+  @override
+  String get sftpHelp =>
+      'SFTP usa esta conexión SSH verificada y los permisos del servidor. Transferencias de hasta 16 MiB; edición UTF-8 de hasta 256 KiB. No se guardan archivos en caché. Las descargas se guardan donde elijas y el proveedor puede sincronizarlas. SSH se cierra mientras el selector está abierto; las subidas reconectan tras autenticar el dispositivo. Solo se eliminan archivos, enlaces o carpetas vacías. Una transferencia interrumpida puede dejar un archivo remoto parcial. Reemplazar requiere soporte para renombrar sobre el destino; si falla, se conserva el original.';
+
+  @override
+  String get sftpConfirm => 'Confirmar';
+
+  @override
+  String get monitorTitle => 'Supervisión';
+
+  @override
+  String get monitorHelp =>
+      'Las comprobaciones se realizan en este teléfono. Android puede retrasarlas en reposo o tras un cierre forzado. Una conexión fallida puede deberse a la red o VPN; no demuestra que el servidor esté caído. Dos fallos consecutivos generan una alerta. La disponibilidad es el porcentaje de comprobaciones accesibles de los últimos 30 días, no un uptime continuo. Se excluyen comprobaciones sin red o desconocidas. Coolify analiza los últimos 20 despliegues y la salud de los recursos; los fallos existentes son la referencia inicial. SSH requiere una clave de servidor ya verificada.';
+
+  @override
+  String get monitorEnable => 'Activar supervisión';
+
+  @override
+  String get monitorConsent =>
+      '¿Permitir que Capidock utilice las credenciales cifradas de esta instancia para comprobaciones de solo lectura en segundo plano, incluso con la app bloqueada? El historial permanece cifrado localmente.';
+
+  @override
+  String get monitorInterval => 'Intervalo en segundo plano';
+
+  @override
+  String get monitorPermission => 'Notificaciones permitidas';
+
+  @override
+  String get monitorPermissionOff => 'Las notificaciones están desactivadas';
+
+  @override
+  String get monitorRequest => 'Permitir notificaciones';
+
+  @override
+  String get monitorCheck => 'Comprobar pronto';
+
+  @override
+  String get monitorScheduled =>
+      'Comprobación programada. Android decide cuándo ejecutarla.';
+
+  @override
+  String get monitorEmpty => 'Crea una instancia para iniciar la supervisión.';
+
+  @override
+  String get monitorNoChecks => 'Sin comprobaciones todavía';
+
+  @override
+  String get monitorObserved => 'Disponibilidad observada';
+
+  @override
+  String get monitorHistory => 'Historial · últimos 30 días';
+
+  @override
+  String get monitorAlerts => 'Alertas';
+
+  @override
+  String get monitorAlertConnections => 'Problemas de conexión y acceso';
+
+  @override
+  String get monitorAlertDeployments => 'Eventos de deployments';
+
+  @override
+  String get monitorAlertResources => 'Cambios de estado de los recursos';
+
+  @override
+  String get monitorAlertRecovery => 'Recuperación';
+
+  @override
+  String get monitorUp => 'Accesible';
+
+  @override
+  String get monitorDown => 'Conexión fallida';
+
+  @override
+  String get monitorOffline => 'Teléfono sin red';
+
+  @override
+  String get monitorAuthentication => 'Revisa credenciales o permisos';
+
+  @override
+  String get monitorIdentity => 'Identidad SSH no verificada';
+
+  @override
+  String get monitorUnknown => 'Comprobación incompleta';
+
+  @override
+  String get monitorStale => 'Esperando una nueva comprobación';
+
+  @override
+  String get monitorLatency => 'Latencia';
+
+  @override
+  String get monitorLimit => 'Puedes supervisar hasta 20 instancias.';
+
+  @override
+  String get monitorFastTitle => 'Supervisión rápida de Coolify';
+
+  @override
+  String get monitorFastHelp =>
+      'Comprueba las instancias Coolify activadas mientras la app está abierta y desbloqueada. Se pausa en segundo plano. Las conexiones lentas pueden retrasar las comprobaciones; los eventos breves pueden pasar desapercibidos.';
+
+  @override
+  String get monitorFastInterval => 'Intervalo con la app abierta';
+
+  @override
+  String get monitorDeploymentStarted => 'Deployment iniciado';
+
+  @override
+  String get monitorDeploymentSucceeded => 'Deployment completado';
+
+  @override
+  String get monitorDeploymentCancelled => 'Deployment cancelado';
+
+  @override
+  String get monitorResourceChanged => 'Estado del recurso modificado';
+
+  @override
+  String get monitorDeploymentFailed => 'El despliegue ha fallado';
+
+  @override
+  String get monitorResourceUnhealthy => 'Recurso con problemas';
 }
