@@ -10,7 +10,13 @@ abstract interface class SecretStore {
 class AndroidSecretStore implements SecretStore {
   const AndroidSecretStore();
   static const storage = FlutterSecureStorage(
-    aOptions: AndroidOptions(resetOnError: false, migrateWithBackup: true),
+    aOptions: AndroidOptions(
+      resetOnError: false,
+      migrateWithBackup: true,
+      keyCipherAlgorithm:
+          KeyCipherAlgorithm.RSA_ECB_OAEPwithSHA_256andMGF1Padding,
+      storageCipherAlgorithm: StorageCipherAlgorithm.AES_GCM_NoPadding,
+    ),
   );
 
   @override

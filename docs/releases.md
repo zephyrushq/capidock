@@ -107,8 +107,13 @@ or push another commit to `release`.
 python3 -m unittest discover -s tool/tests -v
 flutter analyze
 flutter test
-flutter build apk --release --build-name 0.2.1 --build-number 2001
+flutter build apk --release --obfuscate --split-debug-info=/private/path/to/symbols --build-name 0.2.1 --build-number 2001
 ```
+
+Protect the split-debug-info directory and retain it with the matching version.
+The GitHub workflow can retain encrypted symbols when the optional
+`CAPIDOCK_SYMBOLS_PASSWORD` secret is configured; raw symbols are never uploaded.
+See [the hardening plan](security-hardening.md) for limitations.
 
 Release builds require signing configuration. `flutter run` and `--debug` builds
 continue using the usual development key.

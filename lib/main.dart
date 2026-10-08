@@ -1,9 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'app.dart';
+import 'core/security/device_lock.dart';
 import 'l10n/locale_controller.dart';
 import 'features/workspaces/data/workspace_store.dart';
 import 'features/workspaces/domain/dock_controller.dart';
@@ -21,6 +19,11 @@ Future<void> main() async {
   final controller = DockController(SecureWorkspaceStore());
   final locales = LocaleController();
   await locales.initialize(WidgetsBinding.instance.platformDispatcher.locales);
-  runApp(CapidockApp(controller: controller, localeController: locales));
-  unawaited(controller.initialize());
+  runApp(
+    DeviceLock(
+      controller: controller,
+      locales: locales,
+      authenticator: PlatformDeviceAuthenticator(),
+    ),
+  );
 }

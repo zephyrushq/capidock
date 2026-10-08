@@ -833,6 +833,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get coolifySaveValue => 'Save value';
+
+  @override
+  String get deviceLocked => 'Capidock locked';
+
+  @override
+  String get deviceUnlockReason => 'Unlock Capidock credentials';
+
+  @override
+  String get deviceUnlock => 'Unlock';
+
+  @override
+  String get deviceLockHelp =>
+      'Set up a device PIN, password or biometrics to continue.';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -1663,6 +1676,19 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get coolifySaveValue => 'Save value';
+
+  @override
+  String get deviceLocked => 'Capidock locked';
+
+  @override
+  String get deviceUnlockReason => 'Unlock Capidock credentials';
+
+  @override
+  String get deviceUnlock => 'Unlock';
+
+  @override
+  String get deviceLockHelp =>
+      'Set up a device PIN, password or biometrics to continue.';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -2493,4 +2519,17 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get coolifySaveValue => 'Save value';
+
+  @override
+  String get deviceLocked => 'Capidock locked';
+
+  @override
+  String get deviceUnlockReason => 'Unlock Capidock credentials';
+
+  @override
+  String get deviceUnlock => 'Unlock';
+
+  @override
+  String get deviceLockHelp =>
+      'Set up a device PIN, password or biometrics to continue.';
 }

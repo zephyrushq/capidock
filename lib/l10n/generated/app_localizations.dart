@@ -1556,6 +1556,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save value'**
   String get coolifySaveValue;
+
+  /// No description provided for @deviceLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Capidock locked'**
+  String get deviceLocked;
+
+  /// No description provided for @deviceUnlockReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Capidock credentials'**
+  String get deviceUnlockReason;
+
+  /// No description provided for @deviceUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get deviceUnlock;
+
+  /// No description provided for @deviceLockHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up a device PIN, password or biometrics to continue.'**
+  String get deviceLockHelp;
 }
 
 class _AppLocalizationsDelegate

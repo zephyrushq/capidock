@@ -9,6 +9,7 @@ import 'package:xterm/xterm.dart';
 import '../../instances/domain/server_instance.dart';
 import 'host_key_store.dart';
 import 'ssh_identity.dart';
+import 'ssh_security_policy.dart';
 
 enum ConnectionStatus { disconnected, connecting, connected, failed }
 
@@ -66,6 +67,7 @@ class SshConnection extends ChangeNotifier {
       }
       final client = SSHClient(
         socket,
+        algorithms: secureSshAlgorithms,
         username: instance.username,
         identities: identities,
         onPasswordRequest: instance.password.isEmpty
@@ -210,6 +212,14 @@ class SshConnection extends ChangeNotifier {
     _shell = null;
     _client?.close();
     _client = null;
+    terminal.mainBuffer.clear();
+    terminal.altBuffer.clear();
+    terminal.mainBuffer.setCursor(0, 0);
+    terminal.altBuffer.setCursor(0, 0);
+    information = null;
+    informationError = null;
+    updatedAt = null;
+    error = null;
     refreshing = false;
     status = ConnectionStatus.disconnected;
     _notify();

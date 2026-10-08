@@ -241,5 +241,9 @@
   "coolifyShowValue": "Mostrar valor",
   "coolifyHideValue": "Ocultar valor",
   "coolifyEditValue": "Editar valor",
-  "coolifySaveValue": "Guardar valor"
+  "coolifySaveValue": "Guardar valor",
+  "deviceLocked": "Capidock bloqueado",
+  "deviceUnlockReason": "Desbloquear las credenciales de Capidock",
+  "deviceUnlock": "Desbloquear",
+  "deviceLockHelp": "Configura un PIN, contraseña o biometría en el dispositivo para continuar."
 }

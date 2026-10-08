@@ -12,7 +12,7 @@ class CoolifySession extends ChangeNotifier with WidgetsBindingObserver {
   }
   final ServerInstance instance;
   final CoolifyClient Function() _createClient;
-  final Set<CoolifyClient> _pending = {};
+  CoolifyClient? _client;
   int generation = 0;
   bool active = true;
   bool _disposed = false, _writing = false;
@@ -27,8 +27,7 @@ class CoolifySession extends ChangeNotifier with WidgetsBindingObserver {
     final write = method != 'GET';
     if (write && _writing) throw const CoolifyException('coolifyConflict');
     final current = generation;
-    final client = _createClient();
-    _pending.add(client);
+    final client = _client ??= _createClient();
     if (write) _writing = true;
     try {
       final response = await client.request(
@@ -44,22 +43,20 @@ class CoolifySession extends ChangeNotifier with WidgetsBindingObserver {
       }
       return response;
     } finally {
-      if (write) _writing = false;
-      _pending.remove(client);
-      client.close();
+      if (write && current == generation) _writing = false;
     }
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden ||
         state == AppLifecycleState.detached) {
       active = false;
       generation++;
-      for (final client in _pending.toList()) {
-        client.close();
-      }
-      _pending.clear();
+      _client?.close();
+      _client = null;
+      _writing = false;
       notifyListeners();
     } else if (state == AppLifecycleState.resumed) {
       active = true;
@@ -71,10 +68,8 @@ class CoolifySession extends ChangeNotifier with WidgetsBindingObserver {
     _disposed = true;
     generation++;
     WidgetsBinding.instance.removeObserver(this);
-    for (final client in _pending) {
-      client.close();
-    }
-    _pending.clear();
+    _client?.close();
+    _client = null;
     super.dispose();
   }
 }

@@ -1,5 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:http/io_client.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:file_selector/file_selector.dart';
@@ -29,7 +33,19 @@ class CoolifyException implements Exception {
 }
 
 class CoolifyClient {
-  CoolifyClient({http.Client? client}) : _client = client ?? http.Client();
+  CoolifyClient({http.Client? client}) : _client = client ?? _secureClient();
+
+  static http.Client _secureClient() {
+    final context = SecurityContext(withTrustedRoots: true)
+      ..minimumTlsProtocolVersion = TlsProtocolVersion.tls1_2;
+    return IOClient(
+      HttpClient(context: context)
+        ..connectionTimeout = const Duration(seconds: 15)
+        ..idleTimeout = const Duration(seconds: 15)
+        ..maxConnectionsPerHost = 4,
+    );
+  }
+
   final http.Client _client;
 
   Future<List<CoolifyResource>> resources(ServerInstance instance) async {
@@ -58,19 +74,16 @@ class CoolifyClient {
         null) {
       throw const CoolifyException('O Coolify requer uma URL HTTPS válida.');
     }
-    if (instance.apiToken.trim().isEmpty) {
+    if (instance.apiToken.trim().isEmpty ||
+        RegExp(r'[\x00-\x20\x7f]').hasMatch(instance.apiToken)) {
       throw const CoolifyException('Configure o token da API.');
     }
     // Only relative API paths are allowed. Never redirect an authenticated request.
     if (!path.startsWith('/') ||
         path.startsWith('//') ||
-        path
-            .split('/')
-            .any(
-              (segment) =>
-                  Uri.decodeComponent(segment) == '..' ||
-                  Uri.decodeComponent(segment) == '.',
-            ) ||
+        path.split('/').any((segment) => !_safeSegment(segment)) ||
+        path.contains('\\') ||
+        RegExp(r'[\x00-\x20\x7f]').hasMatch(path) ||
         path.contains('?') ||
         path.contains('#') ||
         path.contains('://') ||
@@ -125,6 +138,8 @@ class CoolifyClient {
           : const Duration(minutes: 15);
       final response = await _client.send(request).timeout(timeout);
       if (response.statusCode < 200 || response.statusCode >= 300) {
+        // Cancel unread bodies so pooled connections cannot remain occupied.
+        await response.stream.listen(null).cancel();
         // Error bodies can include environment values or credentials. Do not echo them.
         final message = switch (response.statusCode) {
           401 => 'Token inválido ou expirado. Edite a credencial da instância.',
@@ -140,7 +155,7 @@ class CoolifyClient {
         };
         throw CoolifyException(message);
       }
-      final bytes = <int>[];
+      final bytes = BytesBuilder(copy: false);
       await response.stream
           .timeout(const Duration(seconds: 15))
           .forEach((chunk) {
@@ -149,11 +164,11 @@ class CoolifyClient {
                 'A resposta do Coolify excedeu o limite de 4 MiB.',
               );
             }
-            bytes.addAll(chunk);
+            bytes.add(chunk);
           })
           .timeout(const Duration(seconds: 20));
       if (bytes.isEmpty) return null;
-      final text = utf8.decode(bytes);
+      final text = utf8.decode(bytes.takeBytes());
       try {
         return jsonDecode(text);
       } on FormatException {
@@ -178,6 +193,17 @@ class CoolifyClient {
       throw const CoolifyException(
         'Não foi possível contactar o Coolify. Verifique a rede e o certificado HTTPS.',
       );
+    }
+  }
+
+  static bool _safeSegment(String segment) {
+    try {
+      final decoded = Uri.decodeComponent(segment);
+      return decoded != '.' &&
+          decoded != '..' &&
+          !RegExp(r'[/\\%\x00-\x1f\x7f?#]').hasMatch(decoded);
+    } on FormatException {
+      return false;
     }
   }
 

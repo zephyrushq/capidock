@@ -842,6 +842,19 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get coolifySaveValue => 'Guardar valor';
+
+  @override
+  String get deviceLocked => 'Capidock bloqueado';
+
+  @override
+  String get deviceUnlockReason => 'Desbloquear as credenciais do Capidock';
+
+  @override
+  String get deviceUnlock => 'Desbloquear';
+
+  @override
+  String get deviceLockHelp =>
+      'Configure um PIN, palavra-passe ou biometria no dispositivo para continuar.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -1681,6 +1694,19 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get coolifySaveValue => 'Salvar valor';
+
+  @override
+  String get deviceLocked => 'Capidock bloqueado';
+
+  @override
+  String get deviceUnlockReason => 'Desbloquear as credenciais do Capidock';
+
+  @override
+  String get deviceUnlock => 'Desbloquear';
+
+  @override
+  String get deviceLockHelp =>
+      'Configure um PIN, senha ou biometria no dispositivo para continuar.';
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).
@@ -2520,4 +2546,17 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get coolifySaveValue => 'Guardar valor';
+
+  @override
+  String get deviceLocked => 'Capidock bloqueado';
+
+  @override
+  String get deviceUnlockReason => 'Desbloquear as credenciais do Capidock';
+
+  @override
+  String get deviceUnlock => 'Desbloquear';
+
+  @override
+  String get deviceLockHelp =>
+      'Configure um PIN, palavra-passe ou biometria no dispositivo para continuar.';
 }

@@ -11,6 +11,9 @@ class DockController extends ChangeNotifier {
   List<DockWorkspace> _workspaces = [];
   String? _workspaceId;
   final Map<String, String> _selectedByWorkspace = {};
+  int _generation = 0;
+  bool _locked = false;
+  Future<void>? _pendingSave;
   bool isLoading = true;
   bool isSaving = false;
   String? loadError;
@@ -24,19 +27,37 @@ class DockController extends ChangeNotifier {
           .where((i) => i.id == _selectedByWorkspace[_workspaceId])
           .firstOrNull ??
       instances.firstOrNull;
+  void lock() {
+    _generation++;
+    _locked = true;
+    _workspaces = [];
+    _workspaceId = null;
+    _selectedByWorkspace.clear();
+    isLoading = true;
+    loadError = null;
+    notifyListeners();
+  }
+
   Future<void> initialize() async {
+    final current = ++_generation;
+    _locked = false;
     isLoading = true;
     loadError = null;
     notifyListeners();
     try {
+      await _pendingSave;
+      if (_locked || current != _generation) return;
       final saved = await _store.load();
+      if (_locked || current != _generation) return;
       final next = saved ?? <DockWorkspace>[];
       _workspaces = List.of(next);
       _workspaceId = _workspaces.firstOrNull?.id;
     } catch (_) {
+      if (_locked || current != _generation) return;
       // Never replace unreadable user data with an empty onboarding state.
       loadError = 'Não foi possível carregar os workspaces guardados.';
     }
+    if (_locked || current != _generation) return;
     isLoading = false;
     notifyListeners();
   }
@@ -189,16 +210,21 @@ class DockController extends ChangeNotifier {
     List<DockWorkspace> next, [
     VoidCallback? onSaved,
   ]) async {
-    if (isSaving || isLoading || loadError != null) {
+    if (_locked || isSaving || isLoading || loadError != null) {
       throw StateError('O armazenamento não está disponível.');
     }
+    final current = _generation;
     isSaving = true;
     notifyListeners();
     try {
-      await _store.save(next);
+      final save = _store.save(next);
+      _pendingSave = save;
+      await save;
+      if (_locked || current != _generation) return;
       _workspaces = next;
       onSaved?.call();
     } finally {
+      _pendingSave = null;
       isSaving = false;
       notifyListeners();
     }

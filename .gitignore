@@ -57,3 +57,6 @@ app.*.map.json
 # Generated Play Store images and upload packages (keep local copies)
 /docs/play-store/**/*.png
 /docs/play-store/*.zip
+
+# Kotlin compiler local cache
+/android/.kotlin/

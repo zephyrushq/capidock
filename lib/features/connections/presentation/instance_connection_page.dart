@@ -42,6 +42,7 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden ||
         state == AppLifecycleState.detached) {
       _ssh.disconnect();
     }

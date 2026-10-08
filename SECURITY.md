@@ -3,7 +3,7 @@
 Capidock is maintained by **ZEPHYRUS PROSPERITY - UNIPESSOAL LDA**.
 This policy covers the Android app, local storage, dependencies as used by
 Capidock, and the build and release tooling in
-[zephyrushq/capidock-mobile](https://github.com/zephyrushq/capidock-mobile).
+[zephyrushq/capidock](https://github.com/zephyrushq/capidock).
 
 ## Supported versions
 
@@ -20,11 +20,11 @@ period, guaranteed response time, or paid bug bounty program.
 
 **Do not publish vulnerability details in public issues, pull requests, or comments.**
 
-1. Open the repository's [Security page](https://github.com/zephyrushq/capidock-mobile/security).
+1. Open the repository's [Security page](https://github.com/zephyrushq/capidock/security).
 2. If **Report a vulnerability** is available, use it to send a private report
    through GitHub. You will need to sign in.
 3. If the button is unavailable, open a
-   [private-contact request](https://github.com/zephyrushq/capidock-mobile/issues/new?template=04-security-contact.yml).
+   [private-contact request](https://github.com/zephyrushq/capidock/issues/new?template=04-security-contact.yml).
    This request is public: ask only for a private reporting channel, without
    describing the vulnerability, affected component, or impact. Wait for the
    maintainer to provide a private channel before sharing technical details.
@@ -50,13 +50,15 @@ their provider instead of including them in a report.
 - Workspace metadata and credentials are encrypted locally using AES-GCM with
   an Android Keystore-protected key through `flutter_secure_storage`. Plaintext
   legacy preferences are removed only after a verified secure migration.
-- There is no biometric app lock. Credentials are accessible to the running app;
-  encryption at rest cannot protect an unlocked or compromised device.
+- The production app requires Android device authentication before loading the vault,
+  and locks when backgrounded. The authentication gate does not bind every Keystore
+  operation to user presence; encryption at rest cannot protect a compromised device.
 - SSH verifies host-key fingerprints and requires explicit trust for a new or
   changed key. Authentication is attempted only after host-key verification.
   Terminal input executes on the configured server with that user's privileges.
-- Coolify uses HTTPS with platform certificate verification and bearer tokens;
-  redirects are not followed. Current Coolify operations are read-only.
+- Coolify requires HTTPS with certificate/hostname verification, TLS 1.2 or newer
+  and bearer tokens; redirects are not followed. Mutating operations use the
+  configured token permissions. Use a least-privilege token appropriate to your needs.
 - SSH sessions close when changing instances or backgrounding the app. Terminal
   output is not persisted. There are no accounts, cloud sync, or backend services.
 - Android backup and device transfer of app data are disabled. No credential
@@ -70,6 +72,9 @@ execution, dependency vulnerabilities with a demonstrated impact, or release
 artifact tampering belong in a private report.
 If you are unsure whether an issue is security-sensitive, use the private
 reporting process.
+
+The implemented controls, limitations and device validation checklist are recorded
+in [the security hardening plan](docs/security-hardening.md).
 
 ## Coordinated disclosure
 

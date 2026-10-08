@@ -29,6 +29,7 @@ jobs:
           ref: release
           fetch-depth: 0
 
+      - run: python3 tool/security_checks.py
       - name: Test release versioning
         run: python3 -m unittest discover -s tool/tests -v
 
@@ -109,7 +110,7 @@ jobs:
           CAPIDOCK_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           CAPIDOCK_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
-          flutter build apk --release --build-name "$RELEASE_VERSION" --build-number "$BUILD_NUMBER"
+          flutter build apk --release --obfuscate --split-debug-info="$RUNNER_TEMP/capidock-symbols" --build-name "$RELEASE_VERSION" --build-number "$BUILD_NUMBER"
           mkdir -p dist
           cp build/app/outputs/flutter-apk/app-release.apk "dist/capidock-$RELEASE_VERSION.apk"
           apksigner=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -n 1)
@@ -125,6 +126,28 @@ jobs:
           name: capidock-${{ steps.version.outputs.version }}
           path: dist/
           if-no-files-found: error
+          retention-days: 14
+
+      # Public repository Actions artifacts are not a confidential symbol store.
+      - name: Encrypt debug symbols for optional retention
+        if: steps.publication.outputs.needed == 'true'
+        env:
+          SYMBOLS_PASSWORD: ${{ secrets.CAPIDOCK_SYMBOLS_PASSWORD }}
+        run: |
+          if [ -n "$SYMBOLS_PASSWORD" ]; then
+            tar -czf "$RUNNER_TEMP/capidock-symbols.tar.gz" -C "$RUNNER_TEMP/capidock-symbols" .
+            printf '%s' "$SYMBOLS_PASSWORD" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --symmetric --cipher-algo AES256 --output "$RUNNER_TEMP/capidock-symbols.tar.gz.gpg" "$RUNNER_TEMP/capidock-symbols.tar.gz"
+            rm -f "$RUNNER_TEMP/capidock-symbols.tar.gz"
+          else
+            echo "Debug symbols will not be retained. Configure CAPIDOCK_SYMBOLS_PASSWORD for encrypted retention." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: steps.publication.outputs.needed == 'true'
+        with:
+          name: capidock-symbols-encrypted-${{ steps.version.outputs.version }}
+          path: ${{ runner.temp }}/capidock-symbols.tar.gz.gpg
+          if-no-files-found: ignore
           retention-days: 14
 
       - name: Publish tag and GitHub Release

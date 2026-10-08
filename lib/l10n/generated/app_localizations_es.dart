@@ -844,6 +844,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get coolifySaveValue => 'Guardar valor';
+
+  @override
+  String get deviceLocked => 'Capidock bloqueado';
+
+  @override
+  String get deviceUnlockReason => 'Desbloquear las credenciales de Capidock';
+
+  @override
+  String get deviceUnlock => 'Desbloquear';
+
+  @override
+  String get deviceLockHelp =>
+      'Configura un PIN, contraseña o biometría en el dispositivo para continuar.';
 }
 
 /// The translations for Spanish Castilian, as used in Spain (`es_ES`).
@@ -1685,4 +1698,17 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get coolifySaveValue => 'Guardar valor';
+
+  @override
+  String get deviceLocked => 'Capidock bloqueado';
+
+  @override
+  String get deviceUnlockReason => 'Desbloquear las credenciales de Capidock';
+
+  @override
+  String get deviceUnlock => 'Desbloquear';
+
+  @override
+  String get deviceLockHelp =>
+      'Configura un PIN, contraseña o biometría en el dispositivo para continuar.';
 }
