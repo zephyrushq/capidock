@@ -1,7 +1,7 @@
 name: capidock
 description: Your dock for managing servers and applications.
 publish_to: none
-version: 0.4.1+4001
+version: 0.5.0+5000
 
 environment:
   sdk: ^3.13.5
