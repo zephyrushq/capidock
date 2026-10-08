@@ -40,15 +40,35 @@ class CoolifyOperation {
 class CoolifyCatalog {
   CoolifyCatalog(this.operations);
   final List<CoolifyOperation> operations;
-  static Future<CoolifyCatalog> load() async {
-    final data = jsonDecode(
-      await rootBundle.loadString('assets/coolify/operations.json'),
-    ) as Map<String, dynamic>;
-    return CoolifyCatalog(
-      (data['operations'] as List)
-          .map((v) => CoolifyOperation(v as Map<String, dynamic>))
-          .toList(),
-    );
+  static Future<CoolifyCatalog>? _loading;
+  // Only bundled public API metadata is cached. Server responses never enter it.
+  static Future<CoolifyCatalog> load() => _loading ??= _load();
+  static Future<CoolifyCatalog> _load() async {
+    try {
+      final data = jsonDecode(
+        await rootBundle.loadString('assets/coolify/operations.json'),
+      ) as Map<String, dynamic>;
+      return CoolifyCatalog(
+        List.unmodifiable(
+          (data['operations'] as List).map(
+            (v) => CoolifyOperation(_freeze(v) as Map<String, dynamic>),
+          ),
+        ),
+      );
+    } catch (_) {
+      _loading = null;
+      rethrow;
+    }
+  }
+
+  static Object? _freeze(Object? value) {
+    if (value is Map<String, dynamic>) {
+      return Map<String, dynamic>.unmodifiable(
+        value.map((key, entry) => MapEntry(key, _freeze(entry))),
+      );
+    }
+    if (value is List) return List.unmodifiable(value.map(_freeze));
+    return value;
   }
 
   CoolifyOperation? find(String method, String path) {

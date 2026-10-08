@@ -35,5 +35,6 @@ flutter:
     - COPYRIGHT
     - LICENSE-TRADEMARKS
   assets:
+    - assets/legal/
     - assets/branding/capidock-mark.png
     - assets/coolify/operations.json

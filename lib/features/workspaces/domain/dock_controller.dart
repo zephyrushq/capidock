@@ -38,6 +38,19 @@ class DockController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> clearLocalData() async {
+    lock();
+    try {
+      await _pendingSave;
+    } catch (_) {
+      /* Failed saves must not prevent erasure. */
+    }
+    if (_store is! SecureWorkspaceStore) {
+      throw StateError('Secure storage required');
+    }
+    await _store.clearLocalData();
+  }
+
   Future<void> initialize() async {
     final current = ++_generation;
     _locked = false;

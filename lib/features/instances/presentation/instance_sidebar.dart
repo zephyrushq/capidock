@@ -12,13 +12,13 @@ class InstanceSidebar extends StatefulWidget {
     required this.controller,
     required this.onSelect,
     required this.onAdd,
-    required this.onAbout,
+    required this.onSettings,
     required this.onManageWorkspaces,
   });
   final DockController controller;
   final ValueChanged<String> onSelect;
   final VoidCallback onAdd;
-  final VoidCallback onAbout;
+  final VoidCallback onSettings;
   final VoidCallback onManageWorkspaces;
 
   @override
@@ -164,14 +164,18 @@ class _InstanceSidebarState extends State<InstanceSidebar> {
               context.l10n.workspaceCount(widget.controller.workspaces.length),
               style: const TextStyle(fontSize: 10, color: DockColors.muted),
             ),
-            trailing: IconButton(
-              onPressed: widget.onAbout,
-              tooltip: context.l10n.aboutCapidock,
-              icon: const Icon(
-                Icons.info_outline,
-                size: 18,
-                color: DockColors.muted,
-              ),
+          ),
+          ListTile(
+            key: const ValueKey('sidebar-app-settings'),
+            onTap: widget.onSettings,
+            leading: const Icon(
+              Icons.settings_outlined,
+              size: 20,
+              color: DockColors.muted,
+            ),
+            title: Text(
+              context.l10n.appSettings,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
             ),
           ),
           const SizedBox(height: 8),

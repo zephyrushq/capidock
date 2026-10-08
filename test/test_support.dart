@@ -56,6 +56,24 @@ class MemoryPreferences implements SharedPreferencesAsync {
 
 class MemorySecretStore implements SecretStore {
   final values = <String, String>{};
+  @override
+  Future<Map<String, String>> readAll() async {
+    if (failRead) throw StateError('Keystore unavailable');
+    return Map.of(values);
+  }
+
+  @override
+  Future<void> delete(String key) async {
+    if (failWrite) throw StateError('Keystore unavailable');
+    values.remove(key);
+  }
+
+  @override
+  Future<void> deleteAll() async {
+    if (failWrite) throw StateError('Keystore unavailable');
+    values.clear();
+  }
+
   bool failWrite = false;
   bool failRead = false;
   bool dropWrites = false;

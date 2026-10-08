@@ -10,7 +10,11 @@ typedef ConfirmHostKey = Future<bool> Function(
 );
 
 class HostKeyStore {
-  HostKeyStore({this._secrets = const AndroidSecretStore()});
+  HostKeyStore({
+    this._secrets = const AndroidSecretStore(),
+    this.persist = true,
+  });
+  final bool persist;
   final SecretStore _secrets;
 
   Future<bool> verify(
@@ -35,6 +39,7 @@ class HostKeyStore {
     if (!await confirm(type, fingerprint, previous) || !isActive()) {
       return false;
     }
+    if (!persist) return isActive();
     final value = jsonEncode({
       'host': instance.host,
       'port': instance.port,

@@ -1,4 +1,3 @@
-import '../../l10n/language_selector.dart';
 import '../../l10n/localization.dart';
 
 import 'package:flutter/material.dart';
@@ -6,6 +5,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../core/app_theme.dart';
 import '../../core/widgets.dart';
+import '../legal/legal_page.dart';
+import '../settings/settings_page.dart';
 import '../workspaces/domain/dock_controller.dart';
 import '../instances/domain/server_instance.dart';
 import '../instances/presentation/instance_editor.dart';
@@ -37,6 +38,13 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
   void _edit() =>
       showInstanceEditor(context, controller, instance: controller.selected);
 
+  void _settings() => Navigator.push(
+    context,
+    MaterialPageRoute<void>(
+      builder: (_) => SettingsPage(controller: controller),
+    ),
+  );
+
   Future<void> _about() async {
     String? version;
     try {
@@ -58,6 +66,8 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
         Text(context.l10n.aboutLicence),
         SizedBox(height: 12),
         SelectableText(context.l10n.sourceCode),
+        const SizedBox(height: 12),
+        const LegalLinks(),
       ],
     );
   }
@@ -109,7 +119,10 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
             if (drawer) Navigator.pop(context);
             _add();
           },
-          onAbout: _about,
+          onSettings: () {
+            if (drawer) Navigator.pop(context);
+            _settings();
+          },
           onManageWorkspaces: _manageWorkspaces,
           onSelect: (id) {
             controller.select(id);
@@ -129,6 +142,15 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
       }
       if (controller.loadError != null) {
         return Scaffold(
+          appBar: AppBar(
+            actions: [
+              IconButton(
+                onPressed: _settings,
+                tooltip: context.l10n.appSettings,
+                icon: const Icon(Icons.settings_outlined),
+              ),
+            ],
+          ),
           body: SafeArea(
             child: Center(
               child: Padding(
@@ -164,7 +186,11 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
         );
       }
       if (controller.workspaces.isEmpty) {
-        return WelcomeScreen(controller: controller, onAbout: _about);
+        return WelcomeScreen(
+          controller: controller,
+          onAbout: _about,
+          onSettings: _settings,
+        );
       }
       final wide = MediaQuery.sizeOf(context).width >= 900;
       final instance = controller.selected;
@@ -256,7 +282,6 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
             ],
           ),
         ),
-        const LanguageSelector(compact: true),
         IconButton(
           onPressed: _add,
           tooltip: controller.activeWorkspace == null

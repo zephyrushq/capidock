@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:file_selector/file_selector.dart';
 
 import '../../connections/data/coolify_client.dart';
+import 'coolify_access.dart';
 import '../../instances/domain/server_instance.dart';
 
 /// No response cache or persistence. Backgrounding cancels pending API requests.
@@ -11,6 +12,7 @@ class CoolifySession extends ChangeNotifier with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
   }
   final ServerInstance instance;
+  final access = CoolifyAccess();
   final CoolifyClient Function() _createClient;
   CoolifyClient? _client;
   int generation = 0;
@@ -24,6 +26,9 @@ class CoolifySession extends ChangeNotifier with WidgetsBindingObserver {
     XFile? file,
   }) async {
     if (!active || _disposed) throw const CoolifyException('coolifyCancelled');
+    if (!access.allows(method, path)) {
+      throw const CoolifyException('coolifyPermissionDenied');
+    }
     final write = method != 'GET';
     if (write && _writing) throw const CoolifyException('coolifyConflict');
     final current = generation;
@@ -41,7 +46,16 @@ class CoolifySession extends ChangeNotifier with WidgetsBindingObserver {
       if (_disposed || !active || current != generation) {
         throw const CoolifyException('coolifyCancelled');
       }
+      access.succeeded(method, path);
       return response;
+    } on CoolifyException catch (error) {
+      if (!_disposed &&
+          active &&
+          current == generation &&
+          error.missingPermissions.isNotEmpty) {
+        access.refusedOperation(method, path, error.missingPermissions);
+      }
+      rethrow;
     } finally {
       if (write && current == generation) _writing = false;
     }
@@ -57,6 +71,7 @@ class CoolifySession extends ChangeNotifier with WidgetsBindingObserver {
       _client?.close();
       _client = null;
       _writing = false;
+      access.clear();
       notifyListeners();
     } else if (state == AppLifecycleState.resumed) {
       active = true;
@@ -70,6 +85,7 @@ class CoolifySession extends ChangeNotifier with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     _client?.close();
     _client = null;
+    access.dispose();
     super.dispose();
   }
 }

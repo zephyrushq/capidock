@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import '../../../core/app_theme.dart';
 import '../../../core/widgets.dart';
+import '../../../core/help_button.dart';
+import '../../legal/legal_page.dart';
 import '../../instances/presentation/instance_form.dart';
 import '../domain/dock_controller.dart';
 
@@ -13,9 +15,11 @@ class WelcomeScreen extends StatefulWidget {
     super.key,
     required this.controller,
     required this.onAbout,
+    this.onSettings,
   });
   final DockController controller;
   final VoidCallback onAbout;
+  final VoidCallback? onSettings;
   @override
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
@@ -90,11 +94,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       appBar: AppBar(
         title: Text('Capidock'),
         actions: [
-          const LanguageSelector(),
+          const LanguageSelector(compact: true),
           IconButton(
-            onPressed: widget.onAbout,
-            tooltip: context.l10n.aboutCapidock,
-            icon: const Icon(Icons.info_outline),
+            onPressed: widget.onSettings ?? widget.onAbout,
+            tooltip: widget.onSettings == null
+                ? context.l10n.aboutCapidock
+                : context.l10n.appSettings,
+            icon: Icon(
+              widget.onSettings == null
+                  ? Icons.info_outline
+                  : Icons.settings_outlined,
+            ),
           ),
         ],
       ),
@@ -113,25 +123,41 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     child: DockLogo(size: 72),
                   ),
                   const SizedBox(height: 28),
-                  Text(
-                    _step == 0
-                        ? context.l10n.welcomeTitle
-                        : _step == 1
-                        ? context.l10n.firstServerTitle
-                        : context.l10n.connectionTitle,
-                    style: Theme.of(context).textTheme.headlineLarge,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          _step == 0
+                              ? context.l10n.welcomeTitle
+                              : _step == 1
+                              ? context.l10n.firstServerTitle
+                              : context.l10n.connectionTitle,
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
+                      ),
+                      HelpButton(
+                        message: _step == 0
+                            ? context.l10n.welcomeBody
+                            : _step == 1
+                            ? context.l10n.firstInstanceBody(
+                                _workspace.text.trim(),
+                              )
+                            : context.l10n.configureInstanceBody(
+                                _draft.name.text.trim(),
+                              ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    _step == 0
-                        ? context.l10n.welcomeBody
-                        : _step == 1
-                        ? context.l10n.firstInstanceBody(_workspace.text.trim())
-                        : context.l10n.configureInstanceBody(
-                            _draft.name.text.trim(),
-                          ),
-                    style: const TextStyle(color: DockColors.muted),
-                  ),
+                  if (_step > 0) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      _step == 1
+                          ? _workspace.text.trim()
+                          : _draft.name.text.trim(),
+                      style: const TextStyle(color: DockColors.muted),
+                    ),
+                  ],
                   const SizedBox(height: 28),
                   Text(
                     context.l10n.onboardingStep(
@@ -218,6 +244,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       child: Text(context.l10n.back),
                     ),
                   const SizedBox(height: 20),
+                  const LegalLinks(),
                   Text(
                     context.l10n.localByChoice,
                     textAlign: TextAlign.center,

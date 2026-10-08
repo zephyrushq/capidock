@@ -1,0 +1,57 @@
+{
+  "locale": "en-US",
+  "date": "2026-10-08",
+  "revision": "1",
+  "terms": {
+    "sections": [
+      {
+        "title": "1. About Capidock",
+        "body": "Capidock is an Android tool maintained by ZEPHYRUS PROSPERITY - UNIPESSOAL LDA. It connects to SSH and Coolify servers you configure. There is no Capidock account, hosted server or paid subscription in this version. Questions about these terms: legal@zephyrushq.com."
+      },
+      {
+        "title": "2. Authorised use and server operations",
+        "body": "Connect only to systems you own or are authorized to administer. You choose the endpoint, credentials and operations. Terminal commands, resource changes, restarts and deletion can affect availability or permanently remove data. Check the target and keep independent backups before making changes."
+      },
+      {
+        "title": "3. Open-source licence and branding",
+        "body": "The software is licensed under GPL-3.0-only. These terms do not replace that license or restrict its permissions to use, study, modify or distribute the code. Copyright and attribution notices remain applicable. The Capidock name, logos and company branding are governed separately by LICENSE-TRADEMARKS; no registered trademark status is claimed here."
+      },
+      {
+        "title": "4. Warranties and third-party services",
+        "body": "The software is provided without warranties to the extent permitted by applicable law and the GPL. Availability, compatibility, data recovery and uninterrupted operation are not guaranteed. Nothing here excludes liability that cannot lawfully be excluded or limits mandatory consumer rights. Third-party servers and services have their own terms; their operators control their availability and data handling."
+      },
+      {
+        "title": "5. Updates and contact",
+        "body": "Updated terms are included with app updates and show their revision date. Changes do not revoke permissions already granted by the GPL. Consult the Privacy Policy for data handling and contact legal@zephyrushq.com with questions."
+      }
+    ]
+  },
+  "privacy": {
+    "sections": [
+      {
+        "title": "1. Who maintains the app",
+        "body": "This policy describes the official Capidock Android app maintained by ZEPHYRUS PROSPERITY - UNIPESSOAL LDA. Privacy contact: legal@zephyrushq.com. Capidock has no developer-hosted account or backend in this version. Capidock does not send workspace credentials or server content to the company as the app publisher; the operators of the servers you choose receive connection data."
+      },
+      {
+        "title": "2. Data stored on your device",
+        "body": "The app stores workspace and instance names, endpoint addresses and ports, SSH usernames, passwords, private keys and passphrases, Coolify API tokens and accepted SSH host fingerprints locally. Workspace records and host fingerprints use AES-GCM encryption with a key protected by Android Keystore. The language and terminal text size are stored separately as ordinary preferences. Android device authentication returns an authentication result; Capidock does not receive your device PIN or biometric templates."
+      },
+      {
+        "title": "3. Data sent to your servers",
+        "body": "When you connect, the app sends authentication information required by the selected protocol directly to your configured server, such as an SSH username and authentication exchange or a Coolify bearer token. Passwords are used when password authentication is selected; SSH private keys are not transmitted during SSH authentication and are used locally to sign authentication data. Commands, environment values, configuration changes and selected import/upload files are sent when you request those operations. The server and network providers can observe connection metadata such as your IP address. SSH host verification and HTTPS certificate validation protect transport; they do not make an untrusted server safe. Server operators may keep logs and data under their own policies."
+      },
+      {
+        "title": "4. Session data and third parties",
+        "body": "Terminal output, server information and API responses are processed for display during the session and are not intentionally saved as a response history. The official app contains no advertising, analytics or developer crash-reporting SDK and does not sell user data. Android, Google Play, keyboards, accessibility tools and external server operators may process data independently under their own settings and policies. If you email us, the company receives the information you choose to send to respond to your request."
+      },
+      {
+        "title": "5. Retention and deletion",
+        "body": "Local workspace data is retained until you remove it or clear the app data. Removing a workspace or instance updates the workspace vault but does not necessarily erase previously accepted SSH host fingerprints. You can forget individual identities in App settings, or erase all saved workspaces, credentials and SSH identities there after device authentication. This in-app erasure preserves language and terminal preferences. Clear Android app storage to remove the local vault, host fingerprints and preferences. Android backup is disabled for these records. Local deletion does not delete remote resources, server logs or revoke credentials; use the server controls for those actions. Losing app data or Keystore access can make credentials unrecoverable. Correspondence is retained only as needed to handle the request and applicable legal obligations."
+      },
+      {
+        "title": "6. Security, rights and contact",
+        "body": "Only provide credentials and upload files you are authorized to use. Prefer least-privilege server accounts. Encryption and screen protection cannot guarantee confidentiality on a compromised device or against a malicious keyboard/accessibility service. Where applicable, you may request access, correction, deletion, restriction, objection or portability of personal data held by the company, and complain to a competent data protection authority. The company cannot retrieve a vault that remains only on your device. Contact legal@zephyrushq.com for privacy requests. Policy updates are included with app updates and display their revision date."
+      }
+    ]
+  }
+}

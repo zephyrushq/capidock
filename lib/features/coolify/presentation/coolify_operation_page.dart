@@ -5,6 +5,8 @@ import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/widgets.dart';
+import '../../../core/help_button.dart';
+import 'coolify_access_button.dart';
 import '../../../l10n/localization.dart';
 import '../../connections/data/coolify_client.dart';
 import '../data/coolify_catalog.dart';
@@ -229,11 +231,16 @@ class _CoolifyOperationPageState extends State<CoolifyOperationPage> {
       if (identifier != null) _changed.add('body:$identifier');
     }
     widget.session.addListener(_clear);
+    widget.session.access.addListener(_accessChanged);
     if (widget.autoRead && !op.mutates) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) _execute();
       });
     }
+  }
+
+  void _accessChanged() {
+    if (mounted) setState(() {});
   }
 
   void _clear() {
@@ -259,6 +266,7 @@ class _CoolifyOperationPageState extends State<CoolifyOperationPage> {
   @override
   void dispose() {
     widget.session.removeListener(_clear);
+    widget.session.access.removeListener(_accessChanged);
     for (final field in _fields.values) {
       field.dispose();
     }
@@ -324,19 +332,26 @@ class _CoolifyOperationPageState extends State<CoolifyOperationPage> {
         enableSuggestions: false,
         decoration: InputDecoration(
           labelText: '${coolifyLabel(context, name)}${required ? ' *' : ''}',
-          helperText: [
-            if (schema['description'] != null) schema['description'],
-            if (schema['enum'] is List) (schema['enum'] as List).join(' | '),
-          ].join('\n'),
-          helperMaxLines: 3,
-          suffixIcon: secret
-              ? IconButton(
+          suffixIcon: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (secret)
+                IconButton(
                   onPressed: () =>
                       setState(() => _reveal[key] = !(_reveal[key] ?? false)),
                   tooltip: context.l10n.showCredential,
                   icon: const Icon(Icons.visibility_outlined),
-                )
-              : null,
+                ),
+              if (schema['description'] != null || schema['enum'] is List)
+                HelpButton(
+                  message: [
+                    if (schema['description'] != null) schema['description'],
+                    if (schema['enum'] is List)
+                      (schema['enum'] as List).join(' | '),
+                  ].join('\n'),
+                ),
+            ],
+          ),
         ),
         onChanged: (_) => _changed.add(key),
         validator: (text) {
@@ -373,7 +388,12 @@ class _CoolifyOperationPageState extends State<CoolifyOperationPage> {
   }
 
   Future<void> _execute() async {
-    if (_busy || _confirming || !_form.currentState!.validate()) return;
+    if (_busy ||
+        _confirming ||
+        !widget.session.access.allows(op.method, op.path) ||
+        !_form.currentState!.validate()) {
+      return;
+    }
     try {
       final generation = widget.session.generation;
       final paths = Map<String, String>.of(widget.pathValues);
@@ -543,13 +563,15 @@ class _CoolifyOperationPageState extends State<CoolifyOperationPage> {
       child: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          if (op.description.isNotEmpty) ...[
-            Text(op.description),
-            const SizedBox(height: 16),
-          ],
-          Text(
-            '${op.method} ${op.path}',
-            style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+          Row(
+            children: [
+              Expanded(
+                child: CoolifyAccessButton(access: widget.session.access),
+              ),
+              HelpButton(
+                message: '${op.description}\n\n${op.method} ${op.path}',
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           for (final p in op.parameters)
@@ -565,7 +587,10 @@ class _CoolifyOperationPageState extends State<CoolifyOperationPage> {
                   p['in'] == 'path' && widget.pathValues.containsKey(p['name']),
             ),
           if (op.properties.isNotEmpty) ...[
-            Text(context.l10n.coolifyChangedOnly),
+            Align(
+              alignment: Alignment.centerRight,
+              child: HelpButton(message: context.l10n.coolifyChangedOnly),
+            ),
             const SizedBox(height: 16),
           ],
           for (final entry in op.properties.entries)
@@ -581,8 +606,11 @@ class _CoolifyOperationPageState extends State<CoolifyOperationPage> {
                       : null,
                   decoration: InputDecoration(
                     labelText: entry.key,
-                    helperText: entry.value['description'] as String?,
-                    helperMaxLines: 3,
+                    suffixIcon: entry.value['description'] == null
+                        ? null
+                        : HelpButton(
+                            message: entry.value['description'] as String,
+                          ),
                   ),
                   items: [
                     DropdownMenuItem(
@@ -632,7 +660,12 @@ class _CoolifyOperationPageState extends State<CoolifyOperationPage> {
           ],
           FilledButton.icon(
             key: const ValueKey('coolify-execute'),
-            onPressed: _busy || _confirming ? null : _execute,
+            onPressed:
+                _busy ||
+                    _confirming ||
+                    !widget.session.access.allows(op.method, op.path)
+                ? null
+                : _execute,
             icon: Icon(op.mutates ? Icons.check : Icons.refresh),
             label: Text(
               op.mutates
@@ -640,6 +673,11 @@ class _CoolifyOperationPageState extends State<CoolifyOperationPage> {
                   : context.l10n.coolifyRead,
             ),
           ),
+          if (!widget.session.access.allows(op.method, op.path))
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(context.l10n.coolifyPermissionDenied),
+            ),
           if (_busy)
             const Padding(
               padding: EdgeInsets.all(16),

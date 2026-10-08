@@ -1580,6 +1580,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set up a device PIN, password or biometrics to continue.'**
   String get deviceLockHelp;
+
+  /// No description provided for @termsOfUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get termsOfUse;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @legalUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated: {date}'**
+  String legalUpdated(String date);
+
+  /// No description provided for @legalLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load this document. Please reopen it.'**
+  String get legalLoadError;
+
+  /// No description provided for @help.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get help;
+
+  /// No description provided for @appSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'App settings'**
+  String get appSettings;
+
+  /// No description provided for @terminalFontSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Terminal text size'**
+  String get terminalFontSize;
+
+  /// No description provided for @lockNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock now'**
+  String get lockNow;
+
+  /// No description provided for @trustedSshKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'Trusted SSH identities'**
+  String get trustedSshKeys;
+
+  /// No description provided for @trustedSshHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare fingerprints with your server before trusting them. Forgetting an identity asks for confirmation on the next connection; an existing session stays connected.'**
+  String get trustedSshHelp;
+
+  /// No description provided for @localStorage.
+  ///
+  /// In en, this message translates to:
+  /// **'Local storage'**
+  String get localStorage;
+
+  /// No description provided for @localCounts.
+  ///
+  /// In en, this message translates to:
+  /// **'{workspaces} workspaces · {instances} instances'**
+  String localCounts(int workspaces, int instances);
+
+  /// No description provided for @eraseLocalData.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase saved server data'**
+  String get eraseLocalData;
+
+  /// No description provided for @eraseLocalWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently removes all saved workspaces, credentials and SSH identities from this device. Your servers are not changed. Device authentication is required.'**
+  String get eraseLocalWarning;
+
+  /// No description provided for @eraseAuthReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Authenticate to erase saved Capidock server data'**
+  String get eraseAuthReason;
+
+  /// No description provided for @localEraseFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to verify that all local server data was erased. Unlock and check your saved data before trying again.'**
+  String get localEraseFailed;
+
+  /// No description provided for @noTrustedKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'No trusted identities'**
+  String get noTrustedKeys;
+
+  /// No description provided for @forgetSshWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Forget this SSH identity? You will need to verify its fingerprint on the next connection.'**
+  String get forgetSshWarning;
+
+  /// No description provided for @tokenAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Token access'**
+  String get tokenAccess;
+
+  /// No description provided for @tokenAccessHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'These are observations of requests in this session, not the token’s exact permissions. The public API does not report whether a token is readonly or root. Unchecked permissions remain unknown. Only explicit permission errors disable actions; generic access failures can also come from IP rules or proxies. The server validates every request.'**
+  String get tokenAccessHelp;
+
+  /// No description provided for @accessUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get accessUnknown;
+
+  /// No description provided for @accessObserved.
+  ///
+  /// In en, this message translates to:
+  /// **'Observed'**
+  String get accessObserved;
+
+  /// No description provided for @accessDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Denied'**
+  String get accessDenied;
+
+  /// No description provided for @coolifyPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'The server reported a missing permission for this action. Edit the token and reconnect to check again.'**
+  String get coolifyPermissionDenied;
+
+  /// No description provided for @testConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Test connection'**
+  String get testConnection;
+
+  /// No description provided for @connectionVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection verified'**
+  String get connectionVerified;
+
+  /// No description provided for @connectionTestHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Tests authentication without saving your draft. SSH does not open a terminal or run commands, and trust confirmed here is temporary. Coolify uses a read-only API request; no write or deploy probes are sent.'**
+  String get connectionTestHelp;
+
+  /// No description provided for @noSearchResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching resources.'**
+  String get noSearchResults;
 }
 
 class _AppLocalizationsDelegate

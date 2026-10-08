@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/widgets.dart';
+import '../../../core/request_states.dart';
+import 'coolify_access_button.dart';
 import '../../../core/app_theme.dart';
 import '../../../l10n/localization.dart';
 import '../../connections/data/coolify_client.dart';
@@ -43,6 +45,7 @@ class _CoolifyWorkspacePageState extends State<CoolifyWorkspacePage> {
   void initState() {
     super.initState();
     _session.addListener(_clear);
+    _session.access.addListener(_accessChanged);
     CoolifyCatalog.load()
         .then((catalog) {
           if (mounted) setState(() => _catalog = catalog);
@@ -50,6 +53,10 @@ class _CoolifyWorkspacePageState extends State<CoolifyWorkspacePage> {
         .catchError((Object error) {
           if (mounted) setState(() => _error = 'invalidApiResponse');
         });
+  }
+
+  void _accessChanged() {
+    if (mounted) setState(() {});
   }
 
   void _clear() {
@@ -66,6 +73,7 @@ class _CoolifyWorkspacePageState extends State<CoolifyWorkspacePage> {
   @override
   void dispose() {
     _session.removeListener(_clear);
+    _session.access.removeListener(_accessChanged);
     _session.dispose();
     super.dispose();
   }
@@ -75,7 +83,6 @@ class _CoolifyWorkspacePageState extends State<CoolifyWorkspacePage> {
     setState(() {
       _busy = true;
       _error = null;
-      _data = null;
     });
     try {
       final data = await _session.request('GET', '/$_collection');
@@ -229,7 +236,10 @@ class _CoolifyWorkspacePageState extends State<CoolifyWorkspacePage> {
           ],
         ),
         const SizedBox(height: 16),
-        Text(context.l10n.coolifyPermissions),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: CoolifyAccessButton(access: _session.access),
+        ),
         const SizedBox(height: 16),
         DropdownButtonFormField<String>(
           initialValue: _collection,
@@ -266,20 +276,13 @@ class _CoolifyWorkspacePageState extends State<CoolifyWorkspacePage> {
           ),
           onChanged: (text) => setState(() => _search = text),
         ),
-        if (_busy)
-          const Padding(
-            padding: EdgeInsets.all(16),
-            child: LinearProgressIndicator(),
-          ),
+        if (_busy && _data == null)
+          const LoadingCards()
+        else if (_busy)
+          const LinearProgressIndicator(),
         if (_error != null)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Text(
-              localizedMessage(context, _error!),
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            ),
-          ),
-        if (_data == null && !_busy) ...[
+          RequestFailure(message: _error!, onRetry: _busy ? null : _load),
+        if (_data == null && !_busy && _error == null) ...[
           const SizedBox(height: 16),
           SurfaceCard(child: Text(context.l10n.coolifyOverview)),
         ],
@@ -287,7 +290,13 @@ class _CoolifyWorkspacePageState extends State<CoolifyWorkspacePage> {
           const SizedBox(height: 16),
           SectionTitle(context.l10n.resourceCount(entries.length)),
           if (entries.isEmpty)
-            SurfaceCard(child: Text(context.l10n.noCoolifyResources)),
+            SurfaceCard(
+              child: Text(
+                _search.trim().isNotEmpty
+                    ? context.l10n.noSearchResults
+                    : context.l10n.noCoolifyResources,
+              ),
+            ),
           CoolifyCardGrid(
             children: [
               for (final item in entries)
@@ -345,6 +354,22 @@ class CoolifyOperationsPage extends StatefulWidget {
 }
 
 class _CoolifyOperationsPageState extends State<CoolifyOperationsPage> {
+  @override
+  void initState() {
+    super.initState();
+    widget.session.access.addListener(_accessChanged);
+  }
+
+  void _accessChanged() {
+    if (mounted) setState(() {});
+  }
+
+  @override
+  void dispose() {
+    widget.session.access.removeListener(_accessChanged);
+    super.dispose();
+  }
+
   String _search = '', _group = '';
   @override
   Widget build(BuildContext context) {
@@ -388,6 +413,7 @@ class _CoolifyOperationsPageState extends State<CoolifyOperationsPage> {
           Text('${filtered.length} / ${all.length}'),
           for (final op in filtered)
             ListTile(
+              enabled: widget.session.access.allows(op.method, op.path),
               title: Text('${op.group} · ${op.title}'),
               subtitle: Text('${op.method} ${op.path}'),
               trailing: Icon(
@@ -434,6 +460,7 @@ class CoolifyResourcePage extends StatefulWidget {
 
 class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
   int _tab = 0, _request = 0;
+  String? _loadedSection;
   Object? _data;
   Map<String, dynamic>? _overview;
   List<Map<String, dynamic>> _components = [];
@@ -473,7 +500,12 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
   void initState() {
     super.initState();
     widget.session.addListener(_clear);
+    widget.session.access.addListener(_accessChanged);
     _load();
+  }
+
+  void _accessChanged() {
+    if (mounted) setState(() {});
   }
 
   void _clear() {
@@ -493,6 +525,7 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
   @override
   void dispose() {
     widget.session.removeListener(_clear);
+    widget.session.access.removeListener(_accessChanged);
     super.dispose();
   }
 
@@ -501,8 +534,7 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
     setState(() {
       _busy = true;
       _error = null;
-      _data = null;
-      _components = [];
+      if (_loadedSection != section) _data = null;
       _componentsError = null;
     });
     final path = switch (section) {
@@ -527,12 +559,14 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
       if (mounted && request == _request) {
         setState(() {
           _data = result;
+          _loadedSection = section;
           if (section == 'details' && result is Map<String, dynamic>) {
             _overview = result;
           }
         });
       }
       if (section == 'details' && widget.collection == 'services') {
+        final components = <Map<String, dynamic>>[];
         for (final collection in ['applications', 'databases']) {
           try {
             final children = await widget.session.request(
@@ -540,12 +574,11 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
               '$base/$collection',
             );
             if (!mounted || request != _request) return;
-            setState(
-              () => _components.addAll(
-                coolifyEntries(children)
-                    .map((item) => {...item, '_collection': collection}),
-              ),
+            components.addAll(
+              coolifyEntries(children)
+                  .map((item) => {...item, '_collection': collection}),
             );
+            setState(() => _components = List.of(components));
           } on CoolifyException catch (error) {
             if (mounted && request == _request) {
               setState(() => _componentsError = error.message);
@@ -571,6 +604,10 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
     if (_busy || _confirming || operation == null) return;
     final generation = widget.session.generation;
     final path = operation.resolvePath(values ?? paths);
+    if (!widget.session.access.allows(operation.method, path)) {
+      setState(() => _error = 'coolifyPermissionDenied');
+      return;
+    }
     setState(() => _confirming = true);
     final accepted = await confirmCoolifyOperation(
       context,
@@ -660,7 +697,10 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
         if (widget.parentServiceUuid == null &&
             ['applications', 'services'].contains(widget.collection))
           FilledButton.icon(
-            onPressed: _busy || _confirming
+            onPressed:
+                _busy ||
+                    _confirming ||
+                    !widget.session.access.allows('POST', '/deploy')
                 ? null
                 : () => _perform(
                     widget.catalog.find('POST', '/deploy'),
@@ -672,7 +712,15 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
           ),
         if (primaryOp != null)
           OutlinedButton.icon(
-            onPressed: _busy || _confirming ? null : () => _perform(primaryOp),
+            onPressed:
+                _busy ||
+                    _confirming ||
+                    !widget.session.access.allows(
+                      primaryOp.method,
+                      primaryOp.path,
+                    )
+                ? null
+                : () => _perform(primaryOp),
             icon: Icon(stopped ? Icons.play_arrow : Icons.restart_alt),
             label: Text(
               stopped ? context.l10n.coolifyStart : context.l10n.coolifyRestart,
@@ -680,7 +728,7 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
           ),
         if (widget.catalog.find('PATCH', template) != null)
           OutlinedButton.icon(
-            onPressed: _busy
+            onPressed: _busy || !widget.session.access.allows('PATCH', template)
                 ? null
                 : () => _operation(
                     widget.catalog.find('PATCH', template),
@@ -972,7 +1020,12 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
                     child: ChoiceChip(
                       label: Text(_sectionLabel(sections[i])),
                       selected: _tab == i,
-                      onSelected: _busy
+                      onSelected:
+                          _busy ||
+                              !widget.session.access.allows(
+                                'GET',
+                                '$template/${sections[i]}',
+                              )
                           ? null
                           : (_) {
                               setState(() => _tab = _tab == i ? 0 : i);
@@ -986,8 +1039,16 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
           const SizedBox(height: 16),
           if (section == 'backups' || section == 'storages')
             FilledButton.icon(
-              onPressed: () =>
-                  _operation(widget.catalog.find('POST', '$template/$section')),
+              onPressed:
+                  _busy ||
+                      !widget.session.access.allows(
+                        'POST',
+                        '$template/$section',
+                      )
+                  ? null
+                  : () => _operation(
+                      widget.catalog.find('POST', '$template/$section'),
+                    ),
               icon: const Icon(Icons.add),
               label: Text(context.l10n.coolifyCreate),
             ),
@@ -1012,6 +1073,10 @@ class _CoolifyResourcePageState extends State<CoolifyResourcePage> {
               )
             else if (section == 'envs')
               CoolifyVariableGroups(
+                canWrite: widget.session.access.allows(
+                  'PATCH',
+                  '$template/envs',
+                ),
                 items: entries,
                 supportsPreview:
                     widget.catalog

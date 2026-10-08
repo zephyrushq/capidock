@@ -359,5 +359,50 @@
   "deviceLocked": "Capidock locked",
   "deviceUnlockReason": "Unlock Capidock credentials",
   "deviceUnlock": "Unlock",
-  "deviceLockHelp": "Set up a device PIN, password or biometrics to continue."
+  "deviceLockHelp": "Set up a device PIN, password or biometrics to continue.",
+  "termsOfUse": "Terms of Use",
+  "privacyPolicy": "Privacy Policy",
+  "legalUpdated": "Updated: {date}",
+  "legalLoadError": "Unable to load this document. Please reopen it.",
+  "@legalUpdated": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "help": "Help",
+  "appSettings": "App settings",
+  "terminalFontSize": "Terminal text size",
+  "lockNow": "Lock now",
+  "trustedSshKeys": "Trusted SSH identities",
+  "trustedSshHelp": "Compare fingerprints with your server before trusting them. Forgetting an identity asks for confirmation on the next connection; an existing session stays connected.",
+  "localStorage": "Local storage",
+  "localCounts": "{workspaces} workspaces · {instances} instances",
+  "eraseLocalData": "Erase saved server data",
+  "eraseLocalWarning": "This permanently removes all saved workspaces, credentials and SSH identities from this device. Your servers are not changed. Device authentication is required.",
+  "eraseAuthReason": "Authenticate to erase saved Capidock server data",
+  "localEraseFailed": "Unable to verify that all local server data was erased. Unlock and check your saved data before trying again.",
+  "noTrustedKeys": "No trusted identities",
+  "forgetSshWarning": "Forget this SSH identity? You will need to verify its fingerprint on the next connection.",
+  "tokenAccess": "Token access",
+  "tokenAccessHelp": "These are observations of requests in this session, not the token’s exact permissions. The public API does not report whether a token is readonly or root. Unchecked permissions remain unknown. Only explicit permission errors disable actions; generic access failures can also come from IP rules or proxies. The server validates every request.",
+  "accessUnknown": "Unknown",
+  "accessObserved": "Observed",
+  "accessDenied": "Denied",
+  "coolifyPermissionDenied": "The server reported a missing permission for this action. Edit the token and reconnect to check again.",
+  "testConnection": "Test connection",
+  "connectionVerified": "Connection verified",
+  "connectionTestHelp": "Tests authentication without saving your draft. SSH does not open a terminal or run commands, and trust confirmed here is temporary. Coolify uses a read-only API request; no write or deploy probes are sent.",
+  "@localCounts": {
+    "placeholders": {
+      "workspaces": {
+        "type": "int"
+      },
+      "instances": {
+        "type": "int"
+      }
+    }
+  },
+  "noSearchResults": "No matching resources."
 }

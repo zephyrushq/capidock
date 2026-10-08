@@ -855,6 +855,103 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get deviceLockHelp =>
       'Configure um PIN, palavra-passe ou biometria no dispositivo para continuar.';
+
+  @override
+  String get termsOfUse => 'Termos de Uso';
+
+  @override
+  String get privacyPolicy => 'Política de Privacidade';
+
+  @override
+  String legalUpdated(String date) {
+    return 'Atualizado: $date';
+  }
+
+  @override
+  String get legalLoadError =>
+      'Não foi possível carregar este documento. Volte a abri-lo.';
+
+  @override
+  String get help => 'Ajuda';
+
+  @override
+  String get appSettings => 'Definições da app';
+
+  @override
+  String get terminalFontSize => 'Tamanho do texto do terminal';
+
+  @override
+  String get lockNow => 'Bloquear agora';
+
+  @override
+  String get trustedSshKeys => 'Identidades SSH de confiança';
+
+  @override
+  String get trustedSshHelp =>
+      'Compara as fingerprints com o teu servidor antes de confiar. Esquecer uma identidade pede confirmação na próxima ligação; uma sessão existente mantém-se ligada.';
+
+  @override
+  String get localStorage => 'Armazenamento local';
+
+  @override
+  String localCounts(int workspaces, int instances) {
+    return '$workspaces workspaces · $instances instâncias';
+  }
+
+  @override
+  String get eraseLocalData => 'Apagar dados de servidores guardados';
+
+  @override
+  String get eraseLocalWarning =>
+      'Remove permanentemente todos os workspaces, credenciais e identidades SSH deste dispositivo. Os teus servidores não são alterados. Requer autenticação do dispositivo.';
+
+  @override
+  String get eraseAuthReason =>
+      'Autentica-te para apagar os dados de servidores do Capidock';
+
+  @override
+  String get localEraseFailed =>
+      'Não foi possível verificar a eliminação de todos os dados locais de servidores. Desbloqueia e verifica os dados guardados antes de tentar novamente.';
+
+  @override
+  String get noTrustedKeys => 'Sem identidades de confiança';
+
+  @override
+  String get forgetSshWarning =>
+      'Esquecer esta identidade SSH? Terás de verificar a fingerprint na próxima ligação.';
+
+  @override
+  String get tokenAccess => 'Acesso do token';
+
+  @override
+  String get tokenAccessHelp =>
+      'Estas são observações dos pedidos nesta sessão, não as permissões exatas do token. A API pública não indica se um token é readonly ou root. Permissões não verificadas ficam desconhecidas. Só erros explícitos de permissão desativam ações; falhas genéricas também podem vir de regras de IP ou proxies. O servidor valida cada pedido.';
+
+  @override
+  String get accessUnknown => 'Desconhecido';
+
+  @override
+  String get accessObserved => 'Observado';
+
+  @override
+  String get accessDenied => 'Recusado';
+
+  @override
+  String get coolifyPermissionDenied =>
+      'O servidor indicou falta de permissão para esta ação. Edita o token e volta a ligar para verificar novamente.';
+
+  @override
+  String get testConnection => 'Testar ligação';
+
+  @override
+  String get connectionVerified => 'Ligação verificada';
+
+  @override
+  String get connectionTestHelp =>
+      'Testa a autenticação sem guardar o formulário. O SSH não abre terminal nem executa comandos; a confiança confirmada aqui é temporária. O Coolify usa um pedido de leitura da API, sem testes de escrita ou deploy.';
+
+  @override
+  String get noSearchResults => 'Nenhum recurso corresponde à pesquisa.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -1707,6 +1804,103 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get deviceLockHelp =>
       'Configure um PIN, senha ou biometria no dispositivo para continuar.';
+
+  @override
+  String get termsOfUse => 'Termos de Uso';
+
+  @override
+  String get privacyPolicy => 'Política de Privacidade';
+
+  @override
+  String legalUpdated(String date) {
+    return 'Atualizado: $date';
+  }
+
+  @override
+  String get legalLoadError =>
+      'Não foi possível carregar este documento. Volte a abri-lo.';
+
+  @override
+  String get help => 'Ajuda';
+
+  @override
+  String get appSettings => 'Configurações do app';
+
+  @override
+  String get terminalFontSize => 'Tamanho do texto do terminal';
+
+  @override
+  String get lockNow => 'Bloquear agora';
+
+  @override
+  String get trustedSshKeys => 'Identidades SSH confiáveis';
+
+  @override
+  String get trustedSshHelp =>
+      'Compare as fingerprints com seu servidor antes de confiar. Esquecer uma identidade pede confirmação na próxima conexão; uma sessão existente continua conectada.';
+
+  @override
+  String get localStorage => 'Armazenamento local';
+
+  @override
+  String localCounts(int workspaces, int instances) {
+    return '$workspaces workspaces · $instances instâncias';
+  }
+
+  @override
+  String get eraseLocalData => 'Apagar dados de servidores salvos';
+
+  @override
+  String get eraseLocalWarning =>
+      'Remove permanentemente todos os workspaces, credenciais e identidades SSH deste dispositivo. Seus servidores não são alterados. Requer autenticação do dispositivo.';
+
+  @override
+  String get eraseAuthReason =>
+      'Autentique-se para apagar os dados de servidores do Capidock';
+
+  @override
+  String get localEraseFailed =>
+      'Não foi possível verificar a exclusão de todos os dados locais de servidores. Desbloqueie e confira os dados salvos antes de tentar novamente.';
+
+  @override
+  String get noTrustedKeys => 'Sem identidades confiáveis';
+
+  @override
+  String get forgetSshWarning =>
+      'Esquecer esta identidade SSH? Você precisará verificar a fingerprint na próxima conexão.';
+
+  @override
+  String get tokenAccess => 'Acesso do token';
+
+  @override
+  String get tokenAccessHelp =>
+      'Estas são observações dos pedidos nesta sessão, não as permissões exatas do token. A API pública não informa se um token é readonly ou root. Permissões não verificadas ficam desconhecidas. Só erros explícitos de permissão desativam ações; falhas genéricas também podem vir de regras de IP ou proxies. O servidor valida cada pedido.';
+
+  @override
+  String get accessUnknown => 'Desconhecido';
+
+  @override
+  String get accessObserved => 'Observado';
+
+  @override
+  String get accessDenied => 'Recusado';
+
+  @override
+  String get coolifyPermissionDenied =>
+      'O servidor informou falta de permissão para esta ação. Edite o token e conecte novamente para verificar.';
+
+  @override
+  String get testConnection => 'Testar conexão';
+
+  @override
+  String get connectionVerified => 'Conexão verificada';
+
+  @override
+  String get connectionTestHelp =>
+      'Testa a autenticação sem salvar o formulário. O SSH não abre terminal nem executa comandos; a confiança confirmada aqui é temporária. O Coolify usa um pedido de leitura da API, sem testes de escrita ou deploy.';
+
+  @override
+  String get noSearchResults => 'Nenhum recurso corresponde à pesquisa.';
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).
@@ -2559,4 +2753,101 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   @override
   String get deviceLockHelp =>
       'Configure um PIN, palavra-passe ou biometria no dispositivo para continuar.';
+
+  @override
+  String get termsOfUse => 'Termos de Uso';
+
+  @override
+  String get privacyPolicy => 'Política de Privacidade';
+
+  @override
+  String legalUpdated(String date) {
+    return 'Atualizado: $date';
+  }
+
+  @override
+  String get legalLoadError =>
+      'Não foi possível carregar este documento. Volte a abri-lo.';
+
+  @override
+  String get help => 'Ajuda';
+
+  @override
+  String get appSettings => 'Definições da app';
+
+  @override
+  String get terminalFontSize => 'Tamanho do texto do terminal';
+
+  @override
+  String get lockNow => 'Bloquear agora';
+
+  @override
+  String get trustedSshKeys => 'Identidades SSH de confiança';
+
+  @override
+  String get trustedSshHelp =>
+      'Compara as fingerprints com o teu servidor antes de confiar. Esquecer uma identidade pede confirmação na próxima ligação; uma sessão existente mantém-se ligada.';
+
+  @override
+  String get localStorage => 'Armazenamento local';
+
+  @override
+  String localCounts(int workspaces, int instances) {
+    return '$workspaces workspaces · $instances instâncias';
+  }
+
+  @override
+  String get eraseLocalData => 'Apagar dados de servidores guardados';
+
+  @override
+  String get eraseLocalWarning =>
+      'Remove permanentemente todos os workspaces, credenciais e identidades SSH deste dispositivo. Os teus servidores não são alterados. Requer autenticação do dispositivo.';
+
+  @override
+  String get eraseAuthReason =>
+      'Autentica-te para apagar os dados de servidores do Capidock';
+
+  @override
+  String get localEraseFailed =>
+      'Não foi possível verificar a eliminação de todos os dados locais de servidores. Desbloqueia e verifica os dados guardados antes de tentar novamente.';
+
+  @override
+  String get noTrustedKeys => 'Sem identidades de confiança';
+
+  @override
+  String get forgetSshWarning =>
+      'Esquecer esta identidade SSH? Terás de verificar a fingerprint na próxima ligação.';
+
+  @override
+  String get tokenAccess => 'Acesso do token';
+
+  @override
+  String get tokenAccessHelp =>
+      'Estas são observações dos pedidos nesta sessão, não as permissões exatas do token. A API pública não indica se um token é readonly ou root. Permissões não verificadas ficam desconhecidas. Só erros explícitos de permissão desativam ações; falhas genéricas também podem vir de regras de IP ou proxies. O servidor valida cada pedido.';
+
+  @override
+  String get accessUnknown => 'Desconhecido';
+
+  @override
+  String get accessObserved => 'Observado';
+
+  @override
+  String get accessDenied => 'Recusado';
+
+  @override
+  String get coolifyPermissionDenied =>
+      'O servidor indicou falta de permissão para esta ação. Edita o token e volta a ligar para verificar novamente.';
+
+  @override
+  String get testConnection => 'Testar ligação';
+
+  @override
+  String get connectionVerified => 'Ligação verificada';
+
+  @override
+  String get connectionTestHelp =>
+      'Testa a autenticação sem guardar o formulário. O SSH não abre terminal nem executa comandos; a confiança confirmada aqui é temporária. O Coolify usa um pedido de leitura da API, sem testes de escrita ou deploy.';
+
+  @override
+  String get noSearchResults => 'Nenhum recurso corresponde à pesquisa.';
 }

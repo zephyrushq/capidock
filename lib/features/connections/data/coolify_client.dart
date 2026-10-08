@@ -28,8 +28,14 @@ class CoolifyResource {
 }
 
 class CoolifyException implements Exception {
-  const CoolifyException(this.message);
+  const CoolifyException(
+    this.message, {
+    this.statusCode,
+    this.missingPermissions = const {},
+  });
   final String message;
+  final int? statusCode;
+  final Set<String> missingPermissions;
 }
 
 class CoolifyClient {
@@ -139,7 +145,12 @@ class CoolifyClient {
       final response = await _client.send(request).timeout(timeout);
       if (response.statusCode < 200 || response.statusCode >= 300) {
         // Cancel unread bodies so pooled connections cannot remain occupied.
-        await response.stream.listen(null).cancel();
+        final missing = response.statusCode == 403
+            ? await _missingPermissions(response)
+            : <String>{};
+        if (response.statusCode != 403) {
+          await response.stream.listen(null).cancel();
+        }
         // Error bodies can include environment values or credentials. Do not echo them.
         final message = switch (response.statusCode) {
           401 => 'Token inválido ou expirado. Edite a credencial da instância.',
@@ -153,7 +164,11 @@ class CoolifyClient {
           _ =>
             'O Coolify respondeu com erro HTTP ${response.statusCode}. Tente novamente.',
         };
-        throw CoolifyException(message);
+        throw CoolifyException(
+          message,
+          statusCode: response.statusCode,
+          missingPermissions: missing,
+        );
       }
       final bytes = BytesBuilder(copy: false);
       await response.stream
@@ -193,6 +208,42 @@ class CoolifyClient {
       throw const CoolifyException(
         'Não foi possível contactar o Coolify. Verifique a rede e o certificado HTTPS.',
       );
+    }
+  }
+
+  /// Accept only the API middleware's exact permission error. HTML, proxy errors,
+  /// arbitrary text and oversized bodies remain generic access failures.
+  static Future<Set<String>> _missingPermissions(
+    http.StreamedResponse response,
+  ) async {
+    if (response.headers['content-type']?.contains('application/json') !=
+        true) {
+      await response.stream.listen(null).cancel();
+      return {};
+    }
+    try {
+      final bytes = BytesBuilder(copy: false);
+      await response.stream
+          .timeout(const Duration(seconds: 3))
+          .forEach((chunk) {
+            if (bytes.length + chunk.length > 4096) {
+              throw const FormatException();
+            }
+            bytes.add(chunk);
+          })
+          .timeout(const Duration(seconds: 4));
+      final data = jsonDecode(utf8.decode(bytes.takeBytes()));
+      if (data is! Map || data['message'] is! String) return {};
+      final match = RegExp(
+        r'^Missing required permissions: (read(?::sensitive)?|write(?::sensitive)?|deploy)(, (read(?::sensitive)?|write(?::sensitive)?|deploy))*$',
+      ).firstMatch(data['message'] as String);
+      if (match == null) return {};
+      return (data['message'] as String)
+          .substring('Missing required permissions: '.length)
+          .split(', ')
+          .toSet();
+    } catch (_) {
+      return {};
     }
   }
 

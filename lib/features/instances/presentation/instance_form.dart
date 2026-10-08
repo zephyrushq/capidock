@@ -3,7 +3,9 @@ import '../../../l10n/localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/help_button.dart';
 import '../../../core/widgets.dart';
+import '../../connections/presentation/connection_test_button.dart';
 import '../../connections/data/ssh_identity.dart';
 import '../domain/server_instance.dart';
 
@@ -249,10 +251,10 @@ class _InstanceConnectionFieldsState extends State<InstanceConnectionFields> {
             fieldKey: 'instance-private-key',
             controller: draft.privateKey,
             label: context.l10n.privateKeyLabel,
+            help: context.l10n.privateKeyHint,
             enabled: widget.enabled,
           ),
-          const SizedBox(height: 8),
-          Text(context.l10n.privateKeyHint),
+
           const SizedBox(height: 16),
           SecretField(
             fieldKey: 'instance-passphrase',
@@ -267,15 +269,25 @@ class _InstanceConnectionFieldsState extends State<InstanceConnectionFields> {
           fieldKey: 'instance-token',
           controller: draft.apiToken,
           label: context.l10n.coolifyToken,
+          help: context.l10n.coolifyTokenHint,
           enabled: widget.enabled,
         ),
-        const SizedBox(height: 12),
-        Text(context.l10n.coolifyTokenHint),
       ],
       const SizedBox(height: 20),
-      SurfaceCard(
-        padding: EdgeInsets.all(14),
-        child: Text(context.l10n.localCredentials),
+      Row(
+        children: [
+          Expanded(
+            child: ConnectionTestButton(
+              key: ValueKey('${draft.type}:${draft.authentication}'),
+              draft: draft,
+              enabled: widget.enabled,
+            ),
+          ),
+          HelpButton(
+            message: context.l10n.localCredentials,
+            title: context.l10n.localStorage,
+          ),
+        ],
       ),
     ],
   );
@@ -289,8 +301,10 @@ class SecretField extends StatefulWidget {
     required this.label,
     required this.enabled,
     this.requiredValue = true,
+    this.help,
   });
   final String fieldKey, label;
+  final String? help;
   final TextEditingController controller;
   final bool enabled, requiredValue;
   @override
@@ -310,14 +324,23 @@ class _SecretFieldState extends State<SecretField> {
     keyboardType: TextInputType.multiline,
     decoration: InputDecoration(
       labelText: widget.label,
-      suffixIcon: IconButton(
-        tooltip: _hidden
-            ? context.l10n.showCredential
-            : context.l10n.hideCredential,
-        onPressed: () => setState(() => _hidden = !_hidden),
-        icon: Icon(
-          _hidden ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-        ),
+      suffixIcon: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.help != null)
+            HelpButton(message: widget.help!, title: widget.label),
+          IconButton(
+            tooltip: _hidden
+                ? context.l10n.showCredential
+                : context.l10n.hideCredential,
+            onPressed: () => setState(() => _hidden = !_hidden),
+            icon: Icon(
+              _hidden
+                  ? Icons.visibility_outlined
+                  : Icons.visibility_off_outlined,
+            ),
+          ),
+        ],
       ),
     ),
     validator: (value) =>

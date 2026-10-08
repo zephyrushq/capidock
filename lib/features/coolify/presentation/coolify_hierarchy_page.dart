@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/app_theme.dart';
 import '../../../core/widgets.dart';
+import '../../../core/request_states.dart';
 import '../../../l10n/localization.dart';
 import '../../connections/data/coolify_client.dart';
 import '../data/coolify_catalog.dart';
@@ -56,7 +57,12 @@ class _CoolifyHierarchyPageState extends State<CoolifyHierarchyPage> {
   void initState() {
     super.initState();
     widget.session.addListener(_clear);
+    widget.session.access.addListener(_accessChanged);
     _load();
+  }
+
+  void _accessChanged() {
+    if (mounted) setState(() {});
   }
 
   void _clear() {
@@ -75,6 +81,7 @@ class _CoolifyHierarchyPageState extends State<CoolifyHierarchyPage> {
   @override
   void dispose() {
     widget.session.removeListener(_clear);
+    widget.session.access.removeListener(_accessChanged);
     super.dispose();
   }
 
@@ -82,8 +89,6 @@ class _CoolifyHierarchyPageState extends State<CoolifyHierarchyPage> {
     final request = ++_request;
     setState(() {
       _busy = true;
-      _details = null;
-      _children = [];
       _error = null;
       _childrenError = null;
     });
@@ -261,7 +266,8 @@ class _CoolifyHierarchyPageState extends State<CoolifyHierarchyPage> {
                 ),
               if (widget.catalog.find('PATCH', template) != null)
                 OutlinedButton.icon(
-                  onPressed: _busy
+                  onPressed:
+                      _busy || !widget.session.access.allows('PATCH', template)
                       ? null
                       : () => _operation(
                           widget.catalog.find('PATCH', template),
@@ -272,7 +278,12 @@ class _CoolifyHierarchyPageState extends State<CoolifyHierarchyPage> {
                 ),
               if (project)
                 FilledButton.icon(
-                  onPressed: _busy
+                  onPressed:
+                      _busy ||
+                          !widget.session.access.allows(
+                            'POST',
+                            '$template/environments',
+                          )
                       ? null
                       : () => _operation(
                           widget.catalog.find('POST', '$template/environments'),
@@ -311,12 +322,19 @@ class _CoolifyHierarchyPageState extends State<CoolifyHierarchyPage> {
                                   o.path.split('/').length == 3 ||
                               o.path == '/services'),
                     ))
-                      PopupMenuItem(value: op, child: Text(op.title)),
+                      PopupMenuItem(
+                        value: op,
+                        enabled:
+                            !_busy &&
+                            widget.session.access.allows(op.method, op.path),
+                        child: Text(op.title),
+                      ),
                   ],
                 ),
               if (widget.catalog.find('DELETE', template) != null)
                 TextButton(
-                  onPressed: _busy
+                  onPressed:
+                      _busy || !widget.session.access.allows('DELETE', template)
                       ? null
                       : () =>
                             _operation(widget.catalog.find('DELETE', template)),
@@ -334,16 +352,16 @@ class _CoolifyHierarchyPageState extends State<CoolifyHierarchyPage> {
               style: const TextStyle(color: DockColors.muted),
             ),
           ),
-          if (_busy) const LinearProgressIndicator(),
+          if (_busy && _details == null)
+            const LoadingCards()
+          else if (_busy)
+            const LinearProgressIndicator(),
           if (_error != null || _childrenError != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Text(
-                localizedMessage(context, _error ?? _childrenError!),
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
+            RequestFailure(
+              message: _error ?? _childrenError!,
+              onRetry: _busy ? null : _load,
             ),
-          if (_details != null && _childrenError == null && !_busy) ...[
+          if (_details != null && _childrenError == null) ...[
             if (_children.isNotEmpty) ...[
               TextField(
                 decoration: InputDecoration(

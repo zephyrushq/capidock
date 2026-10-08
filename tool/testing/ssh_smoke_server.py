@@ -21,6 +21,9 @@ args.config.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
 password = secrets.token_urlsafe(32)
 passphrase = secrets.token_urlsafe(32)
 client_key = asyncssh.generate_private_key('ssh-ed25519')
+activity_path = Path(str(args.config) + '.activity')
+channel_requests = 0
+activity_path.write_text('0')
 
 
 class Server(asyncssh.SSHServer):
@@ -31,7 +34,7 @@ class Server(asyncssh.SSHServer):
         return True
 
     def validate_password(self, username, candidate):
-        return username == 'capidock-test' and candidate == password
+        return username in ('capidock-test', 'capidock-test-auth-only') and candidate == password
 
     def public_key_auth_supported(self):
         return True
@@ -41,6 +44,10 @@ class Server(asyncssh.SSHServer):
 
 
 async def handle(process):
+    global channel_requests
+    if process.get_extra_info('username') == 'capidock-test-auth-only':
+        channel_requests += 1
+        activity_path.write_text(str(channel_requests))
     try:
         if process.command:
             # Actual system information without accepting arbitrary shell input.

@@ -5,9 +5,11 @@ import 'package:xterm/xterm.dart';
 
 import '../../../core/app_theme.dart';
 import '../../../core/widgets.dart';
+import '../../settings/app_preferences.dart';
 import '../../instances/domain/server_instance.dart';
 import '../../coolify/presentation/coolify_workspace_page.dart';
 import '../data/ssh_connection.dart';
+import 'host_key_dialog.dart';
 
 class InstanceConnectionPage extends StatefulWidget {
   const InstanceConnectionPage({
@@ -63,54 +65,13 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
     String? previous,
   ) async {
     if (!mounted) return false;
-    return await showDialog<bool>(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: Text(
-              previous == null
-                  ? context.l10n.confirmSshServer
-                  : context.l10n.serverKeyChanged,
-            ),
-            content: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '${widget.instance.host}:${widget.instance.port}\n\n${previous == null ? context.l10n.compareFingerprint : context.l10n.changedKeyWarning}',
-                  ),
-                  const SizedBox(height: 16),
-                  Text(type),
-                  const SizedBox(height: 8),
-                  SelectableText(fingerprint),
-                  if (previous != null) ...[
-                    const SizedBox(height: 16),
-                    Text(context.l10n.savedKey),
-                    SelectableText(previous),
-                  ],
-                  const SizedBox(height: 16),
-                  Text(context.l10n.verifyKeyCommand),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text(context.l10n.cancel),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text(
-                  previous == null
-                      ? context.l10n.trustAndConnect
-                      : context.l10n.replaceKey,
-                ),
-              ),
-            ],
-          ),
-        ) ??
-        false;
+    return confirmSshHostKey(
+      context,
+      widget.instance,
+      type,
+      fingerprint,
+      previous,
+    );
   }
 
   @override
@@ -312,6 +273,10 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
       Expanded(
         child: TerminalView(
           _ssh.terminal,
+          textStyle: TerminalStyle(
+            fontSize:
+                AppPreferencesScope.maybeOf(context)?.terminalFontSize ?? 14,
+          ),
           focusNode: _terminalFocus,
           readOnly: !_connected,
           autofocus: _connected,

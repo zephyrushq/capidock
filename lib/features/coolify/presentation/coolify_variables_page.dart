@@ -6,6 +6,7 @@ import '../data/coolify_catalog.dart';
 import '../data/coolify_session.dart';
 import 'coolify_variable_widgets.dart';
 import 'coolify_operation_page.dart';
+import '../../../core/request_states.dart';
 import 'coolify_workspace_page.dart';
 
 class CoolifyVariablesPage extends StatefulWidget {
@@ -34,7 +35,12 @@ class _CoolifyVariablesPageState extends State<CoolifyVariablesPage> {
   void initState() {
     super.initState();
     widget.session.addListener(_clear);
+    widget.session.access.addListener(_accessChanged);
     _load();
+  }
+
+  void _accessChanged() {
+    if (mounted) setState(() {});
   }
 
   void _clear() {
@@ -51,13 +57,13 @@ class _CoolifyVariablesPageState extends State<CoolifyVariablesPage> {
   @override
   void dispose() {
     widget.session.removeListener(_clear);
+    widget.session.access.removeListener(_accessChanged);
     super.dispose();
   }
 
   Future<void> _load() async {
     final request = ++_request;
     setState(() {
-      _data = null;
       _error = null;
       _busy = true;
     });
@@ -138,13 +144,20 @@ class _CoolifyVariablesPageState extends State<CoolifyVariablesPage> {
         Align(
           alignment: Alignment.centerLeft,
           child: FilledButton.icon(
-            onPressed: _busy ? null : () => _edit('POST'),
+            onPressed:
+                _busy || !widget.session.access.allows('POST', widget.template)
+                ? null
+                : () => _edit('POST'),
             icon: const Icon(Icons.add),
             label: Text(context.l10n.coolifyCreate),
           ),
         ),
-        if (_busy) const LinearProgressIndicator(),
-        if (_error != null) Text(localizedMessage(context, _error!)),
+        if (_busy && _data == null)
+          const LoadingCards()
+        else if (_busy)
+          const LinearProgressIndicator(),
+        if (_error != null)
+          RequestFailure(message: _error!, onRetry: _busy ? null : _load),
         if (_data != null && _data!.isEmpty)
           Padding(
             padding: const EdgeInsets.all(16),
@@ -154,6 +167,7 @@ class _CoolifyVariablesPageState extends State<CoolifyVariablesPage> {
           CoolifyVariableGroups(
             items: _data!,
             supportsPreview: false,
+            canWrite: widget.session.access.allows('PATCH', widget.template),
             onEdit: (item) => _edit('PATCH', item),
             onDelete: (item) => _edit('DELETE', item),
           ),

@@ -846,6 +846,103 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deviceLockHelp =>
       'Set up a device PIN, password or biometrics to continue.';
+
+  @override
+  String get termsOfUse => 'Terms of Use';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String legalUpdated(String date) {
+    return 'Updated: $date';
+  }
+
+  @override
+  String get legalLoadError =>
+      'Unable to load this document. Please reopen it.';
+
+  @override
+  String get help => 'Help';
+
+  @override
+  String get appSettings => 'App settings';
+
+  @override
+  String get terminalFontSize => 'Terminal text size';
+
+  @override
+  String get lockNow => 'Lock now';
+
+  @override
+  String get trustedSshKeys => 'Trusted SSH identities';
+
+  @override
+  String get trustedSshHelp =>
+      'Compare fingerprints with your server before trusting them. Forgetting an identity asks for confirmation on the next connection; an existing session stays connected.';
+
+  @override
+  String get localStorage => 'Local storage';
+
+  @override
+  String localCounts(int workspaces, int instances) {
+    return '$workspaces workspaces · $instances instances';
+  }
+
+  @override
+  String get eraseLocalData => 'Erase saved server data';
+
+  @override
+  String get eraseLocalWarning =>
+      'This permanently removes all saved workspaces, credentials and SSH identities from this device. Your servers are not changed. Device authentication is required.';
+
+  @override
+  String get eraseAuthReason =>
+      'Authenticate to erase saved Capidock server data';
+
+  @override
+  String get localEraseFailed =>
+      'Unable to verify that all local server data was erased. Unlock and check your saved data before trying again.';
+
+  @override
+  String get noTrustedKeys => 'No trusted identities';
+
+  @override
+  String get forgetSshWarning =>
+      'Forget this SSH identity? You will need to verify its fingerprint on the next connection.';
+
+  @override
+  String get tokenAccess => 'Token access';
+
+  @override
+  String get tokenAccessHelp =>
+      'These are observations of requests in this session, not the token’s exact permissions. The public API does not report whether a token is readonly or root. Unchecked permissions remain unknown. Only explicit permission errors disable actions; generic access failures can also come from IP rules or proxies. The server validates every request.';
+
+  @override
+  String get accessUnknown => 'Unknown';
+
+  @override
+  String get accessObserved => 'Observed';
+
+  @override
+  String get accessDenied => 'Denied';
+
+  @override
+  String get coolifyPermissionDenied =>
+      'The server reported a missing permission for this action. Edit the token and reconnect to check again.';
+
+  @override
+  String get testConnection => 'Test connection';
+
+  @override
+  String get connectionVerified => 'Connection verified';
+
+  @override
+  String get connectionTestHelp =>
+      'Tests authentication without saving your draft. SSH does not open a terminal or run commands, and trust confirmed here is temporary. Coolify uses a read-only API request; no write or deploy probes are sent.';
+
+  @override
+  String get noSearchResults => 'No matching resources.';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -1689,6 +1786,103 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   @override
   String get deviceLockHelp =>
       'Set up a device PIN, password or biometrics to continue.';
+
+  @override
+  String get termsOfUse => 'Terms of Use';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String legalUpdated(String date) {
+    return 'Updated: $date';
+  }
+
+  @override
+  String get legalLoadError =>
+      'Unable to load this document. Please reopen it.';
+
+  @override
+  String get help => 'Help';
+
+  @override
+  String get appSettings => 'App settings';
+
+  @override
+  String get terminalFontSize => 'Terminal text size';
+
+  @override
+  String get lockNow => 'Lock now';
+
+  @override
+  String get trustedSshKeys => 'Trusted SSH identities';
+
+  @override
+  String get trustedSshHelp =>
+      'Compare fingerprints with your server before trusting them. Forgetting an identity asks for confirmation on the next connection; an existing session stays connected.';
+
+  @override
+  String get localStorage => 'Local storage';
+
+  @override
+  String localCounts(int workspaces, int instances) {
+    return '$workspaces workspaces · $instances instances';
+  }
+
+  @override
+  String get eraseLocalData => 'Erase saved server data';
+
+  @override
+  String get eraseLocalWarning =>
+      'This permanently removes all saved workspaces, credentials and SSH identities from this device. Your servers are not changed. Device authentication is required.';
+
+  @override
+  String get eraseAuthReason =>
+      'Authenticate to erase saved Capidock server data';
+
+  @override
+  String get localEraseFailed =>
+      'Unable to verify that all local server data was erased. Unlock and check your saved data before trying again.';
+
+  @override
+  String get noTrustedKeys => 'No trusted identities';
+
+  @override
+  String get forgetSshWarning =>
+      'Forget this SSH identity? You will need to verify its fingerprint on the next connection.';
+
+  @override
+  String get tokenAccess => 'Token access';
+
+  @override
+  String get tokenAccessHelp =>
+      'These are observations of requests in this session, not the token’s exact permissions. The public API does not report whether a token is readonly or root. Unchecked permissions remain unknown. Only explicit permission errors disable actions; generic access failures can also come from IP rules or proxies. The server validates every request.';
+
+  @override
+  String get accessUnknown => 'Unknown';
+
+  @override
+  String get accessObserved => 'Observed';
+
+  @override
+  String get accessDenied => 'Denied';
+
+  @override
+  String get coolifyPermissionDenied =>
+      'The server reported a missing permission for this action. Edit the token and reconnect to check again.';
+
+  @override
+  String get testConnection => 'Test connection';
+
+  @override
+  String get connectionVerified => 'Connection verified';
+
+  @override
+  String get connectionTestHelp =>
+      'Tests authentication without saving your draft. SSH does not open a terminal or run commands, and trust confirmed here is temporary. Coolify uses a read-only API request; no write or deploy probes are sent.';
+
+  @override
+  String get noSearchResults => 'No matching resources.';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -2532,4 +2726,101 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String get deviceLockHelp =>
       'Set up a device PIN, password or biometrics to continue.';
+
+  @override
+  String get termsOfUse => 'Terms of Use';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String legalUpdated(String date) {
+    return 'Updated: $date';
+  }
+
+  @override
+  String get legalLoadError =>
+      'Unable to load this document. Please reopen it.';
+
+  @override
+  String get help => 'Help';
+
+  @override
+  String get appSettings => 'App settings';
+
+  @override
+  String get terminalFontSize => 'Terminal text size';
+
+  @override
+  String get lockNow => 'Lock now';
+
+  @override
+  String get trustedSshKeys => 'Trusted SSH identities';
+
+  @override
+  String get trustedSshHelp =>
+      'Compare fingerprints with your server before trusting them. Forgetting an identity asks for confirmation on the next connection; an existing session stays connected.';
+
+  @override
+  String get localStorage => 'Local storage';
+
+  @override
+  String localCounts(int workspaces, int instances) {
+    return '$workspaces workspaces · $instances instances';
+  }
+
+  @override
+  String get eraseLocalData => 'Erase saved server data';
+
+  @override
+  String get eraseLocalWarning =>
+      'This permanently removes all saved workspaces, credentials and SSH identities from this device. Your servers are not changed. Device authentication is required.';
+
+  @override
+  String get eraseAuthReason =>
+      'Authenticate to erase saved Capidock server data';
+
+  @override
+  String get localEraseFailed =>
+      'Unable to verify that all local server data was erased. Unlock and check your saved data before trying again.';
+
+  @override
+  String get noTrustedKeys => 'No trusted identities';
+
+  @override
+  String get forgetSshWarning =>
+      'Forget this SSH identity? You will need to verify its fingerprint on the next connection.';
+
+  @override
+  String get tokenAccess => 'Token access';
+
+  @override
+  String get tokenAccessHelp =>
+      'These are observations of requests in this session, not the token’s exact permissions. The public API does not report whether a token is readonly or root. Unchecked permissions remain unknown. Only explicit permission errors disable actions; generic access failures can also come from IP rules or proxies. The server validates every request.';
+
+  @override
+  String get accessUnknown => 'Unknown';
+
+  @override
+  String get accessObserved => 'Observed';
+
+  @override
+  String get accessDenied => 'Denied';
+
+  @override
+  String get coolifyPermissionDenied =>
+      'The server reported a missing permission for this action. Edit the token and reconnect to check again.';
+
+  @override
+  String get testConnection => 'Test connection';
+
+  @override
+  String get connectionVerified => 'Connection verified';
+
+  @override
+  String get connectionTestHelp =>
+      'Tests authentication without saving your draft. SSH does not open a terminal or run commands, and trust confirmed here is temporary. Coolify uses a read-only API request; no write or deploy probes are sent.';
+
+  @override
+  String get noSearchResults => 'No matching resources.';
 }

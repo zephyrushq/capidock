@@ -74,6 +74,15 @@ class SecureWorkspaceStore implements WorkspaceStore {
     await _removePlaintext();
   }
 
+  Future<void> clearLocalData() async {
+    // Remove legacy sources first so a partially interrupted wipe cannot migrate them back.
+    await _removePlaintext();
+    await _secrets.deleteAll();
+    if ((await _secrets.readAll()).isNotEmpty) {
+      throw StateError('Local data deletion could not be verified');
+    }
+  }
+
   Future<void> _removePlaintext() async {
     await _preferences.remove(previousStorageKey);
     await _preferences.remove(legacyStorageKey);

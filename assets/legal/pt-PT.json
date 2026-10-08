@@ -1,0 +1,57 @@
+{
+  "locale": "pt-PT",
+  "date": "2026-10-08",
+  "revision": "1",
+  "terms": {
+    "sections": [
+      {
+        "title": "1. Sobre o Capidock",
+        "body": "O Capidock é uma ferramenta Android mantida por ZEPHYRUS PROSPERITY - UNIPESSOAL LDA. Liga-se aos servidores SSH e Coolify que configurar. Esta versão não tem conta Capidock, servidor alojado pela empresa nem subscrição paga. Dúvidas sobre estes termos: legal@zephyrushq.com."
+      },
+      {
+        "title": "2. Uso autorizado e operações nos servidores",
+        "body": "Ligue-se apenas a sistemas seus ou que esteja autorizado a administrar. O utilizador escolhe o destino, as credenciais e as operações. Comandos de terminal, alterações de recursos, reinícios e eliminações podem afetar a disponibilidade ou apagar dados permanentemente. Confirme o destino e mantenha cópias de segurança independentes antes de fazer alterações."
+      },
+      {
+        "title": "3. Licença open source e marcas",
+        "body": "O software está licenciado sob GPL-3.0-only. Estes termos não substituem essa licença nem restringem os direitos de utilizar, estudar, modificar ou distribuir o código. Mantêm-se os avisos de direitos de autor e atribuição. O nome Capidock, os logótipos e a identidade da empresa são regulados separadamente por LICENSE-TRADEMARKS; não se afirma aqui que sejam marcas registadas."
+      },
+      {
+        "title": "4. Garantias e serviços de terceiros",
+        "body": "O software é disponibilizado sem garantias na medida permitida pela lei aplicável e pela GPL. Não se garantem disponibilidade, compatibilidade, recuperação de dados ou funcionamento ininterrupto. Nada neste texto exclui responsabilidades que legalmente não possam ser excluídas nem limita direitos obrigatórios do consumidor. Os servidores e serviços de terceiros têm os seus próprios termos; os seus operadores controlam a disponibilidade e o tratamento de dados."
+      },
+      {
+        "title": "5. Atualizações e contacto",
+        "body": "Os termos atualizados acompanham as atualizações da app e indicam a data de revisão. As alterações não revogam direitos já concedidos pela GPL. Consulte a Política de Privacidade sobre o tratamento de dados e contacte legal@zephyrushq.com para esclarecer dúvidas."
+      }
+    ]
+  },
+  "privacy": {
+    "sections": [
+      {
+        "title": "1. Quem mantém a app",
+        "body": "Esta política descreve a app Android oficial Capidock, mantida por ZEPHYRUS PROSPERITY - UNIPESSOAL LDA. Contacto de privacidade: legal@zephyrushq.com. Esta versão não tem conta nem backend alojado pelo programador. O Capidock não envia credenciais dos workspaces nem conteúdo dos servidores à empresa enquanto editora da app; os operadores dos servidores escolhidos recebem os dados da ligação."
+      },
+      {
+        "title": "2. Dados guardados no dispositivo",
+        "body": "A app guarda localmente nomes de workspaces e instâncias, endereços e portas, nomes de utilizador SSH, palavras-passe, chaves privadas e respetivas frases-passe, tokens da API Coolify e fingerprints SSH aceites. Os registos dos workspaces e os fingerprints usam encriptação AES-GCM com uma chave protegida pelo Android Keystore. O idioma e o tamanho do texto do terminal são guardados separadamente como preferências normais. A autenticação do Android devolve um resultado; o Capidock não recebe o PIN do dispositivo nem os modelos biométricos."
+      },
+      {
+        "title": "3. Dados enviados aos seus servidores",
+        "body": "Ao ligar, a app envia diretamente ao servidor configurado as informações exigidas pelo protocolo, como o utilizador e a troca de autenticação SSH ou o token Coolify. As palavras-passe são utilizadas quando seleciona essa autenticação; as chaves privadas SSH não são transmitidas durante a autenticação SSH e assinam os dados localmente. Comandos, valores de variáveis de ambiente, alterações de configuração e ficheiros escolhidos para importação ou envio são transmitidos quando solicita essas operações. O servidor e os fornecedores de rede podem observar metadados, como o endereço IP. A verificação SSH e a validação HTTPS protegem o transporte, mas não tornam seguro um servidor não fiável. Os operadores podem guardar registos e dados segundo as suas políticas."
+      },
+      {
+        "title": "4. Dados da sessão e terceiros",
+        "body": "O conteúdo do terminal, as informações do servidor e as respostas da API são processados para apresentação durante a sessão e não são intencionalmente guardados como histórico de respostas. A app oficial não inclui publicidade, analytics nem SDK de relatórios de falhas para o programador e não vende dados. Android, Google Play, teclados, ferramentas de acessibilidade e operadores externos podem tratar dados independentemente, segundo as suas definições e políticas. Se enviar um email, a empresa recebe os dados que decidir partilhar para responder ao pedido."
+      },
+      {
+        "title": "5. Conservação e eliminação",
+        "body": "Os dados locais dos workspaces permanecem até os remover ou limpar os dados da app. Remover um workspace ou instância atualiza o cofre, mas pode manter fingerprints SSH anteriormente aceites. Nas Definições da app pode esquecer identidades individuais ou apagar todos os workspaces, credenciais e identidades SSH guardados, após autenticação do dispositivo. Esta eliminação na app preserva as preferências de idioma e terminal. Limpe o armazenamento da app no Android para remover o cofre, fingerprints e preferências. As cópias de segurança Android estão desativadas para estes registos. A eliminação local não apaga recursos ou registos remotos nem revoga credenciais; utilize os controlos do servidor para essas ações. Perder os dados da app ou o acesso ao Keystore pode tornar as credenciais irrecuperáveis. A correspondência é conservada apenas pelo tempo necessário para tratar o pedido e cumprir obrigações legais aplicáveis."
+      },
+      {
+        "title": "6. Segurança, direitos e contacto",
+        "body": "Forneça apenas credenciais e ficheiros que esteja autorizado a utilizar. Prefira contas com o mínimo de permissões. A encriptação e a proteção do ecrã não garantem confidencialidade num dispositivo comprometido ou contra teclados e serviços de acessibilidade maliciosos. Quando aplicável, pode pedir acesso, retificação, apagamento, limitação, oposição ou portabilidade dos dados pessoais detidos pela empresa e reclamar junto da autoridade de proteção de dados competente. A empresa não consegue recuperar um cofre que existe apenas no seu dispositivo. Contacte legal@zephyrushq.com para pedidos de privacidade. As revisões acompanham as atualizações da app e indicam a data de revisão."
+      }
+    ]
+  }
+}

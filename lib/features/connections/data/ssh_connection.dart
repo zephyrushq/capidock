@@ -36,7 +36,7 @@ class SshConnection extends ChangeNotifier {
     if (!_disposed) notifyListeners();
   }
 
-  Future<void> connect(ConfirmHostKey confirm) async {
+  Future<void> connect(ConfirmHostKey confirm, {bool openShell = true}) async {
     disconnect();
     final generation = _generation;
     status = ConnectionStatus.connecting;
@@ -93,6 +93,11 @@ class SshConnection extends ChangeNotifier {
       );
       await client.authenticated;
       if (!_active(generation)) return;
+      if (!openShell) {
+        status = ConnectionStatus.connected;
+        _notify();
+        return;
+      }
       final shell = await client
           .shell(
             pty: SSHPtyConfig(

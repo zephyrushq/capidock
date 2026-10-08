@@ -80,6 +80,47 @@ void main() {
     );
   }
 
+  test(
+    'Connection testing authenticates without any shell or command channel',
+    () async {
+      final config = jsonDecode(
+        File(configPath).readAsStringSync(),
+      ) as Map<String, dynamic>;
+      final activity = File('$configPath.activity');
+      final before = activity.readAsStringSync();
+      final secrets = MemorySecretStore();
+      final connection = SshConnection(
+        ServerInstance(
+          id: 'auth-only',
+          name: 'Local authentication',
+          type: InstanceType.ssh,
+          host: '127.0.0.1',
+          port: config['port'] as int,
+          username: 'capidock-test-auth-only',
+          password: config['password'] as String,
+        ),
+        hostKeys: HostKeyStore(secrets: secrets, persist: false),
+      );
+      addTearDown(connection.dispose);
+      await connection.connect((_, _, _) async => true, openShell: false);
+      expect(
+        connection.status,
+        ConnectionStatus.connected,
+        reason: connection.error,
+      );
+      expect(connection.terminal.onOutput, isNull);
+      expect(connection.information, isNull);
+      expect(secrets.values, isEmpty);
+      connection.disconnect();
+      expect(
+        activity.readAsStringSync(),
+        before,
+        reason: 'The server must not receive any shell or exec request',
+      );
+    },
+    skip: configPath.isEmpty,
+  );
+
   test('Real SSH rejects a declined host key and wrong password', () async {
     final config =
         jsonDecode(File(configPath).readAsStringSync()) as Map<String, dynamic>;

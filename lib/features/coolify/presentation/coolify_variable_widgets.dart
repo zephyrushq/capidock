@@ -22,11 +22,12 @@ class CoolifyVariableGroups extends StatelessWidget {
     required this.onDelete,
     this.onCreate,
     this.supportsPreview = true,
+    this.canWrite = true,
   });
   final List<Map<String, dynamic>> items;
   final void Function(Map<String, dynamic>) onEdit, onDelete;
   final void Function(bool)? onCreate;
-  final bool supportsPreview;
+  final bool supportsPreview, canWrite;
   @override
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
@@ -62,7 +63,7 @@ class CoolifyVariableGroups extends StatelessWidget {
         trailing: onCreate == null
             ? null
             : IconButton(
-                onPressed: () => onCreate!(preview),
+                onPressed: canWrite ? () => onCreate!(preview) : null,
                 icon: const Icon(Icons.add),
                 tooltip: context.l10n.coolifyCreate,
               ),
@@ -85,8 +86,8 @@ class CoolifyVariableGroups extends StatelessWidget {
               '${item['key']}:${item['uuid'] ?? item['id']}:$preview',
             ),
             item: item,
-            onEdit: () => onEdit(item),
-            onDelete: item['uuid'] != null || item['id'] != null
+            onEdit: canWrite ? () => onEdit(item) : null,
+            onDelete: canWrite && (item['uuid'] != null || item['id'] != null)
                 ? () => onDelete(item)
                 : null,
           ),
@@ -103,7 +104,7 @@ class CoolifyVariableCard extends StatefulWidget {
     this.onDelete,
   });
   final Map<String, dynamic> item;
-  final VoidCallback onEdit;
+  final VoidCallback? onEdit;
   final VoidCallback? onDelete;
   @override
   State<CoolifyVariableCard> createState() => _CoolifyVariableCardState();
@@ -216,7 +217,17 @@ class _CoolifyVariableValuePageState extends State<CoolifyVariableValuePage> {
   void initState() {
     super.initState();
     widget.session.addListener(_clear);
+    widget.session.access.addListener(_accessChanged);
   }
+
+  void _accessChanged() {
+    if (mounted) setState(() {});
+  }
+
+  bool get _canWrite => widget.session.access.allows(
+    widget.operation.method,
+    widget.operation.path,
+  );
 
   void _clear() {
     if (mounted) {
@@ -233,12 +244,19 @@ class _CoolifyVariableValuePageState extends State<CoolifyVariableValuePage> {
   @override
   void dispose() {
     widget.session.removeListener(_clear);
+    widget.session.access.removeListener(_accessChanged);
     _value.dispose();
     super.dispose();
   }
 
   Future<void> _save() async {
-    if (!_changed || _busy || _confirming || !widget.session.active) return;
+    if (!_changed ||
+        _busy ||
+        _confirming ||
+        !widget.session.active ||
+        !_canWrite) {
+      return;
+    }
     final generation = widget.session.generation;
     final op = widget.operation;
     final body = <String, dynamic>{'value': _value.text};
@@ -311,7 +329,7 @@ class _CoolifyVariableValuePageState extends State<CoolifyVariableValuePage> {
         TextField(
           key: const ValueKey('coolify-variable-value'),
           controller: _value,
-          enabled: !_busy && !_confirming,
+          enabled: !_busy && !_confirming && _canWrite,
           obscureText: !_reveal,
           maxLines: _reveal ? 8 : 1,
           autocorrect: false,
@@ -331,7 +349,12 @@ class _CoolifyVariableValuePageState extends State<CoolifyVariableValuePage> {
         const SizedBox(height: 20),
         FilledButton.icon(
           key: const ValueKey('coolify-save-variable-value'),
-          onPressed: _changed && !_busy && !_confirming && widget.session.active
+          onPressed:
+              _changed &&
+                  !_busy &&
+                  !_confirming &&
+                  widget.session.active &&
+                  _canWrite
               ? _save
               : null,
           icon: const Icon(Icons.save_outlined),

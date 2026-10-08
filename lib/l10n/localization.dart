@@ -17,6 +17,8 @@ String localizedMessage(BuildContext context, String message) {
   return switch (message) {
     'invalidApiResponse' => strings.invalidApiResponse,
     'coolifyConflict' => strings.coolifyConflict,
+    'coolifyPermissionDenied' => strings.coolifyPermissionDenied,
+    'localEraseFailed' => strings.localEraseFailed,
     'coolifyValidationError' => strings.coolifyValidationError,
     'coolifyUploadSize' => strings.coolifyUploadSize,
     'coolifyCancelled' => strings.coolifyCancelled,
