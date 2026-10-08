@@ -1,0 +1,39 @@
+# Capidock — es-ES
+
+## App name
+
+Capidock
+
+## Short description (74/80)
+
+Gestiona servidores SSH y Coolify en workspaces, con un terminal SSH móvil
+
+## Full description (2104/4000)
+
+Tus servidores. En tu bolsillo.
+
+Capidock reúne tus servidores SSH e instancias de Coolify en una app móvil. Agrúpalos en workspaces, cambia entre instancias como canales y mantén organizados tus servidores personales, homelab y proyectos.
+
+WORKSPACES PARA TUS SERVIDORES
+Crea workspaces separados para distintos proyectos o entornos. Añade, edita, busca y mueve instancias entre workspaces. La configuración guiada te ayuda a preparar tu primer workspace y conexión.
+
+UN TERMINAL SSH INTERACTIVO
+Conéctate con contraseña o clave privada, incluidas las claves cifradas compatibles. Ejecuta comandos en un terminal interactivo con atajos para flechas, Tab, Esc y teclas Ctrl. Consulta información del sistema, tiempo de actividad y uso de memoria y disco en servidores Linux/POSIX compatibles. Confirma la huella de la clave del servidor en la primera conexión; las siguientes conexiones comprueban la huella guardada.
+
+TUS RECURSOS DE COOLIFY
+Conéctate a tu instalación de Coolify mediante HTTPS con un token de la API. Consulta los nombres y estados de aplicaciones, bases de datos y servicios que devuelve la API. La integración con Coolify permite actualmente consultar recursos; las acciones de despliegue, reinicio y parada no están disponibles.
+
+CONFIGURACIÓN LOCAL
+Los ajustes de los workspaces y las credenciales se guardan cifrados en tu dispositivo. No necesitas una cuenta de Capidock. Las conexiones se realizan directamente con los servidores que configuras. Capidock no tiene backend, telemetría ni sincronización en la nube. Para usar SSH o Coolify, necesitas una conexión de red y un servidor accesible.
+
+ELIGE TU IDIOMA
+Usa inglés (Reino Unido o Estados Unidos), portugués (Portugal o Brasil) o español (España). Cambia el idioma en la pantalla de bienvenida o en el workspace; tu elección se guarda.
+
+UNA CAPIBARA AL TIMÓN
+Una interfaz morada y una capibara robot hacen compañía a tus servidores. La capibara da la bienvenida; tú te encargas de los comandos.
+
+Capidock es un proyecto de código abierto de Zephyrus Prosperity. Código fuente: https://github.com/zephyrushq/capidock-mobile
+
+## Feature graphic alt text
+
+Capidock: Tus servidores. En tu bolsillo. Una tarjeta morada agrupa instancias SSH y Coolify en un workspace.

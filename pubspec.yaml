@@ -7,6 +7,7 @@ environment:
   sdk: ^3.13.5
 
 dependencies:
+  file_selector: ^1.1.0
   dartssh2: ^4.1.0
   flutter:
     sdk: flutter
@@ -28,7 +29,10 @@ flutter:
   generate: true
   uses-material-design: true
   licenses:
+    - assets/coolify/LICENSE.txt
+    - assets/coolify/NOTICE
     - COPYRIGHT
     - LICENSE-TRADEMARKS
   assets:
     - assets/branding/capidock-mark.png
+    - assets/coolify/operations.json

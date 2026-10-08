@@ -1,0 +1,8 @@
+{
+  "welcome.png": "Creación guiada del primer workspace",
+  "languages.png": "Selector de idioma con cinco opciones regionales y banderas",
+  "connection.png": "Configuración de una instancia SSH con datos de conexión de ejemplo",
+  "overview.png": "Instancia SSH guardada, lista para conectar",
+  "channels.png": "Navegación del workspace con instancias SSH y Coolify agrupadas",
+  "coolify.png": "Instancia Coolify guardada, lista para conectar mediante HTTPS"
+}

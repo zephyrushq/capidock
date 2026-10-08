@@ -6,7 +6,7 @@ import 'package:xterm/xterm.dart';
 import '../../../core/app_theme.dart';
 import '../../../core/widgets.dart';
 import '../../instances/domain/server_instance.dart';
-import '../data/coolify_client.dart';
+import '../../coolify/presentation/coolify_workspace_page.dart';
 import '../data/ssh_connection.dart';
 
 class InstanceConnectionPage extends StatefulWidget {
@@ -14,9 +14,11 @@ class InstanceConnectionPage extends StatefulWidget {
     super.key,
     required this.instance,
     required this.onEdit,
+    this.onTerminal,
   });
   final ServerInstance instance;
   final VoidCallback onEdit;
+  final VoidCallback? onTerminal;
   @override
   State<InstanceConnectionPage> createState() => _InstanceConnectionPageState();
 }
@@ -24,20 +26,12 @@ class InstanceConnectionPage extends StatefulWidget {
 class _InstanceConnectionPageState extends State<InstanceConnectionPage>
     with WidgetsBindingObserver {
   late final SshConnection _ssh = SshConnection(widget.instance);
-  CoolifyClient? _coolify;
-  List<CoolifyResource>? _resources;
-  String? _coolifyError;
-  DateTime? _updatedAt;
-  bool _loading = false;
-  int _request = 0;
   int _tab = 0;
   final _terminalFocus = FocusNode();
 
   bool get _isSsh => widget.instance.type == InstanceType.ssh;
-  bool get _connected =>
-      _isSsh ? _ssh.status == ConnectionStatus.connected : _resources != null;
-  bool get _busy =>
-      _isSsh ? _ssh.status == ConnectionStatus.connecting : _loading;
+  bool get _connected => _ssh.status == ConnectionStatus.connected;
+  bool get _busy => _ssh.status == ConnectionStatus.connecting;
 
   @override
   void initState() {
@@ -50,56 +44,16 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
       _ssh.disconnect();
-      _cancelCoolify();
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _request++;
-    _coolify?.close();
+
     _ssh.dispose();
     _terminalFocus.dispose();
     super.dispose();
-  }
-
-  void _cancelCoolify() {
-    _request++;
-    _coolify?.close();
-    _coolify = null;
-    if (mounted) setState(() => _loading = false);
-  }
-
-  Future<void> _loadResources() async {
-    _cancelCoolify();
-    final request = _request;
-    final client = CoolifyClient();
-    _coolify = client;
-    setState(() {
-      _loading = true;
-      _coolifyError = null;
-    });
-    try {
-      final resources = await client.resources(widget.instance);
-      if (!mounted || request != _request) return;
-      setState(() {
-        _resources = resources;
-        _updatedAt = DateTime.now();
-      });
-    } on CoolifyException catch (error) {
-      if (mounted && request == _request) {
-        setState(() => _coolifyError = error.message);
-      }
-    } finally {
-      client.close();
-      if (mounted && request == _request) {
-        setState(() {
-          _loading = false;
-          _coolify = null;
-        });
-      }
-    }
   }
 
   Future<bool> _confirmHostKey(
@@ -159,29 +113,36 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
   }
 
   @override
-  Widget build(BuildContext context) => ListenableBuilder(
-    listenable: _ssh,
-    builder: (context, _) => Column(
-      children: [
-        Expanded(child: _isSsh && _tab == 1 ? _terminal() : _overview()),
-        if (_isSsh)
-          NavigationBar(
-            selectedIndex: _tab,
-            onDestinationSelected: (value) => setState(() => _tab = value),
-            destinations: [
-              NavigationDestination(
-                icon: Icon(Icons.dns_outlined),
-                label: context.l10n.server,
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.terminal),
-                label: 'Terminal',
-              ),
+  Widget build(BuildContext context) => !_isSsh
+      ? CoolifyWorkspacePage(
+          instance: widget.instance,
+          onEdit: widget.onEdit,
+          onTerminal: widget.onTerminal ?? widget.onEdit,
+        )
+      : ListenableBuilder(
+          listenable: _ssh,
+          builder: (context, _) => Column(
+            children: [
+              Expanded(child: _isSsh && _tab == 1 ? _terminal() : _overview()),
+              if (_isSsh)
+                NavigationBar(
+                  selectedIndex: _tab,
+                  onDestinationSelected: (value) =>
+                      setState(() => _tab = value),
+                  destinations: [
+                    NavigationDestination(
+                      icon: Icon(Icons.dns_outlined),
+                      label: context.l10n.server,
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.terminal),
+                      label: 'Terminal',
+                    ),
+                  ],
+                ),
             ],
           ),
-      ],
-    ),
-  );
+        );
 
   Widget _overview() => ListView(
     padding: const EdgeInsets.all(24),
@@ -240,13 +201,9 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
               onPressed: _busy
                   ? null
                   : () {
-                      if (_isSsh) {
-                        _connected
-                            ? _ssh.refreshInformation()
-                            : _ssh.connect(_confirmHostKey);
-                      } else {
-                        _loadResources();
-                      }
+                      _connected
+                          ? _ssh.refreshInformation()
+                          : _ssh.connect(_confirmHostKey);
                     },
               icon: Icon(_connected ? Icons.refresh : Icons.power_settings_new),
               label: Text(
@@ -259,7 +216,7 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
             ),
             if (_busy || (_isSsh && _connected))
               OutlinedButton(
-                onPressed: _isSsh ? _ssh.disconnect : _cancelCoolify,
+                onPressed: _ssh.disconnect,
                 child: Text(
                   _busy ? context.l10n.cancel : context.l10n.disconnect,
                 ),
@@ -276,7 +233,7 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
           padding: EdgeInsets.only(top: 20),
           child: LinearProgressIndicator(),
         ),
-      if ((_isSsh ? _ssh.error : _coolifyError) case final String error)
+      if (_ssh.error case final String error)
         Padding(
           padding: const EdgeInsets.only(top: 20),
           child: Text(
@@ -311,37 +268,6 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
           ),
         ] else if (!_busy && !_connected)
           SurfaceCard(child: Text(context.l10n.connectForInfo)),
-      ] else ...[
-        if (_resources != null) ...[
-          SectionTitle(context.l10n.resourceCount(_resources!.length)),
-          _timestamp(_updatedAt),
-          const SizedBox(height: 16),
-          if (_resources!.isEmpty)
-            SurfaceCard(child: Text(context.l10n.noCoolifyResources)),
-          for (final resource in _resources!)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: SurfaceCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      localizedMessage(context, resource.name),
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      resource.type,
-                      style: const TextStyle(color: DockColors.muted),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(localizedMessage(context, resource.status)),
-                  ],
-                ),
-              ),
-            ),
-        ] else if (!_busy)
-          SurfaceCard(child: Text(context.l10n.coolifyOverview)),
       ],
       const SizedBox(height: 24),
       Text(
@@ -356,9 +282,7 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
         ? ''
         : context.l10n.lastRead(
             TimeOfDay.fromDateTime(time).format(context),
-            !_connected || _coolifyError != null
-                ? context.l10n.previousData
-                : '',
+            !_connected ? context.l10n.previousData : '',
           ),
     style: const TextStyle(color: DockColors.muted, fontSize: 12),
   );

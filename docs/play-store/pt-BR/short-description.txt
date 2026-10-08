@@ -1,0 +1,1 @@
+Gerencie servidores SSH e Coolify em workspaces, com um terminal SSH móvel

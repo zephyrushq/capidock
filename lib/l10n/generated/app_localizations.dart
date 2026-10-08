@@ -666,7 +666,7 @@ abstract class AppLocalizations {
   /// No description provided for @coolifyDescription.
   ///
   /// In en, this message translates to:
-  /// **'Applications and deployments'**
+  /// **'Description'**
   String get coolifyDescription;
 
   /// No description provided for @hostRequired.
@@ -786,7 +786,7 @@ abstract class AppLocalizations {
   /// No description provided for @coolifyTokenHint.
   ///
   /// In en, this message translates to:
-  /// **'In Coolify, enable the API and create a read-only token under Keys & Tokens → API tokens. Use the base URL without /api/v1.'**
+  /// **'In Coolify, enable the API and create a token under Keys & Tokens → API tokens. Read-only tokens can view resources. Editing needs write; deployment operations may need deploy or sensitive. Use the base URL without /api/v1.'**
   String get coolifyTokenHint;
 
   /// No description provided for @localCredentials.
@@ -1040,6 +1040,522 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =0{0 resources} one{1 resource} other{{count} resources}}'**
   String resourceCount(int count);
+
+  /// No description provided for @coolifyOperations.
+  ///
+  /// In en, this message translates to:
+  /// **'All operations'**
+  String get coolifyOperations;
+
+  /// No description provided for @coolifyApplications.
+  ///
+  /// In en, this message translates to:
+  /// **'Applications'**
+  String get coolifyApplications;
+
+  /// No description provided for @coolifyDatabases.
+  ///
+  /// In en, this message translates to:
+  /// **'Databases'**
+  String get coolifyDatabases;
+
+  /// No description provided for @coolifyServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Services'**
+  String get coolifyServices;
+
+  /// No description provided for @coolifyProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Projects'**
+  String get coolifyProjects;
+
+  /// No description provided for @coolifyServers.
+  ///
+  /// In en, this message translates to:
+  /// **'Servers'**
+  String get coolifyServers;
+
+  /// No description provided for @coolifyPermissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Reads need read permission. Editing needs write; deploys and server operations may need deploy or sensitive permission. Your Coolify version determines which operations are available.'**
+  String get coolifyPermissions;
+
+  /// No description provided for @coolifySearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search resources or operations'**
+  String get coolifySearch;
+
+  /// No description provided for @coolifyAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get coolifyAll;
+
+  /// No description provided for @coolifyCatalogHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Access the documented Coolify API operations. Field names and descriptions follow the official API. Newer operations may not exist on older installations.'**
+  String get coolifyCatalogHelp;
+
+  /// No description provided for @coolifyDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get coolifyDetails;
+
+  /// No description provided for @coolifyEnvironment.
+  ///
+  /// In en, this message translates to:
+  /// **'Environment'**
+  String get coolifyEnvironment;
+
+  /// No description provided for @coolifyLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'Logs'**
+  String get coolifyLogs;
+
+  /// No description provided for @coolifyBackups.
+  ///
+  /// In en, this message translates to:
+  /// **'Backups'**
+  String get coolifyBackups;
+
+  /// No description provided for @coolifyStorages.
+  ///
+  /// In en, this message translates to:
+  /// **'Volumes and files'**
+  String get coolifyStorages;
+
+  /// No description provided for @coolifyDeployments.
+  ///
+  /// In en, this message translates to:
+  /// **'Deployments'**
+  String get coolifyDeployments;
+
+  /// No description provided for @coolifyCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get coolifyCreate;
+
+  /// No description provided for @coolifyEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit configuration'**
+  String get coolifyEdit;
+
+  /// No description provided for @coolifyStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get coolifyStart;
+
+  /// No description provided for @coolifyStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get coolifyStop;
+
+  /// No description provided for @coolifyRestart.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart'**
+  String get coolifyRestart;
+
+  /// No description provided for @coolifyDeploy.
+  ///
+  /// In en, this message translates to:
+  /// **'Deploy'**
+  String get coolifyDeploy;
+
+  /// No description provided for @coolifyExecutions.
+  ///
+  /// In en, this message translates to:
+  /// **'Execution history'**
+  String get coolifyExecutions;
+
+  /// No description provided for @coolifyScheduleBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup schedule'**
+  String get coolifyScheduleBackup;
+
+  /// No description provided for @coolifyRunBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Run backup'**
+  String get coolifyRunBackup;
+
+  /// No description provided for @coolifyEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No results returned by the API.'**
+  String get coolifyEmpty;
+
+  /// No description provided for @coolifyConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm operation'**
+  String get coolifyConfirm;
+
+  /// No description provided for @coolifyDestructive.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm destructive operation'**
+  String get coolifyDestructive;
+
+  /// No description provided for @coolifyMutationWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This changes the remote server. Stop, restart, deploy, restore and delete operations can interrupt services or remove data. Check the target before continuing.'**
+  String get coolifyMutationWarning;
+
+  /// No description provided for @coolifyTypeTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Type {target} to confirm.'**
+  String coolifyTypeTarget(String target);
+
+  /// No description provided for @coolifyExecute.
+  ///
+  /// In en, this message translates to:
+  /// **'Execute operation'**
+  String get coolifyExecute;
+
+  /// No description provided for @coolifyRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read data'**
+  String get coolifyRead;
+
+  /// No description provided for @coolifyReveal.
+  ///
+  /// In en, this message translates to:
+  /// **'Show values and logs (may contain secrets)'**
+  String get coolifyReveal;
+
+  /// No description provided for @coolifyChangedOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only edited fields are sent. Optional fields left untouched keep their server values. Empty edited strings clear a value. Arrays and objects use JSON.'**
+  String get coolifyChangedOnly;
+
+  /// No description provided for @coolifyInvalidField.
+  ///
+  /// In en, this message translates to:
+  /// **'Check this value and its required type.'**
+  String get coolifyInvalidField;
+
+  /// No description provided for @coolifyInvalidJson.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter valid JSON.'**
+  String get coolifyInvalidJson;
+
+  /// No description provided for @coolifyRequiredPayload.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in at least one field, all required fields, and choose a file for uploads.'**
+  String get coolifyRequiredPayload;
+
+  /// No description provided for @coolifyChooseFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose backup file'**
+  String get coolifyChooseFile;
+
+  /// No description provided for @coolifySuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Request accepted by Coolify. Queued jobs may still be running; refresh their status.'**
+  String get coolifySuccess;
+
+  /// No description provided for @coolifyYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get coolifyYes;
+
+  /// No description provided for @coolifyNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get coolifyNo;
+
+  /// No description provided for @coolifyConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Another operation is in progress or this change conflicts with the current state. Refresh before trying again.'**
+  String get coolifyConflict;
+
+  /// No description provided for @coolifyValidationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Coolify rejected the fields. Check required values, types and your installed API version.'**
+  String get coolifyValidationError;
+
+  /// No description provided for @coolifyUploadSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a non-empty backup file no larger than 10 GiB.'**
+  String get coolifyUploadSize;
+
+  /// No description provided for @coolifyCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection closed. Refresh to check whether the remote operation completed.'**
+  String get coolifyCancelled;
+
+  /// No description provided for @coolifySshTerminal.
+  ///
+  /// In en, this message translates to:
+  /// **'Coolify does not expose an interactive terminal through its public REST API. Choose a saved SSH connection to access the server.'**
+  String get coolifySshTerminal;
+
+  /// No description provided for @coolifyNoSsh.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an SSH instance for this server to a workspace first.'**
+  String get coolifyNoSsh;
+
+  /// No description provided for @coolifyResources.
+  ///
+  /// In en, this message translates to:
+  /// **'Resources'**
+  String get coolifyResources;
+
+  /// No description provided for @coolifyEnvironments.
+  ///
+  /// In en, this message translates to:
+  /// **'Environments'**
+  String get coolifyEnvironments;
+
+  /// No description provided for @coolifySharedVariables.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared variables'**
+  String get coolifySharedVariables;
+
+  /// No description provided for @coolifyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get coolifyName;
+
+  /// No description provided for @coolifyStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get coolifyStatus;
+
+  /// No description provided for @coolifyDomains.
+  ///
+  /// In en, this message translates to:
+  /// **'Domains'**
+  String get coolifyDomains;
+
+  /// No description provided for @coolifyRepository.
+  ///
+  /// In en, this message translates to:
+  /// **'Repository'**
+  String get coolifyRepository;
+
+  /// No description provided for @coolifyBranch.
+  ///
+  /// In en, this message translates to:
+  /// **'Branch'**
+  String get coolifyBranch;
+
+  /// No description provided for @coolifyBuildPack.
+  ///
+  /// In en, this message translates to:
+  /// **'Build method'**
+  String get coolifyBuildPack;
+
+  /// No description provided for @coolifyAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get coolifyAddress;
+
+  /// No description provided for @coolifyPort.
+  ///
+  /// In en, this message translates to:
+  /// **'Port'**
+  String get coolifyPort;
+
+  /// No description provided for @coolifyUser.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get coolifyUser;
+
+  /// No description provided for @coolifyFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule'**
+  String get coolifyFrequency;
+
+  /// No description provided for @coolifyEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get coolifyEnabled;
+
+  /// No description provided for @coolifyMountPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Mount path'**
+  String get coolifyMountPath;
+
+  /// No description provided for @coolifyHostPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Host path'**
+  String get coolifyHostPath;
+
+  /// No description provided for @coolifyCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get coolifyCreated;
+
+  /// No description provided for @coolifyUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated'**
+  String get coolifyUpdated;
+
+  /// No description provided for @coolifyValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get coolifyValue;
+
+  /// No description provided for @coolifyPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get coolifyPreview;
+
+  /// No description provided for @coolifySettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get coolifySettings;
+
+  /// No description provided for @coolifyType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get coolifyType;
+
+  /// No description provided for @coolifyRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Running'**
+  String get coolifyRunning;
+
+  /// No description provided for @coolifyStopped.
+  ///
+  /// In en, this message translates to:
+  /// **'Stopped'**
+  String get coolifyStopped;
+
+  /// No description provided for @coolifyConfiguration.
+  ///
+  /// In en, this message translates to:
+  /// **'Configuration'**
+  String get coolifyConfiguration;
+
+  /// No description provided for @coolifyOverviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get coolifyOverviewTitle;
+
+  /// No description provided for @coolifyResourceSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search resources'**
+  String get coolifyResourceSearch;
+
+  /// No description provided for @coolifyOtherSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'More settings'**
+  String get coolifyOtherSettings;
+
+  /// No description provided for @coolifyEnvironmentEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No environments in this project yet.'**
+  String get coolifyEnvironmentEmpty;
+
+  /// No description provided for @coolifyLogsHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Reveal logs to view their contents. They may contain secrets.'**
+  String get coolifyLogsHidden;
+
+  /// No description provided for @coolifyResourceEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No resources in this environment yet.'**
+  String get coolifyResourceEmpty;
+
+  /// No description provided for @coolifyRestricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Value protected by token permissions.'**
+  String get coolifyRestricted;
+
+  /// No description provided for @coolifyVariables.
+  ///
+  /// In en, this message translates to:
+  /// **'Environment variables'**
+  String get coolifyVariables;
+
+  /// No description provided for @coolifyNormalVariables.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal variables'**
+  String get coolifyNormalVariables;
+
+  /// No description provided for @coolifyPreviewVariables.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview variables'**
+  String get coolifyPreviewVariables;
+
+  /// No description provided for @coolifyShowValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Show value'**
+  String get coolifyShowValue;
+
+  /// No description provided for @coolifyHideValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide value'**
+  String get coolifyHideValue;
+
+  /// No description provided for @coolifyEditValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit value'**
+  String get coolifyEditValue;
+
+  /// No description provided for @coolifySaveValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Save value'**
+  String get coolifySaveValue;
 }
 
 class _AppLocalizationsDelegate

@@ -1,30 +1,56 @@
-# Google Play listing assets
+# Google Play store listings
 
-Upload the files from `en-GB` to the appropriate fields in Play Console:
+The `en-GB`, `en-US`, `pt-PT`, `pt-BR` and `es-ES` folders match the five regional
+languages currently supported by Capidock. Every folder is a complete listing
+for version 0.3.0, with copy and visuals in that locale.
 
-| File | Field | Dimensions |
+## Upload
+
+Add each language in Play Console's **Main store listing**, select it, then use
+its folder or `capidock-play-store-<locale>.zip`:
+
+| File | Play Console field | Limit / dimensions |
 | --- | --- | --- |
-| `app-icon.png` | App icon | 512 × 512 |
-| `feature-graphic.png` | Feature graphic | 1024 × 500 |
-| `phone/channels.png` | Phone screenshots: workspace navigation | 1080 × 1920 |
-| `phone/overview.png` | Phone screenshots: SSH connection | 1080 × 1920 |
-| `phone/coolify.png` | Phone screenshots: Coolify connection | 1080 × 1920 |
-| `phone/languages.png` | Phone screenshots: language selection | 1080 × 1920 |
-| `phone/welcome.png` | Phone screenshots: first workspace | 1080 × 1920 |
-| `phone/connection.png` | Phone screenshots: SSH configuration | 1080 × 1920 |
+| `app-name.txt` | App name | 30 characters; Capidock in every language |
+| `short-description.txt` | Short description | 80 characters |
+| `full-description.txt` | Full description | 4000 characters |
+| `app-icon.png` | App icon | 512 × 512; under 1 MB |
+| `feature-graphic.png` | Feature graphic | 1024 × 500; under 15 MB |
+| `feature-graphic-alt.txt` | Feature graphic alternative text | Under 140 characters |
+| `phone/*.png` | Phone screenshots | Six images, 1080 × 1920 |
+| `tablet-7/*.png` | 7-inch tablet screenshots | Six images, 1920 × 1080 |
+| `tablet-10/*.png` | 10-inch tablet screenshots | Six images, 2560 × 1440 |
+| `screenshots-alt.json` | Screenshot alternative text, when available | Per-image descriptions in the selected language |
 
-The banner and screenshots use the app's British English localisation.
-They are rendered directly from the current Flutter widgets at a phone viewport,
-rather than captured from a physical Android device. They contain only isolated
-in-memory example configuration, reserved example.com addresses and dummy
-credentials. No connections are attempted and no connected state, server metrics
-or terminal output are fabricated. These fixtures do not seed the production app.
+`listing.md` groups the text for convenient reading and copying. `listing.json`
+also stores the localised graphic copy for the renderer. Copy only the contents
+of each `.txt` field, without file names or Markdown headings.
 
-All screenshots and the feature graphic are opaque 24-bit RGB PNGs. The store
-icon is a 32-bit RGBA PNG, with an opaque square background and no baked-in
-rounded corners or outer shadow. It reuses the existing Capidock mascot.
+Suggested screenshot order: `channels`, `overview`, `coolify`, `languages`,
+`welcome`, `connection`. The tablet navigation sidebar is part of the actual
+responsive app layout, not a scaled phone screenshot. `overview` and `channels`
+show different instance counts in the phone fixtures; on tablets they both
+include the persistent navigation sidebar.
 
-## Regenerate
+The app icon has no text and is identical across languages. Each feature graphic
+and screenshot is rendered in its own locale. Example instance names and host
+addresses are configuration supplied by a user and intentionally stay unchanged.
+Leave **Video** empty: this package does not contain a video or a YouTube URL.
+
+## Capture method
+
+These screenshots are rendered directly from the current Flutter widgets, not
+captured from physical Android devices. Phone, 7-inch tablet and 10-inch tablet
+layouts use independent viewports. They contain isolated in-memory example
+configuration, reserved example.com addresses and dummy credentials. No
+connections are attempted and no connected state, server metrics or terminal
+output are fabricated. These fixtures do not seed the production app.
+
+Screenshots and feature graphics are opaque 24-bit RGB PNGs. Store icons are
+32-bit RGBA PNGs with an opaque square background, no baked-in rounded corners
+or outer shadow, and the existing Capidock mascot.
+
+## Regenerate and validate
 
 Requires Flutter, ImageMagick (`magick`) and Python 3:
 
@@ -32,12 +58,16 @@ Requires Flutter, ImageMagick (`magick`) and Python 3:
 FLUTTER_ROOT=/path/to/flutter bash tool/testing/export_play_store_assets.sh
 ```
 
-The export creates `capidock-play-store-assets.zip` with the eight upload images
-and this guide. The archive is a convenience download; upload each image to its
-matching Play Console field.
+The renderer runs 80 widget tests across five locales and three device profiles.
+The packaging script validates every text limit, PNG dimensions, colour format
+and upload file size. It produces five separate locale ZIPs and the complete
+`capidock-play-store-assets.zip` containing all five locale folders.
 
-Suggested feature graphic alt text:
+To validate and rebuild the ZIPs without re-rendering:
 
-> Capidock: Your servers. Your pocket. A purple workspace card groups SSH and Coolify instances.
+```bash
+python3 tool/testing/package_play_store_assets.py
+```
 
+See [Google Play's preview asset guidelines](https://support.google.com/googleplay/android-developer/answer/9866151).
 Branding remains subject to the repository's `LICENSE-TRADEMARKS` and `COPYRIGHT`.

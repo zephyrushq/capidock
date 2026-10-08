@@ -1,0 +1,12 @@
+{
+  "appName": "Capidock",
+  "short": "Gerencie servidores SSH e Coolify em workspaces, com um terminal SSH móvel",
+  "full": "Seus servidores. No seu bolso.\n\nO Capidock reúne seus servidores SSH e instâncias Coolify em um app móvel. Agrupe tudo em workspaces, alterne entre instâncias como canais e mantenha seus servidores pessoais, homelab e projetos organizados.\n\nWORKSPACES PARA SEUS SERVIDORES\nCrie workspaces separados para diferentes projetos ou ambientes. Adicione, edite, pesquise e mova instâncias entre workspaces. A configuração guiada ajuda você a preparar o primeiro workspace e a primeira conexão.\n\nUM TERMINAL SSH INTERATIVO\nConecte-se com senha ou chave privada, incluindo chaves criptografadas compatíveis. Execute comandos em um terminal interativo com atalhos para setas, Tab, Esc e teclas Ctrl. Consulte informações do sistema, tempo de atividade e uso de memória e disco em servidores Linux/POSIX compatíveis. Confirme a impressão digital da chave do servidor na primeira conexão; as conexões seguintes verificam a impressão digital salva.\n\nSEUS RECURSOS COOLIFY\nConecte-se à sua instalação Coolify por HTTPS com um token da API. Consulte nomes e status de aplicativos, bancos de dados e serviços retornados pela API. A integração Coolify permite atualmente consultar recursos; ações de deploy, reinício e parada não estão disponíveis.\n\nCONFIGURAÇÃO LOCAL\nAs configurações dos workspaces e as credenciais ficam criptografadas no dispositivo. Você não precisa de uma conta Capidock. As conexões são feitas diretamente aos servidores que você configura. O Capidock não tem backend, telemetria nem sincronização na nuvem. Para usar SSH ou Coolify, você precisa de uma conexão de rede e de um servidor acessível.\n\nESCOLHA SEU IDIOMA\nUse inglês (Estados Unidos ou Reino Unido), português (Brasil ou Portugal) ou espanhol (Espanha). Troque o idioma na tela de boas-vindas ou no workspace; sua escolha fica salva.\n\nUMA CAPIVARA NO COMANDO\nUma interface roxa e uma capivara robô fazem companhia aos seus servidores. A capivara dá as boas-vindas; você cuida dos comandos.\n\nO Capidock é um projeto de código aberto da Zephyrus Prosperity. Código-fonte: https://github.com/zephyrushq/capidock-mobile",
+  "headline": [
+    "Seus servidores.",
+    "No seu bolso."
+  ],
+  "subtitle": "Um lugar mais tranquilo para gerenciar servidores.",
+  "topics": "WORKSPACES · CÓDIGO ABERTO · DADOS LOCAIS",
+  "alt": "Capidock: Seus servidores. No seu bolso. Um cartão roxo agrupa instâncias SSH e Coolify em um workspace."
+}

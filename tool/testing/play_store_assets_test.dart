@@ -1,10 +1,12 @@
 // Render actual Flutter screens and branded assets for the Google Play listing.
 // Run with: FLUTTER_ROOT=/path/to/flutter flutter test tool/testing/play_store_assets_test.dart
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:capidock/app.dart';
 import 'package:capidock/l10n/locale_controller.dart';
+import 'package:capidock/l10n/localization.dart';
 import 'package:capidock/features/instances/domain/server_instance.dart';
 import 'package:capidock/features/workspaces/domain/dock_controller.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,16 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../test/test_support.dart';
 
-Future<void> renderBrandAssets() async {
+const storeDevices = [
+  (name: 'phone', size: Size(1080, 1920), ratio: 2.5),
+  (name: 'tablet-7', size: Size(1920, 1080), ratio: 1.5),
+  (name: 'tablet-10', size: Size(2560, 1440), ratio: 1.6),
+];
+
+Future<void> renderBrandAssets(String tag) async {
+  final copy = jsonDecode(
+    await File('docs/play-store/$tag/listing.json').readAsString(),
+  ) as Map<String, dynamic>;
   final root = Platform.environment['FLUTTER_ROOT'];
   if (root == null) throw StateError('Set FLUTTER_ROOT to your Flutter SDK.');
   final font = FontLoader('Roboto')
@@ -43,7 +54,7 @@ Future<void> renderBrandAssets() async {
     final picture = recorder.endRecording();
     final pixels = await picture.toImage(w, h);
     final bytes = await pixels.toByteData(format: ui.ImageByteFormat.png);
-    await File('docs/play-store/en-GB/$name.png')
+    await File('docs/play-store/$tag/$name.png')
         .writeAsBytes(bytes!.buffer.asUint8List());
     pixels.dispose();
     picture.dispose();
@@ -95,13 +106,14 @@ Future<void> renderBrandAssets() async {
     Color colour, {
     FontWeight weight = FontWeight.w400,
     double? spacing,
+    double maxWidth = 490,
   }) {
-    final painter = TextPainter(
+    TextPainter measure(double fontSize) => TextPainter(
       text: TextSpan(
         text: value,
         style: TextStyle(
           fontFamily: 'Roboto',
-          fontSize: size,
+          fontSize: fontSize,
           fontWeight: weight,
           color: colour,
           letterSpacing: spacing,
@@ -110,7 +122,15 @@ Future<void> renderBrandAssets() async {
       ),
       textDirection: TextDirection.ltr,
     )..layout();
+    var painter = measure(size);
+    while (painter.width > maxWidth && size > 12) {
+      painter.dispose();
+      size -= .5;
+      painter = measure(size);
+    }
+    expect(painter.width, lessThanOrEqualTo(maxWidth), reason: '$tag: $value');
     painter.paint(canvas, Offset(x, y));
+    painter.dispose();
   }
 
   const white = Color(0xfff5efff);
@@ -122,16 +142,31 @@ Future<void> renderBrandAssets() async {
     Paint()..filterQuality = FilterQuality.high,
   );
   text('Capidock', 145, 65, 32, white, weight: FontWeight.w700);
-  text('Your servers.', 96, 154, 61, white, weight: FontWeight.w700);
-  text('Your pocket.', 96, 224, 61, white, weight: FontWeight.w700);
-  text('A calmer place for server management.', 98, 313, 20, lavender);
   text(
-    'WORKSPACES · OPEN SOURCE · LOCAL FIRST',
+    copy['headline'][0] as String,
+    96,
+    154,
+    61,
+    white,
+    weight: FontWeight.w700,
+  );
+  text(
+    copy['headline'][1] as String,
+    96,
+    224,
+    61,
+    white,
+    weight: FontWeight.w700,
+  );
+  text(copy['subtitle'] as String, 98, 313, 20, lavender);
+  text(
+    copy['topics'] as String,
     98,
     407,
     17,
     lavender,
     spacing: 1,
+    maxWidth: 830,
   );
 
   const panel = Rect.fromLTWH(635, 95, 291, 276);
@@ -181,155 +216,178 @@ Future<void> renderBrandAssets() async {
 }
 
 void main() {
-  testWidgets('Render store icon and feature graphic', (tester) async {
-    await tester.runAsync(renderBrandAssets);
-  });
-  for (final view in [
-    'welcome',
-    'connection',
-    'overview',
-    'channels',
-    'coolify',
-  ]) {
-    testWidgets('Render $view preview', (tester) async {
-      tester.view.physicalSize = const Size(1080, 1920);
-      tester.view.devicePixelRatio = 2.5;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      // Widget tests use Ahem by default; load the SDK's real font for documentation.
-      await tester.runAsync(() async {
-        final root = Platform.environment['FLUTTER_ROOT'];
-        if (root == null) {
-          throw StateError('Set FLUTTER_ROOT to the Flutter SDK directory.');
-        }
-        final font = FontLoader('Roboto');
-        font.addFont(
-          File('$root/bin/cache/artifacts/material_fonts/Roboto-Regular.ttf')
-              .readAsBytes()
-              .then(ByteData.sublistView),
-        );
-        await font.load();
-        final icons = FontLoader('MaterialIcons')
-          ..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'));
-        await icons.load();
-      });
-      final controller = DockController(MemoryWorkspaceStore());
-      await controller.initialize();
-      final boundaryKey = GlobalKey();
-      await tester.pumpWidget(
-        RepaintBoundary(
-          key: boundaryKey,
-          child: CapidockApp(
-            controller: controller,
-            localeController: LocaleController(
-              initialLocale: const Locale('en', 'GB'),
-              preferences: MemoryPreferences(),
-            ),
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-      Future<void> capture(String name) async {
-        await tester.runAsync(() async {
-          for (final element in find.byType(Image).evaluate()) {
-            await precacheImage((element.widget as Image).image, element);
-          }
-        });
-        await tester.pumpAndSettle();
-        expect(tester.takeException(), isNull);
-        final boundary =
-            boundaryKey.currentContext!.findRenderObject()!
-                as RenderRepaintBoundary;
-        await tester.runAsync(() async {
-          final pixels = await boundary.toImage(pixelRatio: 2.5);
-          final bytes = await pixels.toByteData(format: ui.ImageByteFormat.png);
-          await File('docs/play-store/en-GB/phone/$name.png')
-              .writeAsBytes(bytes!.buffer.asUint8List());
-          pixels.dispose();
-        });
-      }
-
-      Future<void> next() async {
-        await tester.ensureVisible(
-          find.byKey(const ValueKey('onboarding-next')),
-        );
-        await tester.tap(find.byKey(const ValueKey('onboarding-next')));
-        await tester.pumpAndSettle();
-      }
-
-      if (view == 'welcome') {
-        await capture(view);
-        await tester.tap(find.byKey(const ValueKey('language-selector')));
-        await tester.pumpAndSettle();
-        await capture('languages');
-        return;
-      }
-      await tester.enterText(
-        find.byKey(const ValueKey('onboarding-workspace')),
-        'Homelab',
-      );
-      await next();
-      await tester.enterText(
-        find.byKey(const ValueKey('instance-name')),
-        'homelab-server',
-      );
-      await next();
-
-      await tester.enterText(
-        find.byKey(const ValueKey('instance-host')),
-        'server.example.com',
-      );
-      await tester.enterText(
-        find.byKey(const ValueKey('instance-user')),
-        'deploy',
-      );
-      await tester.enterText(
-        find.byKey(const ValueKey('instance-password')),
-        'preview-only',
-      );
-      if (view == 'connection') {
-        FocusManager.instance.primaryFocus?.unfocus();
-        await capture(view);
-        return;
-      }
-      await next();
-      if (view == 'overview') {
-        await capture(view);
-        return;
-      }
-      await controller.upsert(
-        const ServerInstance(
-          id: 'preview-coolify',
-          name: 'coolify',
-          type: InstanceType.coolify,
-          host: 'https://coolify.example.com',
-          port: 443,
-          apiToken: 'preview-only',
-        ),
-      );
-      await controller.upsert(
-        const ServerInstance(
-          id: 'preview-staging',
-          name: 'staging-server',
-          type: InstanceType.ssh,
-          host: 'staging.example.com',
-          port: 22,
-          username: 'deploy',
-          password: 'preview-only',
-        ),
-      );
-      controller.select(
-        view == 'coolify' ? 'preview-coolify' : controller.instances.first.id,
-      );
-      await tester.pumpAndSettle();
-      if (view == 'coolify') {
-        await capture(view);
-        return;
-      }
-      await tester.tap(find.byTooltip('Open instances'));
-      await tester.pumpAndSettle();
-      await capture('channels');
-      await tester.pumpWidget(const SizedBox.shrink());
+  for (final language in AppLanguage.values) {
+    final locale = language.locale;
+    final tag = locale.toLanguageTag();
+    testWidgets('Render $tag store icon and feature graphic', (tester) async {
+      await tester.runAsync(() => renderBrandAssets(tag));
     });
+    for (final device in storeDevices) {
+      for (final view in [
+        'welcome',
+        'connection',
+        'overview',
+        'channels',
+        'coolify',
+      ]) {
+        testWidgets('Render $tag ${device.name} $view preview', (tester) async {
+          tester.view.physicalSize = device.size;
+          tester.view.devicePixelRatio = device.ratio;
+          addTearDown(tester.view.resetPhysicalSize);
+          addTearDown(tester.view.resetDevicePixelRatio);
+          // Widget tests use Ahem by default; load the SDK's real font for documentation.
+          await tester.runAsync(() async {
+            final root = Platform.environment['FLUTTER_ROOT'];
+            if (root == null) {
+              throw StateError(
+                'Set FLUTTER_ROOT to the Flutter SDK directory.',
+              );
+            }
+            final font = FontLoader('Roboto');
+            font.addFont(
+              File(
+                '$root/bin/cache/artifacts/material_fonts/Roboto-Regular.ttf',
+              ).readAsBytes().then(ByteData.sublistView),
+            );
+            await font.load();
+            final icons = FontLoader('MaterialIcons')
+              ..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'));
+            await icons.load();
+          });
+          final controller = DockController(MemoryWorkspaceStore());
+          await controller.initialize();
+          final boundaryKey = GlobalKey();
+          await tester.pumpWidget(
+            RepaintBoundary(
+              key: boundaryKey,
+              child: CapidockApp(
+                controller: controller,
+                localeController: LocaleController(
+                  initialLocale: locale,
+                  preferences: MemoryPreferences(),
+                ),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          Future<void> capture(String name) async {
+            await tester.runAsync(() async {
+              for (final element in find.byType(Image).evaluate()) {
+                await precacheImage((element.widget as Image).image, element);
+              }
+            });
+            await tester.pumpAndSettle();
+            expect(tester.takeException(), isNull);
+            final boundary =
+                boundaryKey.currentContext!.findRenderObject()!
+                    as RenderRepaintBoundary;
+            await tester.runAsync(() async {
+              final pixels = await boundary.toImage(pixelRatio: device.ratio);
+              final bytes = await pixels.toByteData(
+                format: ui.ImageByteFormat.png,
+              );
+              final folder = Directory('docs/play-store/$tag/${device.name}');
+              await folder.create(recursive: true);
+              await File('${folder.path}/$name.png')
+                  .writeAsBytes(bytes!.buffer.asUint8List());
+              pixels.dispose();
+            });
+          }
+
+          Future<void> next() async {
+            await tester.ensureVisible(
+              find.byKey(const ValueKey('onboarding-next')),
+            );
+            await tester.tap(find.byKey(const ValueKey('onboarding-next')));
+            await tester.pumpAndSettle();
+          }
+
+          if (view == 'welcome') {
+            await capture(view);
+            await tester.tap(find.byKey(const ValueKey('language-selector')));
+            await tester.pumpAndSettle();
+            await capture('languages');
+            return;
+          }
+          await tester.enterText(
+            find.byKey(const ValueKey('onboarding-workspace')),
+            'Homelab',
+          );
+          await next();
+          await tester.enterText(
+            find.byKey(const ValueKey('instance-name')),
+            'homelab-server',
+          );
+          await next();
+
+          await tester.enterText(
+            find.byKey(const ValueKey('instance-host')),
+            'server.example.com',
+          );
+          await tester.enterText(
+            find.byKey(const ValueKey('instance-user')),
+            'deploy',
+          );
+          await tester.enterText(
+            find.byKey(const ValueKey('instance-password')),
+            'preview-only',
+          );
+          if (view == 'connection') {
+            FocusManager.instance.primaryFocus?.unfocus();
+            await capture(view);
+            return;
+          }
+          await next();
+          if (view == 'overview') {
+            await capture(view);
+            return;
+          }
+          await controller.upsert(
+            const ServerInstance(
+              id: 'preview-coolify',
+              name: 'coolify',
+              type: InstanceType.coolify,
+              host: 'https://coolify.example.com',
+              port: 443,
+              apiToken: 'preview-only',
+            ),
+          );
+          await controller.upsert(
+            const ServerInstance(
+              id: 'preview-staging',
+              name: 'staging-server',
+              type: InstanceType.ssh,
+              host: 'staging.example.com',
+              port: 22,
+              username: 'deploy',
+              password: 'preview-only',
+            ),
+          );
+          controller.select(
+            view == 'coolify'
+                ? 'preview-coolify'
+                : controller.instances.first.id,
+          );
+          await tester.pumpAndSettle();
+          if (view == 'coolify') {
+            await capture(view);
+            return;
+          }
+          // Wide tablet layouts already show the instance navigation sidebar.
+          if (device.size.width / device.ratio < 900) {
+            // Resolve the tooltip from the MaterialApp subtree, which owns localisation.
+            final workspaceContext = tester.element(
+              find.byKey(const ValueKey('language-selector')).first,
+            );
+            await tester.tap(
+              find.byTooltip(workspaceContext.l10n.openInstances),
+            );
+            await tester.pumpAndSettle();
+          }
+          await capture('channels');
+          await tester.pumpWidget(const SizedBox.shrink());
+        });
+      }
+    }
   }
 }

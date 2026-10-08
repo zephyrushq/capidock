@@ -1,0 +1,1 @@
+Capidock: Os teus servidores. No teu bolso. Um cartão roxo agrupa instâncias SSH e Coolify num workspace.

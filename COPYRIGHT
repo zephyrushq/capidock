@@ -53,3 +53,11 @@ Warranty and liability
 The exclusions of warranty and limitations of liability in sections 15 and
 16 of LICENSE apply only to the extent permitted by applicable law. This
 notice does not exclude liability that the law does not allow to be excluded.
+
+Coolify API metadata
+
+assets/coolify/operations.json contains adapted API metadata from the Coolify
+project by coollabsio and its contributors, under Apache-2.0. The upstream
+license is preserved in assets/coolify/LICENSE.txt. Source and modification
+notices are in assets/coolify/NOTICE. This does not grant rights to Coolify
+trademarks or imply endorsement.

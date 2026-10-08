@@ -1,0 +1,1 @@
+Capidock: Tus servidores. En tu bolsillo. Una tarjeta morada agrupa instancias SSH y Coolify en un workspace.

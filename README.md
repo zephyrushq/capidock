@@ -77,19 +77,19 @@ the AI-generated artwork's provenance is recorded in the
 - Encrypted local storage for workspace names, addresses, usernames, passwords, private keys, passphrases, and API tokens. Android uses `flutter_secure_storage` with AES-GCM and an Android Keystore-protected key. No Capidock account, backend, telemetry, or synchronization.
 - Real SSH authentication by password or private key (PEM/OpenSSH, including encrypted keys), an interactive PTY terminal, arrow/Tab/Esc/Ctrl keys, and a read-only system summary.
 - SSH host-key confirmation on first use; subsequent connections verify the stored fingerprint. A changed key requires explicit verification and replacement.
-- Coolify resource listing over HTTPS: application, database, and service names, types, and statuses returned by the API. Refresh and error states use actual responses.
+- Coolify management over HTTPS: project/environment navigation, typed resource cards and readable configuration, environment variables, logs, deployments, backup schedules/executions, volumes, start/stop/restart/deploy and editing. A schema-backed operation catalogue covers all 291 documented API operations, including creation, imports, projects and server settings. See [Coolify integration](docs/coolify.md).
 - Timeouts, cancellation, connection errors, empty states, and manual reconnect. No simulated metrics, resources, or terminal responses.
-- Responsive layouts, Portuguese UI, a purple theme, and the robot-capybara identity.
+- Responsive layouts, five regional languages, a purple theme, and the robot-capybara identity.
 - Automated Flutter checks, a loopback SSH transport test, and signed Android release workflows.
 
 ## Connect your first server
 
 1. Open the app and choose **Create workspace (`Criar workspace`)**. Enter a workspace name and a name for its first instance.
 2. Choose **SSH** and provide a hostname/IP, port (default 22), username, and password or private key. Paste the complete private key including its BEGIN/END lines; enter its passphrase if encrypted.
-3. Alternatively, choose **Coolify** and provide its base HTTPS URL, such as `https://coolify.example.com`, and an API token with read permission. Enable API access and allow the phone's network address if the installation uses an IP allowlist. Do not include `/api/v1` in the URL.
+3. Alternatively, choose **Coolify** and provide its base HTTPS URL, such as `https://coolify.example.com`, and an API token with read permission. Editing requires write; deployment/server operations may require deploy or sensitive permission. Enable API access and allow the phone's network address if the installation uses an IP allowlist. Do not include `/api/v1` in the URL.
 4. Save, then tap **Connect (`Ligar à instância`)**. For SSH, compare the displayed SHA256 fingerprint against the server's host key before accepting. Open **Terminal** to interact with the server.
 
-Coolify uses [GET /api/v1/resources](https://coolify.io/docs/api/endpoints/resources/list-resources) with a bearer token. See [API access](https://coolify.io/docs/api/overview). HTTPS must have a certificate trusted by Android; the app does not bypass certificate validation or follow API redirects with credentials.
+Coolify starts with [GET /api/v1/resources](https://coolify.io/docs/api/endpoints/resources/list-resources) and uses the documented API operations with a bearer token. See [API access](https://coolify.io/docs/api/overview). HTTPS must have a certificate trusted by Android; the app does not bypass certificate validation or follow API redirects with credentials.
 
 ## Navigation and connection lifecycle
 
@@ -97,9 +97,9 @@ Open the sidebar on your phone. The left rail shows your workspaces; **+** creat
 
 Tap the workspace name or **Manage workspaces (`Gerir workspaces`)** to rename or remove a workspace. With at least two workspaces, **⋯ → Move to workspace (`Mover para workspace`)** moves an instance and its credentials together.
 
-Connections start only when you tap **Connect**. SSH sessions close when switching instance, editing its configuration, or putting the app in the background. Terminal output stays in memory for the selected instance (up to 3,000 lines); it is not written to the vault. Reconnect manually when returning. The server summary runs static read-only Linux/POSIX commands (`uname`, `uptime`, `free`, `df`); it is refreshed on connection or on request. Coolify data is a timestamped snapshot refreshed on request.
+Connections start only when you tap **Connect**. SSH sessions close when switching instance, editing its configuration, or putting the app in the background. Terminal output stays in memory for the selected instance (up to 3,000 lines); it is not written to the vault. Reconnect manually when returning. The server summary runs static read-only Linux/POSIX commands (`uname`, `uptime`, `free`, `df`); it is refreshed on connection or on request. Coolify resources are loaded on request; opening details or switching a detail section reads that section. Responses and unsaved API drafts stay in memory and are cleared when backgrounded. Mutations require confirmation and are never automatically retried.
 
-Coolify management actions (deploy/restart/stop), file transfer, tunnels, keyboard-interactive/MFA SSH, a biometric app lock, and background sessions are not implemented. Encryption protects persisted data; it does not protect a running app on an unlocked or compromised device. Android cloud backup and device transfer are disabled for app data. Uninstalling the app removes its local configuration; there is no export/recovery feature yet.
+SSH file transfer, tunnels, keyboard-interactive/MFA SSH, a biometric app lock, and background sessions are not implemented. Encryption protects persisted data; it does not protect a running app on an unlocked or compromised device. Android cloud backup and device transfer are disabled for app data. Uninstalling the app removes its local configuration; there is no export/recovery feature yet.
 
 ## Existing installations
 
@@ -182,6 +182,11 @@ including placeholders and plural forms. The language-only bundles provide
 base translations; the five regional variants are the selectable languages.
 After editing a catalogue, run `flutter gen-l10n`. Add new regional languages to
 `AppLanguage.values` and the flag painter in `lib/l10n/language_selector.dart`.
+
+The [Google Play listing package](docs/play-store/README.md) contains separate
+text, feature graphics and phone/7-inch/10-inch tablet screenshots for all five
+regional languages. Each folder includes text files ready to paste into Play
+Console and a ZIP with its upload assets. The icon is shared across languages.
 
 Google Play assets can be regenerated with:
 
