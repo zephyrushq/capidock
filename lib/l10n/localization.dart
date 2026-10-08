@@ -15,6 +15,14 @@ String localizedMessage(BuildContext context, String message) {
   ).firstMatch(message);
   if (http != null) return strings.httpError(int.parse(http.group(1)!));
   return switch (message) {
+    'invalidApiResponse' => strings.invalidApiResponse,
+    'coolifyConflict' => strings.coolifyConflict,
+    'coolifyValidationError' => strings.coolifyValidationError,
+    'coolifyUploadSize' => strings.coolifyUploadSize,
+    'coolifyCancelled' => strings.coolifyCancelled,
+    'coolifyInvalidField' => strings.coolifyInvalidField,
+    'coolifyInvalidJson' => strings.coolifyInvalidJson,
+    'coolifyRequiredPayload' => strings.coolifyRequiredPayload,
     'secureSaveError' => strings.secureSaveError,
     'saveError' => strings.saveError,
     "Sem nome" => strings.unnamedResource,

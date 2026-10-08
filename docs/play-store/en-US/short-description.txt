@@ -1,0 +1,1 @@
+Organize SSH and Coolify servers in workspaces, with a mobile SSH terminal

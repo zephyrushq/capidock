@@ -10,18 +10,29 @@ Future<void> showInstanceEditor(
   BuildContext context,
   DockController controller, {
   ServerInstance? instance,
+  String? workspaceId,
 }) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
   useSafeArea: true,
   constraints: const BoxConstraints(maxWidth: 560),
-  builder: (_) => InstanceEditor(controller: controller, instance: instance),
+  builder: (_) => InstanceEditor(
+    controller: controller,
+    instance: instance,
+    workspaceId: workspaceId,
+  ),
 );
 
 class InstanceEditor extends StatefulWidget {
-  const InstanceEditor({super.key, required this.controller, this.instance});
+  const InstanceEditor({
+    super.key,
+    required this.controller,
+    this.instance,
+    this.workspaceId,
+  });
   final DockController controller;
   final ServerInstance? instance;
+  final String? workspaceId;
   @override
   State<InstanceEditor> createState() => _InstanceEditorState();
 }
@@ -29,8 +40,11 @@ class InstanceEditor extends StatefulWidget {
 class _InstanceEditorState extends State<InstanceEditor> {
   final _form = GlobalKey<FormState>();
   late final _draft = InstanceDraft(widget.instance);
-  late final _workspaceId = widget.controller.activeWorkspace!.id;
-  late final _workspaceName = widget.controller.activeWorkspace!.name;
+  late final _workspaceId =
+      widget.workspaceId ?? widget.controller.activeWorkspace!.id;
+  late final _workspaceName = widget.controller.workspaces
+      .firstWhere((w) => w.id == _workspaceId)
+      .name;
   bool _saving = false;
   String? _error;
 
@@ -122,10 +136,14 @@ class _InstanceEditorState extends State<InstanceEditor> {
       return;
     }
     try {
+      final previousWorkspaceId = widget.controller.activeWorkspace?.id;
       await widget.controller.upsert(
         _draft.toInstance(),
         workspaceId: _workspaceId,
       );
+      if (widget.workspaceId != null && previousWorkspaceId != null) {
+        widget.controller.selectWorkspace(previousWorkspaceId);
+      }
       if (mounted) Navigator.pop(context);
     } catch (_) {
       if (mounted) {

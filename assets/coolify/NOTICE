@@ -1,0 +1,14 @@
+Coolify API metadata
+
+Derived from Coolify by coollabsio and its contributors.
+Upstream project: https://github.com/coollabsio/coolify
+Upstream license: Apache License, Version 2.0 (see LICENSE.txt).
+Source commit: 81239e61323a1410ae8b9c024c0d6daab45b2029
+Source: openapi.json at that commit.
+
+Modified for Capidock on 2026-10-08: response schemas omitted, referenced input
+schemas resolved, operation metadata extracted, and the multipart import-upload
+contract supplemented from HandlesDatabaseImportsApi.php at the same commit.
+Regeneration instructions: tool/generate_coolify_catalog.py.
+
+No Coolify source implementation or trademark rights are included.

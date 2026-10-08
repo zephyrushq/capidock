@@ -319,7 +319,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sshDescription => 'Server access through a terminal';
 
   @override
-  String get coolifyDescription => 'Applications and deployments';
+  String get coolifyDescription => 'Description';
 
   @override
   String get hostRequired => 'Enter the instance address.';
@@ -383,7 +383,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get coolifyTokenHint =>
-      'In Coolify, enable the API and create a read-only token under Keys & Tokens → API tokens. Use the base URL without /api/v1.';
+      'In Coolify, enable the API and create a token under Keys & Tokens → API tokens. Read-only tokens can view resources. Editing needs write; deployment operations may need deploy or sensitive. Use the base URL without /api/v1.';
 
   @override
   String get localCredentials =>
@@ -560,6 +560,279 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get coolifyOperations => 'All operations';
+
+  @override
+  String get coolifyApplications => 'Applications';
+
+  @override
+  String get coolifyDatabases => 'Databases';
+
+  @override
+  String get coolifyServices => 'Services';
+
+  @override
+  String get coolifyProjects => 'Projects';
+
+  @override
+  String get coolifyServers => 'Servers';
+
+  @override
+  String get coolifyPermissions =>
+      'Reads need read permission. Editing needs write; deploys and server operations may need deploy or sensitive permission. Your Coolify version determines which operations are available.';
+
+  @override
+  String get coolifySearch => 'Search resources or operations';
+
+  @override
+  String get coolifyAll => 'All categories';
+
+  @override
+  String get coolifyCatalogHelp =>
+      'Access the documented Coolify API operations. Field names and descriptions follow the official API. Newer operations may not exist on older installations.';
+
+  @override
+  String get coolifyDetails => 'Details';
+
+  @override
+  String get coolifyEnvironment => 'Environment';
+
+  @override
+  String get coolifyLogs => 'Logs';
+
+  @override
+  String get coolifyBackups => 'Backups';
+
+  @override
+  String get coolifyStorages => 'Volumes and files';
+
+  @override
+  String get coolifyDeployments => 'Deployments';
+
+  @override
+  String get coolifyCreate => 'Create';
+
+  @override
+  String get coolifyEdit => 'Edit configuration';
+
+  @override
+  String get coolifyStart => 'Start';
+
+  @override
+  String get coolifyStop => 'Stop';
+
+  @override
+  String get coolifyRestart => 'Restart';
+
+  @override
+  String get coolifyDeploy => 'Deploy';
+
+  @override
+  String get coolifyExecutions => 'Execution history';
+
+  @override
+  String get coolifyScheduleBackup => 'Backup schedule';
+
+  @override
+  String get coolifyRunBackup => 'Run backup';
+
+  @override
+  String get coolifyEmpty => 'No results returned by the API.';
+
+  @override
+  String get coolifyConfirm => 'Confirm operation';
+
+  @override
+  String get coolifyDestructive => 'Confirm destructive operation';
+
+  @override
+  String get coolifyMutationWarning =>
+      'This changes the remote server. Stop, restart, deploy, restore and delete operations can interrupt services or remove data. Check the target before continuing.';
+
+  @override
+  String coolifyTypeTarget(String target) {
+    return 'Type $target to confirm.';
+  }
+
+  @override
+  String get coolifyExecute => 'Execute operation';
+
+  @override
+  String get coolifyRead => 'Read data';
+
+  @override
+  String get coolifyReveal => 'Show values and logs (may contain secrets)';
+
+  @override
+  String get coolifyChangedOnly =>
+      'Only edited fields are sent. Optional fields left untouched keep their server values. Empty edited strings clear a value. Arrays and objects use JSON.';
+
+  @override
+  String get coolifyInvalidField => 'Check this value and its required type.';
+
+  @override
+  String get coolifyInvalidJson => 'Enter valid JSON.';
+
+  @override
+  String get coolifyRequiredPayload =>
+      'Fill in at least one field, all required fields, and choose a file for uploads.';
+
+  @override
+  String get coolifyChooseFile => 'Choose backup file';
+
+  @override
+  String get coolifySuccess =>
+      'Request accepted by Coolify. Queued jobs may still be running; refresh their status.';
+
+  @override
+  String get coolifyYes => 'Yes';
+
+  @override
+  String get coolifyNo => 'No';
+
+  @override
+  String get coolifyConflict =>
+      'Another operation is in progress or this change conflicts with the current state. Refresh before trying again.';
+
+  @override
+  String get coolifyValidationError =>
+      'Coolify rejected the fields. Check required values, types and your installed API version.';
+
+  @override
+  String get coolifyUploadSize =>
+      'Choose a non-empty backup file no larger than 10 GiB.';
+
+  @override
+  String get coolifyCancelled =>
+      'Connection closed. Refresh to check whether the remote operation completed.';
+
+  @override
+  String get coolifySshTerminal =>
+      'Coolify does not expose an interactive terminal through its public REST API. Choose a saved SSH connection to access the server.';
+
+  @override
+  String get coolifyNoSsh =>
+      'Add an SSH instance for this server to a workspace first.';
+
+  @override
+  String get coolifyResources => 'Resources';
+
+  @override
+  String get coolifyEnvironments => 'Environments';
+
+  @override
+  String get coolifySharedVariables => 'Shared variables';
+
+  @override
+  String get coolifyName => 'Name';
+
+  @override
+  String get coolifyStatus => 'Status';
+
+  @override
+  String get coolifyDomains => 'Domains';
+
+  @override
+  String get coolifyRepository => 'Repository';
+
+  @override
+  String get coolifyBranch => 'Branch';
+
+  @override
+  String get coolifyBuildPack => 'Build method';
+
+  @override
+  String get coolifyAddress => 'Address';
+
+  @override
+  String get coolifyPort => 'Port';
+
+  @override
+  String get coolifyUser => 'User';
+
+  @override
+  String get coolifyFrequency => 'Schedule';
+
+  @override
+  String get coolifyEnabled => 'Enabled';
+
+  @override
+  String get coolifyMountPath => 'Mount path';
+
+  @override
+  String get coolifyHostPath => 'Host path';
+
+  @override
+  String get coolifyCreated => 'Created';
+
+  @override
+  String get coolifyUpdated => 'Updated';
+
+  @override
+  String get coolifyValue => 'Value';
+
+  @override
+  String get coolifyPreview => 'Preview';
+
+  @override
+  String get coolifySettings => 'Settings';
+
+  @override
+  String get coolifyType => 'Type';
+
+  @override
+  String get coolifyRunning => 'Running';
+
+  @override
+  String get coolifyStopped => 'Stopped';
+
+  @override
+  String get coolifyConfiguration => 'Configuration';
+
+  @override
+  String get coolifyOverviewTitle => 'Overview';
+
+  @override
+  String get coolifyResourceSearch => 'Search resources';
+
+  @override
+  String get coolifyOtherSettings => 'More settings';
+
+  @override
+  String get coolifyEnvironmentEmpty => 'No environments in this project yet.';
+
+  @override
+  String get coolifyLogsHidden =>
+      'Reveal logs to view their contents. They may contain secrets.';
+
+  @override
+  String get coolifyResourceEmpty => 'No resources in this environment yet.';
+
+  @override
+  String get coolifyRestricted => 'Value protected by token permissions.';
+
+  @override
+  String get coolifyVariables => 'Environment variables';
+
+  @override
+  String get coolifyNormalVariables => 'Normal variables';
+
+  @override
+  String get coolifyPreviewVariables => 'Preview variables';
+
+  @override
+  String get coolifyShowValue => 'Show value';
+
+  @override
+  String get coolifyHideValue => 'Hide value';
+
+  @override
+  String get coolifyEditValue => 'Edit value';
+
+  @override
+  String get coolifySaveValue => 'Save value';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -876,7 +1149,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get sshDescription => 'Server access through a terminal';
 
   @override
-  String get coolifyDescription => 'Applications and deployments';
+  String get coolifyDescription => 'Description';
 
   @override
   String get hostRequired => 'Enter the instance address.';
@@ -940,7 +1213,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get coolifyTokenHint =>
-      'In Coolify, enable the API and create a read-only token under Keys & Tokens → API tokens. Use the base URL without /api/v1.';
+      'In Coolify, enable the API and create a token under Keys & Tokens → API tokens. Read-only tokens can view resources. Editing needs write; deployment operations may need deploy or sensitive. Use the base URL without /api/v1.';
 
   @override
   String get localCredentials =>
@@ -1117,6 +1390,279 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
     );
     return '$_temp0';
   }
+
+  @override
+  String get coolifyOperations => 'All operations';
+
+  @override
+  String get coolifyApplications => 'Applications';
+
+  @override
+  String get coolifyDatabases => 'Databases';
+
+  @override
+  String get coolifyServices => 'Services';
+
+  @override
+  String get coolifyProjects => 'Projects';
+
+  @override
+  String get coolifyServers => 'Servers';
+
+  @override
+  String get coolifyPermissions =>
+      'Reads need read permission. Editing needs write; deploys and server operations may need deploy or sensitive permission. Your Coolify version determines which operations are available.';
+
+  @override
+  String get coolifySearch => 'Search resources or operations';
+
+  @override
+  String get coolifyAll => 'All categories';
+
+  @override
+  String get coolifyCatalogHelp =>
+      'Access the documented Coolify API operations. Field names and descriptions follow the official API. Newer operations may not exist on older installations.';
+
+  @override
+  String get coolifyDetails => 'Details';
+
+  @override
+  String get coolifyEnvironment => 'Environment';
+
+  @override
+  String get coolifyLogs => 'Logs';
+
+  @override
+  String get coolifyBackups => 'Backups';
+
+  @override
+  String get coolifyStorages => 'Volumes and files';
+
+  @override
+  String get coolifyDeployments => 'Deployments';
+
+  @override
+  String get coolifyCreate => 'Create';
+
+  @override
+  String get coolifyEdit => 'Edit configuration';
+
+  @override
+  String get coolifyStart => 'Start';
+
+  @override
+  String get coolifyStop => 'Stop';
+
+  @override
+  String get coolifyRestart => 'Restart';
+
+  @override
+  String get coolifyDeploy => 'Deploy';
+
+  @override
+  String get coolifyExecutions => 'Execution history';
+
+  @override
+  String get coolifyScheduleBackup => 'Backup schedule';
+
+  @override
+  String get coolifyRunBackup => 'Run backup';
+
+  @override
+  String get coolifyEmpty => 'No results returned by the API.';
+
+  @override
+  String get coolifyConfirm => 'Confirm operation';
+
+  @override
+  String get coolifyDestructive => 'Confirm destructive operation';
+
+  @override
+  String get coolifyMutationWarning =>
+      'This changes the remote server. Stop, restart, deploy, restore and delete operations can interrupt services or remove data. Check the target before continuing.';
+
+  @override
+  String coolifyTypeTarget(String target) {
+    return 'Type $target to confirm.';
+  }
+
+  @override
+  String get coolifyExecute => 'Execute operation';
+
+  @override
+  String get coolifyRead => 'Read data';
+
+  @override
+  String get coolifyReveal => 'Show values and logs (may contain secrets)';
+
+  @override
+  String get coolifyChangedOnly =>
+      'Only edited fields are sent. Optional fields left untouched keep their server values. Empty edited strings clear a value. Arrays and objects use JSON.';
+
+  @override
+  String get coolifyInvalidField => 'Check this value and its required type.';
+
+  @override
+  String get coolifyInvalidJson => 'Enter valid JSON.';
+
+  @override
+  String get coolifyRequiredPayload =>
+      'Fill in at least one field, all required fields, and choose a file for uploads.';
+
+  @override
+  String get coolifyChooseFile => 'Choose backup file';
+
+  @override
+  String get coolifySuccess =>
+      'Request accepted by Coolify. Queued jobs may still be running; refresh their status.';
+
+  @override
+  String get coolifyYes => 'Yes';
+
+  @override
+  String get coolifyNo => 'No';
+
+  @override
+  String get coolifyConflict =>
+      'Another operation is in progress or this change conflicts with the current state. Refresh before trying again.';
+
+  @override
+  String get coolifyValidationError =>
+      'Coolify rejected the fields. Check required values, types and your installed API version.';
+
+  @override
+  String get coolifyUploadSize =>
+      'Choose a non-empty backup file no larger than 10 GiB.';
+
+  @override
+  String get coolifyCancelled =>
+      'Connection closed. Refresh to check whether the remote operation completed.';
+
+  @override
+  String get coolifySshTerminal =>
+      'Coolify does not expose an interactive terminal through its public REST API. Choose a saved SSH connection to access the server.';
+
+  @override
+  String get coolifyNoSsh =>
+      'Add an SSH instance for this server to a workspace first.';
+
+  @override
+  String get coolifyResources => 'Resources';
+
+  @override
+  String get coolifyEnvironments => 'Environments';
+
+  @override
+  String get coolifySharedVariables => 'Shared variables';
+
+  @override
+  String get coolifyName => 'Name';
+
+  @override
+  String get coolifyStatus => 'Status';
+
+  @override
+  String get coolifyDomains => 'Domains';
+
+  @override
+  String get coolifyRepository => 'Repository';
+
+  @override
+  String get coolifyBranch => 'Branch';
+
+  @override
+  String get coolifyBuildPack => 'Build method';
+
+  @override
+  String get coolifyAddress => 'Address';
+
+  @override
+  String get coolifyPort => 'Port';
+
+  @override
+  String get coolifyUser => 'User';
+
+  @override
+  String get coolifyFrequency => 'Schedule';
+
+  @override
+  String get coolifyEnabled => 'Enabled';
+
+  @override
+  String get coolifyMountPath => 'Mount path';
+
+  @override
+  String get coolifyHostPath => 'Host path';
+
+  @override
+  String get coolifyCreated => 'Created';
+
+  @override
+  String get coolifyUpdated => 'Updated';
+
+  @override
+  String get coolifyValue => 'Value';
+
+  @override
+  String get coolifyPreview => 'Preview';
+
+  @override
+  String get coolifySettings => 'Settings';
+
+  @override
+  String get coolifyType => 'Type';
+
+  @override
+  String get coolifyRunning => 'Running';
+
+  @override
+  String get coolifyStopped => 'Stopped';
+
+  @override
+  String get coolifyConfiguration => 'Configuration';
+
+  @override
+  String get coolifyOverviewTitle => 'Overview';
+
+  @override
+  String get coolifyResourceSearch => 'Search resources';
+
+  @override
+  String get coolifyOtherSettings => 'More settings';
+
+  @override
+  String get coolifyEnvironmentEmpty => 'No environments in this project yet.';
+
+  @override
+  String get coolifyLogsHidden =>
+      'Reveal logs to view their contents. They may contain secrets.';
+
+  @override
+  String get coolifyResourceEmpty => 'No resources in this environment yet.';
+
+  @override
+  String get coolifyRestricted => 'Value protected by token permissions.';
+
+  @override
+  String get coolifyVariables => 'Environment variables';
+
+  @override
+  String get coolifyNormalVariables => 'Normal variables';
+
+  @override
+  String get coolifyPreviewVariables => 'Preview variables';
+
+  @override
+  String get coolifyShowValue => 'Show value';
+
+  @override
+  String get coolifyHideValue => 'Hide value';
+
+  @override
+  String get coolifyEditValue => 'Edit value';
+
+  @override
+  String get coolifySaveValue => 'Save value';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -1433,7 +1979,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get sshDescription => 'Server access through a terminal';
 
   @override
-  String get coolifyDescription => 'Applications and deployments';
+  String get coolifyDescription => 'Description';
 
   @override
   String get hostRequired => 'Enter the instance address.';
@@ -1497,7 +2043,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get coolifyTokenHint =>
-      'In Coolify, enable the API and create a read-only token under Keys & Tokens → API tokens. Use the base URL without /api/v1.';
+      'In Coolify, enable the API and create a token under Keys & Tokens → API tokens. Read-only tokens can view resources. Editing needs write; deployment operations may need deploy or sensitive. Use the base URL without /api/v1.';
 
   @override
   String get localCredentials =>
@@ -1674,4 +2220,277 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
     );
     return '$_temp0';
   }
+
+  @override
+  String get coolifyOperations => 'All operations';
+
+  @override
+  String get coolifyApplications => 'Applications';
+
+  @override
+  String get coolifyDatabases => 'Databases';
+
+  @override
+  String get coolifyServices => 'Services';
+
+  @override
+  String get coolifyProjects => 'Projects';
+
+  @override
+  String get coolifyServers => 'Servers';
+
+  @override
+  String get coolifyPermissions =>
+      'Reads need read permission. Editing needs write; deploys and server operations may need deploy or sensitive permission. Your Coolify version determines which operations are available.';
+
+  @override
+  String get coolifySearch => 'Search resources or operations';
+
+  @override
+  String get coolifyAll => 'All categories';
+
+  @override
+  String get coolifyCatalogHelp =>
+      'Access the documented Coolify API operations. Field names and descriptions follow the official API. Newer operations may not exist on older installations.';
+
+  @override
+  String get coolifyDetails => 'Details';
+
+  @override
+  String get coolifyEnvironment => 'Environment';
+
+  @override
+  String get coolifyLogs => 'Logs';
+
+  @override
+  String get coolifyBackups => 'Backups';
+
+  @override
+  String get coolifyStorages => 'Volumes and files';
+
+  @override
+  String get coolifyDeployments => 'Deployments';
+
+  @override
+  String get coolifyCreate => 'Create';
+
+  @override
+  String get coolifyEdit => 'Edit configuration';
+
+  @override
+  String get coolifyStart => 'Start';
+
+  @override
+  String get coolifyStop => 'Stop';
+
+  @override
+  String get coolifyRestart => 'Restart';
+
+  @override
+  String get coolifyDeploy => 'Deploy';
+
+  @override
+  String get coolifyExecutions => 'Execution history';
+
+  @override
+  String get coolifyScheduleBackup => 'Backup schedule';
+
+  @override
+  String get coolifyRunBackup => 'Run backup';
+
+  @override
+  String get coolifyEmpty => 'No results returned by the API.';
+
+  @override
+  String get coolifyConfirm => 'Confirm operation';
+
+  @override
+  String get coolifyDestructive => 'Confirm destructive operation';
+
+  @override
+  String get coolifyMutationWarning =>
+      'This changes the remote server. Stop, restart, deploy, restore and delete operations can interrupt services or remove data. Check the target before continuing.';
+
+  @override
+  String coolifyTypeTarget(String target) {
+    return 'Type $target to confirm.';
+  }
+
+  @override
+  String get coolifyExecute => 'Execute operation';
+
+  @override
+  String get coolifyRead => 'Read data';
+
+  @override
+  String get coolifyReveal => 'Show values and logs (may contain secrets)';
+
+  @override
+  String get coolifyChangedOnly =>
+      'Only edited fields are sent. Optional fields left untouched keep their server values. Empty edited strings clear a value. Arrays and objects use JSON.';
+
+  @override
+  String get coolifyInvalidField => 'Check this value and its required type.';
+
+  @override
+  String get coolifyInvalidJson => 'Enter valid JSON.';
+
+  @override
+  String get coolifyRequiredPayload =>
+      'Fill in at least one field, all required fields, and choose a file for uploads.';
+
+  @override
+  String get coolifyChooseFile => 'Choose backup file';
+
+  @override
+  String get coolifySuccess =>
+      'Request accepted by Coolify. Queued jobs may still be running; refresh their status.';
+
+  @override
+  String get coolifyYes => 'Yes';
+
+  @override
+  String get coolifyNo => 'No';
+
+  @override
+  String get coolifyConflict =>
+      'Another operation is in progress or this change conflicts with the current state. Refresh before trying again.';
+
+  @override
+  String get coolifyValidationError =>
+      'Coolify rejected the fields. Check required values, types and your installed API version.';
+
+  @override
+  String get coolifyUploadSize =>
+      'Choose a non-empty backup file no larger than 10 GiB.';
+
+  @override
+  String get coolifyCancelled =>
+      'Connection closed. Refresh to check whether the remote operation completed.';
+
+  @override
+  String get coolifySshTerminal =>
+      'Coolify does not expose an interactive terminal through its public REST API. Choose a saved SSH connection to access the server.';
+
+  @override
+  String get coolifyNoSsh =>
+      'Add an SSH instance for this server to a workspace first.';
+
+  @override
+  String get coolifyResources => 'Resources';
+
+  @override
+  String get coolifyEnvironments => 'Environments';
+
+  @override
+  String get coolifySharedVariables => 'Shared variables';
+
+  @override
+  String get coolifyName => 'Name';
+
+  @override
+  String get coolifyStatus => 'Status';
+
+  @override
+  String get coolifyDomains => 'Domains';
+
+  @override
+  String get coolifyRepository => 'Repository';
+
+  @override
+  String get coolifyBranch => 'Branch';
+
+  @override
+  String get coolifyBuildPack => 'Build method';
+
+  @override
+  String get coolifyAddress => 'Address';
+
+  @override
+  String get coolifyPort => 'Port';
+
+  @override
+  String get coolifyUser => 'User';
+
+  @override
+  String get coolifyFrequency => 'Schedule';
+
+  @override
+  String get coolifyEnabled => 'Enabled';
+
+  @override
+  String get coolifyMountPath => 'Mount path';
+
+  @override
+  String get coolifyHostPath => 'Host path';
+
+  @override
+  String get coolifyCreated => 'Created';
+
+  @override
+  String get coolifyUpdated => 'Updated';
+
+  @override
+  String get coolifyValue => 'Value';
+
+  @override
+  String get coolifyPreview => 'Preview';
+
+  @override
+  String get coolifySettings => 'Settings';
+
+  @override
+  String get coolifyType => 'Type';
+
+  @override
+  String get coolifyRunning => 'Running';
+
+  @override
+  String get coolifyStopped => 'Stopped';
+
+  @override
+  String get coolifyConfiguration => 'Configuration';
+
+  @override
+  String get coolifyOverviewTitle => 'Overview';
+
+  @override
+  String get coolifyResourceSearch => 'Search resources';
+
+  @override
+  String get coolifyOtherSettings => 'More settings';
+
+  @override
+  String get coolifyEnvironmentEmpty => 'No environments in this project yet.';
+
+  @override
+  String get coolifyLogsHidden =>
+      'Reveal logs to view their contents. They may contain secrets.';
+
+  @override
+  String get coolifyResourceEmpty => 'No resources in this environment yet.';
+
+  @override
+  String get coolifyRestricted => 'Value protected by token permissions.';
+
+  @override
+  String get coolifyVariables => 'Environment variables';
+
+  @override
+  String get coolifyNormalVariables => 'Normal variables';
+
+  @override
+  String get coolifyPreviewVariables => 'Preview variables';
+
+  @override
+  String get coolifyShowValue => 'Show value';
+
+  @override
+  String get coolifyHideValue => 'Hide value';
+
+  @override
+  String get coolifyEditValue => 'Edit value';
+
+  @override
+  String get coolifySaveValue => 'Save value';
 }

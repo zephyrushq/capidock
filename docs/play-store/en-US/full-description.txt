@@ -1,0 +1,23 @@
+Your servers. Your pocket.
+
+Capidock brings your SSH servers and Coolify instances together in a mobile app. Group them into workspaces, switch between instances like channels and keep your personal servers, homelab and projects organized.
+
+WORKSPACES FOR YOUR SERVERS
+Create separate workspaces for different projects or environments. Add, edit, search and move instances between workspaces. Guided setup helps you configure your first workspace and connection.
+
+AN INTERACTIVE SSH TERMINAL
+Connect using a password or private key, including supported encrypted keys. Run commands in an interactive terminal with shortcuts for arrows, Tab, Esc and Ctrl keys. Check system information, uptime, memory and disk usage on compatible Linux/POSIX servers. Confirm the server's host-key fingerprint on first connection; later connections check the saved fingerprint.
+
+YOUR COOLIFY RESOURCES
+Connect to your own Coolify installation over HTTPS with an API token. View application, database and service names and statuses returned by the API. Coolify integration currently provides resource viewing; deployment, restart and stop actions are not available.
+
+LOCAL CONFIGURATION
+Workspace settings and credentials are stored encrypted on your device. No Capidock account is needed. Connections go directly to the servers you configure. Capidock has no backend, telemetry or cloud synchronization. A reachable server and network connection are required to use SSH or Coolify.
+
+CHOOSE YOUR LANGUAGE
+Use English (United Kingdom or United States), Portuguese (Portugal or Brazil) or Spanish (Spain). Change language from the welcome screen or workspace; your choice is remembered.
+
+A CAPYBARA AT THE HELM
+A purple interface and a robot capybara keep your servers company. The capybara handles the welcome; you handle the commands.
+
+Capidock is an open-source project by Zephyrus Prosperity. Source code: https://github.com/zephyrushq/capidock-mobile

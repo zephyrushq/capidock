@@ -49,3 +49,11 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Local copies extracted from generated Play Store ZIP packages
+/docs/play-store/capidock-play-store-assets/
+/docs/play-store/capidock-play-store-en-GB/
+
+# Generated Play Store images and upload packages (keep local copies)
+/docs/play-store/**/*.png
+/docs/play-store/*.zip

@@ -1,0 +1,1 @@
+Capidock: Your servers. Your pocket. A purple workspace card groups SSH and Coolify instances.
