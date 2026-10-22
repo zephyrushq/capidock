@@ -2,7 +2,8 @@
 
 Creates fresh credentials in a private directory. Never exposes a shell: the
 only accepted operations are a read-only probe, a synthetic container listing,
-a fixed container PTY command and a printf challenge. No Docker daemon is used.
+a fixed container PTY command and a printf challenge. With --docker-container,
+additional allowlisted commands access only that disposable real container.
 Run with --config /tmp/<private-directory>/connection.json, then use that path
 as SSH_TEST_CONFIG when running test/ssh_transport_test.dart.
 """
@@ -10,6 +11,13 @@ import argparse
 import asyncio
 import json
 import os
+import pty
+import re
+import shlex
+import fcntl
+import struct
+import termios
+import tty
 from pathlib import Path
 import secrets
 
@@ -17,7 +25,10 @@ import asyncssh
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--config', type=Path, required=True)
+parser.add_argument('--docker-container', help='Optional isolated real Docker container ID')
 args = parser.parse_args()
+if args.docker_container and not re.fullmatch(r'[a-f0-9]{64}', args.docker_container):
+    parser.error('Expected an immutable Docker container ID')
 args.config.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
 password = secrets.token_urlsafe(32)
 passphrase = secrets.token_urlsafe(32)
@@ -40,7 +51,7 @@ class Server(asyncssh.SSHServer):
         return True
 
     def validate_password(self, username, candidate):
-        return username in ('capidock-test', 'capidock-test-auth-only') and candidate == password
+        return username in ('capidock-test', 'capidock-test-auth-only', 'capidock-test-overflow', 'capidock-test-cancel') and candidate == password
 
     def public_key_auth_supported(self):
         return True
@@ -49,12 +60,96 @@ class Server(asyncssh.SSHServer):
         return username == 'capidock-test' and key == client_key.convert_to_public()
 
 
+async def real_docker(process):
+    """Allowlisted Docker operations confined to one disposable container."""
+    target = args.docker_container
+    command = process.command or ''
+    terminal_prefix = f'docker exec -it {target} '
+    if command in (terminal_prefix + 'sh', terminal_prefix + 'bash'):
+        if process.term_type != 'xterm-256color':
+            process.exit(1)
+            return True
+        master, slave = pty.openpty()
+        tty.setraw(slave)
+        fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack('HHHH', 24, 80, 0, 0))
+        child = await asyncio.create_subprocess_exec('docker', 'exec', '-it', target,
+            command.rsplit(' ', 1)[1], stdin=slave, stdout=slave, stderr=slave)
+        os.close(slave)
+        async def output():
+            while True:
+                try:
+                    chunk = await asyncio.to_thread(os.read, master, 4096)
+                except OSError:
+                    return
+                if not chunk:
+                    return
+                process.stdout.write(chunk.decode(errors='replace'))
+        async def input_data():
+            while chunk := await process.stdin.read(4096):
+                os.write(master, chunk.encode())
+        tasks = [asyncio.create_task(output()), asyncio.create_task(input_data())]
+        try:
+            code = await child.wait()
+            await tasks[0]
+            process.exit(code)
+        finally:
+            for task in tasks:
+                task.cancel()
+            os.close(master)
+            if child.returncode is None:
+                child.terminate()
+                await child.wait()
+        return True
+    if not command.startswith('LC_ALL=C docker '):
+        return False
+    argv = shlex.split(command)[1:]
+    merge_logs = argv[-1:] == ['2>&1']
+    if merge_logs:
+        argv = argv[:-1]
+    valid = False
+    if argv[:5] == ['docker', 'ps', '-a', '--no-trunc', '--format'] and len(argv) == 6:
+        # Never enumerate unrelated containers on the developer's Docker host.
+        argv[2:2] = ['--filter', f'id={target}']
+        valid = True
+    elif argv[:5] == ['docker', 'inspect', '--type', 'container', '--format'] and len(argv) == 7:
+        valid = argv[-1] == target
+    elif argv[:5] == ['docker', 'stats', '--no-stream', '--no-trunc', '--format'] and len(argv) == 7:
+        valid = argv[-1] == target
+    elif argv[:5] == ['docker', 'logs', '--tail', '200', '--timestamps'] and len(argv) == 6:
+        valid = argv[-1] == target and merge_logs
+    elif len(argv) == 3 and argv[0] == 'docker' and argv[1] in ('start', 'stop', 'restart'):
+        valid = argv[-1] == target
+    if not valid:
+        process.stderr.write('Outside Docker smoke-test scope\n')
+        process.exit(1)
+        return True
+    child = await asyncio.create_subprocess_exec(*argv, stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.STDOUT if merge_logs else asyncio.subprocess.PIPE)
+    stdout, stderr = await child.communicate()
+    process.stdout.write(stdout.decode(errors='replace'))
+    if stderr:
+        process.stderr.write(stderr.decode(errors='replace'))
+    process.exit(child.returncode)
+    return True
+
+
 async def handle(process):
     global channel_requests
     if process.get_extra_info('username') == 'capidock-test-auth-only':
         channel_requests += 1
         activity_path.write_text(str(channel_requests))
     try:
+        fixture_command = 'LC_ALL=C docker logs --tail 200 --timestamps ' + 'a' * 64 + ' 2>&1'
+        if process.command == fixture_command:
+            if process.get_extra_info('username') == 'capidock-test-overflow':
+                process.stdout.write('x' * 600000)
+                process.exit(0)
+                return
+            if process.get_extra_info('username') == 'capidock-test-cancel':
+                await process.stdin.read()
+                return
+        if args.docker_container and await real_docker(process):
+            return
         if process.command == "docker ps --no-trunc --format '{{json .}}'":
             process.stdout.write(json.dumps(dict(ID='a' * 64, Names='smoke-container',
                 Labels='coolify.applicationUuid=smoke-resource', Image='fixture')) + '\n')
@@ -94,10 +189,11 @@ async def handle(process):
 
 async def main():
     server = await asyncssh.create_server(Server, '127.0.0.1', 0,
+        line_editor=False,
         server_host_keys=[asyncssh.generate_private_key('ssh-ed25519')],
         process_factory=handle,
         sftp_factory=lambda channel: asyncssh.SFTPServer(channel, chroot=str(remote_root)))
-    config = dict(port=server.get_port(), username='capidock-test', password=password,
+    config = dict(dockerId=args.docker_container, port=server.get_port(), username='capidock-test', password=password,
         privateKey=client_key.export_private_key('openssh', passphrase=passphrase).decode(),
         passphrase=passphrase)
     fd = os.open(args.config, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)

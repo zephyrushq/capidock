@@ -11,6 +11,8 @@ import 'host_key_store.dart';
 import 'ssh_identity.dart';
 import 'ssh_security_policy.dart';
 import '../../coolify/terminal/container_target.dart';
+import '../../docker/data/docker_command.dart';
+import 'ssh_terminal_channel.dart';
 
 enum SshFailure { authentication, identity, unreachable, other }
 
@@ -26,6 +28,9 @@ class SshConnection extends ChangeNotifier {
   SSHSession? _shell;
   bool _openingShell = false;
   final List<StreamSubscription<String>> _streams = [];
+  final _dockerSessions = <SSHSession>{};
+  final _dockerRequests = <void Function()>{};
+  final _dockerTerminals = <SshTerminalChannel>{};
   int _generation = 0;
   bool _disposed = false;
   ConnectionStatus status = ConnectionStatus.disconnected;
@@ -233,6 +238,172 @@ class SshConnection extends ChangeNotifier {
     _notify();
   }
 
+  Future<DockerCommandResult> executeDocker(
+    DockerCommand command,
+    DockerCancellation cancellation,
+  ) async {
+    final client = _client;
+    final generation = _generation;
+    if (client == null || status != ConnectionStatus.connected) {
+      throw const DockerException(DockerFailure.disconnected);
+    }
+    if (cancellation.cancelled) {
+      throw const DockerException(DockerFailure.cancelled);
+    }
+    SSHSession? session;
+    var accepting = true;
+    final stdout = <int>[], stderr = <int>[];
+    final streams = <StreamSubscription<List<int>>>[];
+    final revoked = Completer<DockerFailure>();
+    void revoke(DockerFailure reason) {
+      session?.close();
+      if (!revoked.isCompleted) revoked.complete(reason);
+    }
+
+    void cancel() => revoke(DockerFailure.cancelled);
+    void disconnected() => revoke(DockerFailure.disconnected);
+    Future<T> guarded<T>(Future<T> operation) => Future.any([
+      operation,
+      revoked.future.then<T>((reason) => throw DockerException(reason)),
+    ]);
+    cancellation.add(cancel);
+    _dockerRequests.add(disconnected);
+    final opening = client.execute(command.command);
+    unawaited(
+      opening.then((value) {
+        if (!accepting || !_active(generation) || cancellation.cancelled) {
+          value.close();
+        }
+      }, onError: (Object _) {}),
+    );
+    try {
+      session = await guarded(opening).timeout(const Duration(seconds: 10));
+      _dockerSessions.add(session);
+      if (!_active(generation) || cancellation.cancelled) {
+        throw const DockerException(DockerFailure.cancelled);
+      }
+      var received = 0;
+      Future<void> drain(Stream<List<int>> stream, List<int> destination) {
+        final done = Completer<void>();
+        streams.add(
+          stream.listen(
+            (chunk) {
+              if (!accepting || done.isCompleted) return;
+              received += chunk.length;
+              if (received > command.limit) {
+                done.completeError(
+                  const DockerException(DockerFailure.tooLarge),
+                );
+              } else {
+                destination.addAll(chunk);
+              }
+            },
+            onDone: () {
+              if (!done.isCompleted) done.complete();
+            },
+            onError: (Object error) {
+              if (!done.isCompleted) done.completeError(error);
+            },
+          ),
+        );
+        return done.future;
+      }
+
+      await guarded(
+        Future.wait([
+          drain(session.stdout, stdout),
+          drain(session.stderr, stderr),
+          session.done,
+        ], eagerError: true),
+      ).timeout(command.timeout);
+      if (!_active(generation)) {
+        throw const DockerException(DockerFailure.disconnected);
+      }
+      if (cancellation.cancelled) {
+        throw const DockerException(DockerFailure.cancelled);
+      }
+      return DockerCommandResult(
+        utf8.decode(stdout, allowMalformed: true),
+        utf8.decode(stderr, allowMalformed: true),
+        session.exitCode,
+      );
+    } on TimeoutException {
+      throw const DockerException(DockerFailure.timeout);
+    } on DockerException {
+      rethrow;
+    } catch (_) {
+      throw DockerException(
+        _active(generation) ? DockerFailure.failed : DockerFailure.disconnected,
+      );
+    } finally {
+      accepting = false;
+      cancellation.remove(cancel);
+      _dockerRequests.remove(disconnected);
+      _dockerSessions.remove(session);
+      for (final stream in streams) {
+        unawaited(stream.cancel());
+      }
+      stdout.clear();
+      stderr.clear();
+      session?.close();
+    }
+  }
+
+  Future<SshTerminalChannel> openDockerTerminal(
+    String id,
+    String shell,
+    DockerCancellation cancellation,
+  ) async {
+    final command = containerShellCommand(id, shell);
+    final client = _client;
+    final generation = _generation;
+    if (client == null || status != ConnectionStatus.connected) {
+      throw const DockerException(DockerFailure.disconnected);
+    }
+    if (cancellation.cancelled) {
+      throw const DockerException(DockerFailure.cancelled);
+    }
+    var accepting = true;
+    final opening = client.execute(
+      command,
+      pty: SSHPtyConfig(type: 'xterm-256color', width: 80, height: 24),
+    );
+    unawaited(
+      opening.then((session) {
+        if (!accepting || !_active(generation) || cancellation.cancelled) {
+          session.close();
+        }
+      }, onError: (Object _) {}),
+    );
+    try {
+      final session = await opening.timeout(const Duration(seconds: 15));
+      if (!_active(generation) || cancellation.cancelled) {
+        session.close();
+        throw const DockerException(DockerFailure.cancelled);
+      }
+      final channel = SshTerminalChannel(session);
+      _dockerTerminals.add(channel);
+      cancellation.add(channel.close);
+      unawaited(
+        session.done.then(
+          (_) {
+            _dockerTerminals.remove(channel);
+            cancellation.remove(channel.close);
+          },
+          onError: (Object _) {
+            _dockerTerminals.remove(channel);
+            cancellation.remove(channel.close);
+          },
+        ),
+      );
+      return channel;
+    } on TimeoutException {
+      throw const DockerException(DockerFailure.timeout);
+    } finally {
+      accepting = false;
+    }
+  }
+
   Future<SftpClient> openSftp() async {
     final client = _client;
     final generation = _generation;
@@ -317,6 +488,18 @@ class SshConnection extends ChangeNotifier {
 
   void disconnect() {
     _generation++;
+    for (final cancel in _dockerRequests.toList()) {
+      cancel();
+    }
+    _dockerRequests.clear();
+    for (final session in _dockerSessions.toList()) {
+      session.close();
+    }
+    _dockerSessions.clear();
+    for (final channel in _dockerTerminals.toList()) {
+      channel.close();
+    }
+    _dockerTerminals.clear();
     terminal.onOutput = null;
     terminal.onResize = null;
     for (final stream in _streams) {

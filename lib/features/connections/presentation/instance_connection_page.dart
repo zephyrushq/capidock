@@ -1,4 +1,5 @@
 import '../../sftp/sftp_panel.dart';
+import '../../docker/presentation/docker_panel.dart';
 import '../../coolify/terminal/container_target.dart';
 import '../../../l10n/localization.dart';
 
@@ -20,18 +21,22 @@ class InstanceConnectionPage extends StatefulWidget {
     required this.onEdit,
     this.onTerminal,
     this.onResourceTerminal,
+    this.createConnection,
   });
   final ServerInstance instance;
   final VoidCallback onEdit;
   final VoidCallback? onTerminal;
   final OpenResourceTerminal? onResourceTerminal;
+  final SshConnection Function(ServerInstance)? createConnection;
   @override
   State<InstanceConnectionPage> createState() => _InstanceConnectionPageState();
 }
 
 class _InstanceConnectionPageState extends State<InstanceConnectionPage>
     with WidgetsBindingObserver {
-  late final SshConnection _ssh = SshConnection(widget.instance);
+  late final SshConnection _ssh =
+      widget.createConnection?.call(widget.instance) ??
+      SshConnection(widget.instance);
   int _tab = 0;
   final _terminalFocus = FocusNode();
 
@@ -110,6 +115,11 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
                     connect: () =>
                         _ssh.connect(_confirmHostKey, openShell: false),
                   ),
+                  3 => DockerPanel(
+                    connection: _ssh,
+                    connect: () =>
+                        _ssh.connect(_confirmHostKey, openShell: false),
+                  ),
                   _ => _overview(),
                 },
               ),
@@ -129,6 +139,10 @@ class _InstanceConnectionPageState extends State<InstanceConnectionPage>
                     NavigationDestination(
                       icon: Icon(Icons.folder_outlined),
                       label: context.l10n.sftpFiles,
+                    ),
+                    const NavigationDestination(
+                      icon: Icon(Icons.inventory_2_outlined),
+                      label: 'Docker',
                     ),
                   ],
                 ),

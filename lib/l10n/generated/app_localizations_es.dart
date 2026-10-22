@@ -1381,6 +1381,103 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get overviewLoadError =>
       'No se pudo cargar la supervisión. Actualiza para volver a intentarlo.';
+
+  @override
+  String get dockerActionUncertain =>
+      'La operación puede haber llegado al servidor. Actualiza el estado antes de intentarlo de nuevo.';
+
+  @override
+  String get dockerConfirmAction =>
+      'Esta acción modifica el contenedor en el servidor. Detenerlo o reiniciarlo puede interrumpir sus servicios.';
+
+  @override
+  String get dockerConnect =>
+      'Conecta por SSH para gestionar Docker en este servidor.';
+
+  @override
+  String get dockerContainerTerminal => 'Terminal del contenedor';
+
+  @override
+  String get dockerDescription =>
+      'Gestiona contenedores mediante esta conexión SSH. Docker debe estar instalado y el usuario SSH debe tener acceso.';
+
+  @override
+  String get dockerEmpty => 'No se encontraron contenedores.';
+
+  @override
+  String get dockerExitCode => 'Código de salida';
+
+  @override
+  String get dockerFailed =>
+      'La operación de Docker falló. Actualiza y comprueba Docker en el servidor.';
+
+  @override
+  String get dockerGone =>
+      'El contenedor ya no existe o no está en ejecución para abrir el terminal. Actualiza la lista.';
+
+  @override
+  String get dockerImage => 'Imagen';
+
+  @override
+  String get dockerInvalidResponse =>
+      'Docker devolvió una respuesta incompatible o incompleta.';
+
+  @override
+  String get dockerLogsHelp =>
+      'Últimas 200 líneas de registros con fecha y hora. Actualiza para leer nuevas entradas. Los registros permanecen en memoria mientras esta pantalla está abierta.';
+
+  @override
+  String get dockerMetricsHelp =>
+      'Las lecturas de CPU/RAM se actualizan cada 10 segundos mientras los detalles están visibles. Las lecturas no disponibles aparecen como —.';
+
+  @override
+  String get dockerMounts => 'Montajes';
+
+  @override
+  String get dockerNoLogs => 'No se devolvieron registros.';
+
+  @override
+  String get dockerNotInstalled =>
+      'No se encontró Docker en la ruta de comandos SSH.';
+
+  @override
+  String get dockerPermission =>
+      'El usuario SSH no tiene permiso para acceder a Docker. Configura el acceso en el servidor.';
+
+  @override
+  String get dockerPorts => 'Puertos publicados';
+
+  @override
+  String get dockerRestartPolicy =>
+      'Política de reinicio · número de reinicios';
+
+  @override
+  String get dockerSearch => 'Buscar contenedor o imagen';
+
+  @override
+  String get dockerStartedAt => 'Iniciado el';
+
+  @override
+  String get dockerState => 'Estado';
+
+  @override
+  String get dockerStoppedMetrics =>
+      'Las lecturas de CPU/RAM no están disponibles para contenedores detenidos.';
+
+  @override
+  String get dockerTerminalEnded =>
+      'El terminal del contenedor ha finalizado. Vuelve a los detalles para abrir otra sesión; la shell elegida debe existir en la imagen.';
+
+  @override
+  String get dockerTimeout => 'La operación de Docker superó el tiempo límite.';
+
+  @override
+  String get dockerTooLarge =>
+      'La respuesta de Docker superó el límite de tamaño.';
+
+  @override
+  String get dockerUnavailable =>
+      'El servicio Docker no está disponible. Comprueba que está en ejecución y accesible para este usuario SSH.';
 }
 
 /// The translations for Spanish Castilian, as used in Spain (`es_ES`).
@@ -2759,4 +2856,101 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   @override
   String get overviewLoadError =>
       'No se pudo cargar la supervisión. Actualiza para volver a intentarlo.';
+
+  @override
+  String get dockerActionUncertain =>
+      'La operación puede haber llegado al servidor. Actualiza el estado antes de intentarlo de nuevo.';
+
+  @override
+  String get dockerConfirmAction =>
+      'Esta acción modifica el contenedor en el servidor. Detenerlo o reiniciarlo puede interrumpir sus servicios.';
+
+  @override
+  String get dockerConnect =>
+      'Conecta por SSH para gestionar Docker en este servidor.';
+
+  @override
+  String get dockerContainerTerminal => 'Terminal del contenedor';
+
+  @override
+  String get dockerDescription =>
+      'Gestiona contenedores mediante esta conexión SSH. Docker debe estar instalado y el usuario SSH debe tener acceso.';
+
+  @override
+  String get dockerEmpty => 'No se encontraron contenedores.';
+
+  @override
+  String get dockerExitCode => 'Código de salida';
+
+  @override
+  String get dockerFailed =>
+      'La operación de Docker falló. Actualiza y comprueba Docker en el servidor.';
+
+  @override
+  String get dockerGone =>
+      'El contenedor ya no existe o no está en ejecución para abrir el terminal. Actualiza la lista.';
+
+  @override
+  String get dockerImage => 'Imagen';
+
+  @override
+  String get dockerInvalidResponse =>
+      'Docker devolvió una respuesta incompatible o incompleta.';
+
+  @override
+  String get dockerLogsHelp =>
+      'Últimas 200 líneas de registros con fecha y hora. Actualiza para leer nuevas entradas. Los registros permanecen en memoria mientras esta pantalla está abierta.';
+
+  @override
+  String get dockerMetricsHelp =>
+      'Las lecturas de CPU/RAM se actualizan cada 10 segundos mientras los detalles están visibles. Las lecturas no disponibles aparecen como —.';
+
+  @override
+  String get dockerMounts => 'Montajes';
+
+  @override
+  String get dockerNoLogs => 'No se devolvieron registros.';
+
+  @override
+  String get dockerNotInstalled =>
+      'No se encontró Docker en la ruta de comandos SSH.';
+
+  @override
+  String get dockerPermission =>
+      'El usuario SSH no tiene permiso para acceder a Docker. Configura el acceso en el servidor.';
+
+  @override
+  String get dockerPorts => 'Puertos publicados';
+
+  @override
+  String get dockerRestartPolicy =>
+      'Política de reinicio · número de reinicios';
+
+  @override
+  String get dockerSearch => 'Buscar contenedor o imagen';
+
+  @override
+  String get dockerStartedAt => 'Iniciado el';
+
+  @override
+  String get dockerState => 'Estado';
+
+  @override
+  String get dockerStoppedMetrics =>
+      'Las lecturas de CPU/RAM no están disponibles para contenedores detenidos.';
+
+  @override
+  String get dockerTerminalEnded =>
+      'El terminal del contenedor ha finalizado. Vuelve a los detalles para abrir otra sesión; la shell elegida debe existir en la imagen.';
+
+  @override
+  String get dockerTimeout => 'La operación de Docker superó el tiempo límite.';
+
+  @override
+  String get dockerTooLarge =>
+      'La respuesta de Docker superó el límite de tamaño.';
+
+  @override
+  String get dockerUnavailable =>
+      'El servicio Docker no está disponible. Comprueba que está en ejecución y accesible para este usuario SSH.';
 }

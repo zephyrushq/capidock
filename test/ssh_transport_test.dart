@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:capidock/features/docker/data/docker_command.dart';
+
 import 'package:capidock/features/sftp/sftp_browser.dart';
 import 'package:capidock/features/coolify/terminal/container_target.dart';
 
@@ -259,6 +261,60 @@ void main() {
     },
     skip: configPath.isEmpty,
   );
+
+  for (final overflow in [true, false]) {
+    test(
+      'Docker SSH ${overflow ? 'output bounds' : 'cancellation'} leaves the transport usable',
+      () async {
+        final config = jsonDecode(
+          File(configPath).readAsStringSync(),
+        ) as Map<String, dynamic>;
+        final connection = SshConnection(
+          ServerInstance(
+            id: 'bounded-docker',
+            name: 'Loopback',
+            type: InstanceType.ssh,
+            host: '127.0.0.1',
+            port: config['port'] as int,
+            username: overflow
+                ? 'capidock-test-overflow'
+                : 'capidock-test-cancel',
+            password: config['password'] as String,
+          ),
+          hostKeys: HostKeyStore(secrets: MemorySecretStore()),
+        );
+        addTearDown(connection.dispose);
+        await connection.connect((_, _, _) async => true, openShell: false);
+        expect(connection.status, ConnectionStatus.connected);
+        final token = DockerCancellation();
+        final request = connection.executeDocker(
+          DockerCommand(DockerOperation.logs, id: 'a' * 64),
+          token,
+        );
+        final assertion = expectLater(
+          request,
+          throwsA(
+            isA<DockerException>().having(
+              (error) => error.failure,
+              'failure',
+              overflow ? DockerFailure.tooLarge : DockerFailure.cancelled,
+            ),
+          ),
+        );
+        if (!overflow) {
+          await Future<void>.delayed(const Duration(milliseconds: 100));
+          token.cancel();
+        }
+        await assertion;
+        expect(connection.status, ConnectionStatus.connected);
+        final sftp = await connection.openSftp();
+        await sftp.close();
+      },
+      skip: configPath.isEmpty
+          ? 'Set SSH_TEST_CONFIG for Docker channel checks'
+          : false,
+    );
+  }
 
   test('Real SSH rejects a declined host key and wrong password', () async {
     final config =

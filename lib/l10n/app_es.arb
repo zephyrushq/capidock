@@ -424,5 +424,32 @@
       }
     }
   },
-  "overviewLoadError": "No se pudo cargar la supervisión. Actualiza para volver a intentarlo."
+  "overviewLoadError": "No se pudo cargar la supervisión. Actualiza para volver a intentarlo.",
+  "dockerActionUncertain": "La operación puede haber llegado al servidor. Actualiza el estado antes de intentarlo de nuevo.",
+  "dockerConfirmAction": "Esta acción modifica el contenedor en el servidor. Detenerlo o reiniciarlo puede interrumpir sus servicios.",
+  "dockerConnect": "Conecta por SSH para gestionar Docker en este servidor.",
+  "dockerContainerTerminal": "Terminal del contenedor",
+  "dockerDescription": "Gestiona contenedores mediante esta conexión SSH. Docker debe estar instalado y el usuario SSH debe tener acceso.",
+  "dockerEmpty": "No se encontraron contenedores.",
+  "dockerExitCode": "Código de salida",
+  "dockerFailed": "La operación de Docker falló. Actualiza y comprueba Docker en el servidor.",
+  "dockerGone": "El contenedor ya no existe o no está en ejecución para abrir el terminal. Actualiza la lista.",
+  "dockerImage": "Imagen",
+  "dockerInvalidResponse": "Docker devolvió una respuesta incompatible o incompleta.",
+  "dockerLogsHelp": "Últimas 200 líneas de registros con fecha y hora. Actualiza para leer nuevas entradas. Los registros permanecen en memoria mientras esta pantalla está abierta.",
+  "dockerMetricsHelp": "Las lecturas de CPU/RAM se actualizan cada 10 segundos mientras los detalles están visibles. Las lecturas no disponibles aparecen como —.",
+  "dockerMounts": "Montajes",
+  "dockerNoLogs": "No se devolvieron registros.",
+  "dockerNotInstalled": "No se encontró Docker en la ruta de comandos SSH.",
+  "dockerPermission": "El usuario SSH no tiene permiso para acceder a Docker. Configura el acceso en el servidor.",
+  "dockerPorts": "Puertos publicados",
+  "dockerRestartPolicy": "Política de reinicio · número de reinicios",
+  "dockerSearch": "Buscar contenedor o imagen",
+  "dockerStartedAt": "Iniciado el",
+  "dockerState": "Estado",
+  "dockerStoppedMetrics": "Las lecturas de CPU/RAM no están disponibles para contenedores detenidos.",
+  "dockerTerminalEnded": "El terminal del contenedor ha finalizado. Vuelve a los detalles para abrir otra sesión; la shell elegida debe existir en la imagen.",
+  "dockerTimeout": "La operación de Docker superó el tiempo límite.",
+  "dockerTooLarge": "La respuesta de Docker superó el límite de tamaño.",
+  "dockerUnavailable": "El servicio Docker no está disponible. Comprueba que está en ejecución y accesible para este usuario SSH."
 }

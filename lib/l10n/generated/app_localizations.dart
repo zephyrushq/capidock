@@ -2486,6 +2486,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not load monitoring data. Refresh to try again.'**
   String get overviewLoadError;
+
+  /// No description provided for @dockerActionUncertain.
+  ///
+  /// In en, this message translates to:
+  /// **'The operation may have reached the server. Refresh the state before trying again.'**
+  String get dockerActionUncertain;
+
+  /// No description provided for @dockerConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'This changes the container on the server. Stopping or restarting it can interrupt its services.'**
+  String get dockerConfirmAction;
+
+  /// No description provided for @dockerConnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect via SSH to manage Docker on this server.'**
+  String get dockerConnect;
+
+  /// No description provided for @dockerContainerTerminal.
+  ///
+  /// In en, this message translates to:
+  /// **'Container terminal'**
+  String get dockerContainerTerminal;
+
+  /// No description provided for @dockerDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage containers through this SSH connection. Docker must be installed and your SSH user must have access to it.'**
+  String get dockerDescription;
+
+  /// No description provided for @dockerEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No containers found.'**
+  String get dockerEmpty;
+
+  /// No description provided for @dockerExitCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit code'**
+  String get dockerExitCode;
+
+  /// No description provided for @dockerFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The Docker operation failed. Refresh and check Docker on the server.'**
+  String get dockerFailed;
+
+  /// No description provided for @dockerGone.
+  ///
+  /// In en, this message translates to:
+  /// **'The container no longer exists or is not running for terminal access. Refresh the list.'**
+  String get dockerGone;
+
+  /// No description provided for @dockerImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get dockerImage;
+
+  /// No description provided for @dockerInvalidResponse.
+  ///
+  /// In en, this message translates to:
+  /// **'Docker returned an unsupported or incomplete response.'**
+  String get dockerInvalidResponse;
+
+  /// No description provided for @dockerLogsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest 200 log lines with timestamps. Refresh to read newer entries. Logs stay in memory while this screen is open.'**
+  String get dockerLogsHelp;
+
+  /// No description provided for @dockerMetricsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU/RAM snapshots refresh every 10 seconds while these details are visible. Missing measurements are shown as —.'**
+  String get dockerMetricsHelp;
+
+  /// No description provided for @dockerMounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Mounts'**
+  String get dockerMounts;
+
+  /// No description provided for @dockerNoLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'No logs returned.'**
+  String get dockerNoLogs;
+
+  /// No description provided for @dockerNotInstalled.
+  ///
+  /// In en, this message translates to:
+  /// **'Docker was not found in the SSH command path.'**
+  String get dockerNotInstalled;
+
+  /// No description provided for @dockerPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'The SSH user does not have permission to access Docker. Configure access on the server.'**
+  String get dockerPermission;
+
+  /// No description provided for @dockerPorts.
+  ///
+  /// In en, this message translates to:
+  /// **'Published ports'**
+  String get dockerPorts;
+
+  /// No description provided for @dockerRestartPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart policy · restart count'**
+  String get dockerRestartPolicy;
+
+  /// No description provided for @dockerSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Find container or image'**
+  String get dockerSearch;
+
+  /// No description provided for @dockerStartedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Started at'**
+  String get dockerStartedAt;
+
+  /// No description provided for @dockerState.
+  ///
+  /// In en, this message translates to:
+  /// **'State'**
+  String get dockerState;
+
+  /// No description provided for @dockerStoppedMetrics.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU/RAM measurements are unavailable for stopped containers.'**
+  String get dockerStoppedMetrics;
+
+  /// No description provided for @dockerTerminalEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'The container terminal has ended. Return to the details to open another session; the selected shell must exist in the image.'**
+  String get dockerTerminalEnded;
+
+  /// No description provided for @dockerTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'The Docker operation timed out.'**
+  String get dockerTimeout;
+
+  /// No description provided for @dockerTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'The Docker response exceeded the size limit.'**
+  String get dockerTooLarge;
+
+  /// No description provided for @dockerUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The Docker daemon is unavailable. Check that it is running and accessible to this SSH user.'**
+  String get dockerUnavailable;
 }
 
 class _AppLocalizationsDelegate

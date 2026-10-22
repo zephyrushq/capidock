@@ -1368,6 +1368,101 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get overviewLoadError =>
       'Could not load monitoring data. Refresh to try again.';
+
+  @override
+  String get dockerActionUncertain =>
+      'The operation may have reached the server. Refresh the state before trying again.';
+
+  @override
+  String get dockerConfirmAction =>
+      'This changes the container on the server. Stopping or restarting it can interrupt its services.';
+
+  @override
+  String get dockerConnect =>
+      'Connect via SSH to manage Docker on this server.';
+
+  @override
+  String get dockerContainerTerminal => 'Container terminal';
+
+  @override
+  String get dockerDescription =>
+      'Manage containers through this SSH connection. Docker must be installed and your SSH user must have access to it.';
+
+  @override
+  String get dockerEmpty => 'No containers found.';
+
+  @override
+  String get dockerExitCode => 'Exit code';
+
+  @override
+  String get dockerFailed =>
+      'The Docker operation failed. Refresh and check Docker on the server.';
+
+  @override
+  String get dockerGone =>
+      'The container no longer exists or is not running for terminal access. Refresh the list.';
+
+  @override
+  String get dockerImage => 'Image';
+
+  @override
+  String get dockerInvalidResponse =>
+      'Docker returned an unsupported or incomplete response.';
+
+  @override
+  String get dockerLogsHelp =>
+      'Latest 200 log lines with timestamps. Refresh to read newer entries. Logs stay in memory while this screen is open.';
+
+  @override
+  String get dockerMetricsHelp =>
+      'CPU/RAM snapshots refresh every 10 seconds while these details are visible. Missing measurements are shown as —.';
+
+  @override
+  String get dockerMounts => 'Mounts';
+
+  @override
+  String get dockerNoLogs => 'No logs returned.';
+
+  @override
+  String get dockerNotInstalled =>
+      'Docker was not found in the SSH command path.';
+
+  @override
+  String get dockerPermission =>
+      'The SSH user does not have permission to access Docker. Configure access on the server.';
+
+  @override
+  String get dockerPorts => 'Published ports';
+
+  @override
+  String get dockerRestartPolicy => 'Restart policy · restart count';
+
+  @override
+  String get dockerSearch => 'Find container or image';
+
+  @override
+  String get dockerStartedAt => 'Started at';
+
+  @override
+  String get dockerState => 'State';
+
+  @override
+  String get dockerStoppedMetrics =>
+      'CPU/RAM measurements are unavailable for stopped containers.';
+
+  @override
+  String get dockerTerminalEnded =>
+      'The container terminal has ended. Return to the details to open another session; the selected shell must exist in the image.';
+
+  @override
+  String get dockerTimeout => 'The Docker operation timed out.';
+
+  @override
+  String get dockerTooLarge => 'The Docker response exceeded the size limit.';
+
+  @override
+  String get dockerUnavailable =>
+      'The Docker daemon is unavailable. Check that it is running and accessible to this SSH user.';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -2733,6 +2828,101 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   @override
   String get overviewLoadError =>
       'Could not load monitoring data. Refresh to try again.';
+
+  @override
+  String get dockerActionUncertain =>
+      'The operation may have reached the server. Refresh the state before trying again.';
+
+  @override
+  String get dockerConfirmAction =>
+      'This changes the container on the server. Stopping or restarting it can interrupt its services.';
+
+  @override
+  String get dockerConnect =>
+      'Connect via SSH to manage Docker on this server.';
+
+  @override
+  String get dockerContainerTerminal => 'Container terminal';
+
+  @override
+  String get dockerDescription =>
+      'Manage containers through this SSH connection. Docker must be installed and your SSH user must have access to it.';
+
+  @override
+  String get dockerEmpty => 'No containers found.';
+
+  @override
+  String get dockerExitCode => 'Exit code';
+
+  @override
+  String get dockerFailed =>
+      'The Docker operation failed. Refresh and check Docker on the server.';
+
+  @override
+  String get dockerGone =>
+      'The container no longer exists or is not running for terminal access. Refresh the list.';
+
+  @override
+  String get dockerImage => 'Image';
+
+  @override
+  String get dockerInvalidResponse =>
+      'Docker returned an unsupported or incomplete response.';
+
+  @override
+  String get dockerLogsHelp =>
+      'Latest 200 log lines with timestamps. Refresh to read newer entries. Logs stay in memory while this screen is open.';
+
+  @override
+  String get dockerMetricsHelp =>
+      'CPU/RAM snapshots refresh every 10 seconds while these details are visible. Missing measurements are shown as —.';
+
+  @override
+  String get dockerMounts => 'Mounts';
+
+  @override
+  String get dockerNoLogs => 'No logs returned.';
+
+  @override
+  String get dockerNotInstalled =>
+      'Docker was not found in the SSH command path.';
+
+  @override
+  String get dockerPermission =>
+      'The SSH user does not have permission to access Docker. Configure access on the server.';
+
+  @override
+  String get dockerPorts => 'Published ports';
+
+  @override
+  String get dockerRestartPolicy => 'Restart policy · restart count';
+
+  @override
+  String get dockerSearch => 'Find container or image';
+
+  @override
+  String get dockerStartedAt => 'Started at';
+
+  @override
+  String get dockerState => 'State';
+
+  @override
+  String get dockerStoppedMetrics =>
+      'CPU/RAM measurements are unavailable for stopped containers.';
+
+  @override
+  String get dockerTerminalEnded =>
+      'The container terminal has ended. Return to the details to open another session; the selected shell must exist in the image.';
+
+  @override
+  String get dockerTimeout => 'The Docker operation timed out.';
+
+  @override
+  String get dockerTooLarge => 'The Docker response exceeded the size limit.';
+
+  @override
+  String get dockerUnavailable =>
+      'The Docker daemon is unavailable. Check that it is running and accessible to this SSH user.';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -4098,4 +4288,99 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String get overviewLoadError =>
       'Could not load monitoring data. Refresh to try again.';
+
+  @override
+  String get dockerActionUncertain =>
+      'The operation may have reached the server. Refresh the state before trying again.';
+
+  @override
+  String get dockerConfirmAction =>
+      'This changes the container on the server. Stopping or restarting it can interrupt its services.';
+
+  @override
+  String get dockerConnect =>
+      'Connect via SSH to manage Docker on this server.';
+
+  @override
+  String get dockerContainerTerminal => 'Container terminal';
+
+  @override
+  String get dockerDescription =>
+      'Manage containers through this SSH connection. Docker must be installed and your SSH user must have access to it.';
+
+  @override
+  String get dockerEmpty => 'No containers found.';
+
+  @override
+  String get dockerExitCode => 'Exit code';
+
+  @override
+  String get dockerFailed =>
+      'The Docker operation failed. Refresh and check Docker on the server.';
+
+  @override
+  String get dockerGone =>
+      'The container no longer exists or is not running for terminal access. Refresh the list.';
+
+  @override
+  String get dockerImage => 'Image';
+
+  @override
+  String get dockerInvalidResponse =>
+      'Docker returned an unsupported or incomplete response.';
+
+  @override
+  String get dockerLogsHelp =>
+      'Latest 200 log lines with timestamps. Refresh to read newer entries. Logs stay in memory while this screen is open.';
+
+  @override
+  String get dockerMetricsHelp =>
+      'CPU/RAM snapshots refresh every 10 seconds while these details are visible. Missing measurements are shown as —.';
+
+  @override
+  String get dockerMounts => 'Mounts';
+
+  @override
+  String get dockerNoLogs => 'No logs returned.';
+
+  @override
+  String get dockerNotInstalled =>
+      'Docker was not found in the SSH command path.';
+
+  @override
+  String get dockerPermission =>
+      'The SSH user does not have permission to access Docker. Configure access on the server.';
+
+  @override
+  String get dockerPorts => 'Published ports';
+
+  @override
+  String get dockerRestartPolicy => 'Restart policy · restart count';
+
+  @override
+  String get dockerSearch => 'Find container or image';
+
+  @override
+  String get dockerStartedAt => 'Started at';
+
+  @override
+  String get dockerState => 'State';
+
+  @override
+  String get dockerStoppedMetrics =>
+      'CPU/RAM measurements are unavailable for stopped containers.';
+
+  @override
+  String get dockerTerminalEnded =>
+      'The container terminal has ended. Return to the details to open another session; the selected shell must exist in the image.';
+
+  @override
+  String get dockerTimeout => 'The Docker operation timed out.';
+
+  @override
+  String get dockerTooLarge => 'The Docker response exceeded the size limit.';
+
+  @override
+  String get dockerUnavailable =>
+      'The Docker daemon is unavailable. Check that it is running and accessible to this SSH user.';
 }

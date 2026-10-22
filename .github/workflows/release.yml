@@ -92,12 +92,13 @@ jobs:
           flutter analyze
           flutter test
 
-      - name: Verify real SSH transport
+      - name: Verify real SSH and Docker transport
         if: steps.publication.outputs.needed == 'true'
         run: |
           python3 -m venv "$RUNNER_TEMP/ssh-tests"
           "$RUNNER_TEMP/ssh-tests/bin/pip" install -r tool/testing/requirements.txt
           CAPIDOCK_TEST_PYTHON="$RUNNER_TEMP/ssh-tests/bin/python" bash tool/testing/run_ssh_smoke.sh
+          CAPIDOCK_TEST_PYTHON="$RUNNER_TEMP/ssh-tests/bin/python" bash tool/testing/run_docker_smoke.sh
 
       - name: Build signed APK and package source and notices
         if: steps.publication.outputs.needed == 'true'

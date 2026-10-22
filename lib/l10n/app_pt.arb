@@ -424,5 +424,32 @@
       }
     }
   },
-  "overviewLoadError": "Não foi possível carregar a monitorização. Atualize para tentar novamente."
+  "overviewLoadError": "Não foi possível carregar a monitorização. Atualize para tentar novamente.",
+  "dockerActionUncertain": "A operação pode ter chegado ao servidor. Atualize o estado antes de tentar novamente.",
+  "dockerConfirmAction": "Esta ação altera o container no servidor. Parar ou reiniciar pode interromper os seus serviços.",
+  "dockerConnect": "Ligue por SSH para gerir o Docker neste servidor.",
+  "dockerContainerTerminal": "Terminal do container",
+  "dockerDescription": "Gira containers através desta ligação SSH. O Docker deve estar instalado e o utilizador SSH deve ter acesso.",
+  "dockerEmpty": "Não foram encontrados containers.",
+  "dockerExitCode": "Código de saída",
+  "dockerFailed": "A operação Docker falhou. Atualize e verifique o Docker no servidor.",
+  "dockerGone": "O container já não existe ou não está em execução para abrir o terminal. Atualize a lista.",
+  "dockerImage": "Imagem",
+  "dockerInvalidResponse": "O Docker devolveu uma resposta incompatível ou incompleta.",
+  "dockerLogsHelp": "Últimas 200 linhas de logs com data e hora. Atualize para ler novas entradas. Os logs ficam em memória enquanto este ecrã estiver aberto.",
+  "dockerMetricsHelp": "As leituras de CPU/RAM são atualizadas a cada 10 segundos enquanto os detalhes estão visíveis. Leituras indisponíveis aparecem como —.",
+  "dockerMounts": "Montagens",
+  "dockerNoLogs": "Não foram devolvidos logs.",
+  "dockerNotInstalled": "O Docker não foi encontrado no caminho de comandos SSH.",
+  "dockerPermission": "O utilizador SSH não tem permissão para aceder ao Docker. Configure o acesso no servidor.",
+  "dockerPorts": "Portas publicadas",
+  "dockerRestartPolicy": "Política de reinício · número de reinícios",
+  "dockerSearch": "Procurar container ou imagem",
+  "dockerStartedAt": "Iniciado em",
+  "dockerState": "Estado",
+  "dockerStoppedMetrics": "As leituras de CPU/RAM não estão disponíveis para containers parados.",
+  "dockerTerminalEnded": "O terminal do container terminou. Volte aos detalhes para abrir outra sessão; a shell escolhida deve existir na imagem.",
+  "dockerTimeout": "A operação Docker excedeu o tempo limite.",
+  "dockerTooLarge": "A resposta Docker excedeu o limite de tamanho.",
+  "dockerUnavailable": "O serviço Docker está indisponível. Verifique se está em execução e acessível a este utilizador SSH."
 }
