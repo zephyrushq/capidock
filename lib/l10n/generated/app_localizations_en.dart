@@ -1305,6 +1305,69 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get monitorResourceUnhealthy => 'Resource unhealthy';
+
+  @override
+  String get workspaceOverview => 'Workspace overview';
+
+  @override
+  String get overviewDescription =>
+      'Observed states from this device. Open an instance to connect.';
+
+  @override
+  String overviewMonitored(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count monitored',
+      one: '1 monitored',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewAttention(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count need attention',
+      one: '1 needs attention',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewStale(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count outdated',
+      one: '1 outdated',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get overviewRecentEvents => 'Recent events';
+
+  @override
+  String get overviewEventsDescription =>
+      'Latest 20 monitoring events from the last 30 days in this workspace.';
+
+  @override
+  String get overviewNoEvents =>
+      'No recent events. Enable monitoring to record changes.';
+
+  @override
+  String get overviewNotMonitored => 'Monitoring off';
+
+  @override
+  String overviewLastCheck(String time) {
+    return 'Last check: $time';
+  }
+
+  @override
+  String get overviewLoadError =>
+      'Could not load monitoring data. Refresh to try again.';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -2607,6 +2670,69 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get monitorResourceUnhealthy => 'Resource unhealthy';
+
+  @override
+  String get workspaceOverview => 'Workspace overview';
+
+  @override
+  String get overviewDescription =>
+      'Observed states from this device. Open an instance to connect.';
+
+  @override
+  String overviewMonitored(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count monitored',
+      one: '1 monitored',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewAttention(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count need attention',
+      one: '1 needs attention',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewStale(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count outdated',
+      one: '1 outdated',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get overviewRecentEvents => 'Recent events';
+
+  @override
+  String get overviewEventsDescription =>
+      'Latest 20 monitoring events from the last 30 days in this workspace.';
+
+  @override
+  String get overviewNoEvents =>
+      'No recent events. Enable monitoring to record changes.';
+
+  @override
+  String get overviewNotMonitored => 'Monitoring off';
+
+  @override
+  String overviewLastCheck(String time) {
+    return 'Last check: $time';
+  }
+
+  @override
+  String get overviewLoadError =>
+      'Could not load monitoring data. Refresh to try again.';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -3909,4 +4035,67 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get monitorResourceUnhealthy => 'Resource unhealthy';
+
+  @override
+  String get workspaceOverview => 'Workspace overview';
+
+  @override
+  String get overviewDescription =>
+      'Observed states from this device. Open an instance to connect.';
+
+  @override
+  String overviewMonitored(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count monitored',
+      one: '1 monitored',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewAttention(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count need attention',
+      one: '1 needs attention',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewStale(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count outdated',
+      one: '1 outdated',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get overviewRecentEvents => 'Recent events';
+
+  @override
+  String get overviewEventsDescription =>
+      'Latest 20 monitoring events from the last 30 days in this workspace.';
+
+  @override
+  String get overviewNoEvents =>
+      'No recent events. Enable monitoring to record changes.';
+
+  @override
+  String get overviewNotMonitored => 'Monitoring off';
+
+  @override
+  String overviewLastCheck(String time) {
+    return 'Last check: $time';
+  }
+
+  @override
+  String get overviewLoadError =>
+      'Could not load monitoring data. Refresh to try again.';
 }

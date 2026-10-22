@@ -244,6 +244,7 @@ class _DeviceLockState extends State<DeviceLock> with WidgetsBindingObserver {
                   controller: widget.controller,
                   localeController: widget.locales,
                   preferences: _preferences,
+                  monitorService: widget.monitoring,
                 ),
               ),
             ),

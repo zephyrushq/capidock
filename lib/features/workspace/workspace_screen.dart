@@ -17,10 +17,18 @@ import '../instances/presentation/instance_sidebar.dart';
 import '../workspaces/presentation/workspace_controls.dart';
 import '../connections/presentation/instance_connection_page.dart';
 import '../workspaces/presentation/welcome_screen.dart';
+import '../workspaces/presentation/workspace_overview.dart';
+import '../monitoring/monitor_page.dart';
+import '../monitoring/monitor_service.dart';
 
 class WorkspaceScreen extends StatefulWidget {
-  const WorkspaceScreen({super.key, required this.controller});
+  const WorkspaceScreen({
+    super.key,
+    required this.controller,
+    this.monitorService,
+  });
   final DockController controller;
+  final MonitorService? monitorService;
   @override
   State<WorkspaceScreen> createState() => _WorkspaceScreenState();
 }
@@ -127,6 +135,10 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
             _settings();
           },
           onManageWorkspaces: _manageWorkspaces,
+          onOverview: () {
+            controller.showOverview();
+            if (drawer) Navigator.pop(context);
+          },
           onSelect: (id) {
             controller.select(id);
             if (drawer) Navigator.pop(context);
@@ -196,7 +208,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
         );
       }
       final wide = MediaQuery.sizeOf(context).width >= 900;
-      final instance = controller.selected;
+      final instance = controller.showingOverview ? null : controller.selected;
       return Scaffold(
         key: _scaffold,
         drawer: wide
@@ -226,7 +238,25 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
                         alignment: Alignment.topCenter,
                         child: ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 1040),
-                          child: instance == null
+                          child:
+                              controller.showingOverview &&
+                                  controller.instances.isNotEmpty
+                              ? WorkspaceOverview(
+                                  key: ValueKey(controller.activeWorkspace?.id),
+                                  controller: controller,
+                                  service: widget.monitorService,
+                                  onSelect: controller.select,
+                                  onMonitoring: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute<void>(
+                                      builder: (_) => MonitorPage(
+                                        controller: controller,
+                                        service: widget.monitorService,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : instance == null
                               ? EmptyWorkspace(
                                   onAdd: _add,
                                   workspaceName:
@@ -285,6 +315,16 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
             ],
           ),
         ),
+        if (!controller.showingOverview)
+          IconButton(
+            key: const ValueKey('open-workspace-overview'),
+            onPressed: controller.showOverview,
+            tooltip: context.l10n.workspaceOverview,
+            icon: const Icon(
+              Icons.dashboard_outlined,
+              color: DockColors.purple,
+            ),
+          ),
         IconButton(
           onPressed: _add,
           tooltip: controller.activeWorkspace == null

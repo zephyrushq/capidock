@@ -1,17 +1,20 @@
 import 'package:capidock/app.dart';
 import 'package:capidock/l10n/locale_controller.dart';
+import 'package:capidock/features/monitoring/monitor_service.dart';
 import 'package:capidock/features/workspaces/domain/dock_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'test_support.dart';
+import 'monitor_support.dart';
 
 Future<DockController> launch(
   WidgetTester tester, {
   Size size = const Size(390, 844),
   double scale = 1,
   MemoryWorkspaceStore? store,
+  bool overview = false,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -23,9 +26,16 @@ Future<DockController> launch(
     store ?? (MemoryWorkspaceStore()..data = fixtureWorkspaces()),
   );
   await controller.initialize();
+  if (!overview && controller.selected != null) {
+    controller.select(controller.selected!.id);
+  }
   await tester.pumpWidget(
     CapidockApp(
       controller: controller,
+      monitorService: MonitorService(
+        secrets: MemorySecretStore(),
+        bridge: FakeMonitorBridge(),
+      ),
       localeController: LocaleController(preferences: MemoryPreferences()),
     ),
   );

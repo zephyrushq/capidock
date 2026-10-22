@@ -385,5 +385,44 @@
   "monitorDeploymentCancelled": "Deployment cancelled",
   "monitorResourceChanged": "Resource state changed",
   "monitorDeploymentFailed": "Deployment failed",
-  "monitorResourceUnhealthy": "Resource unhealthy"
+  "monitorResourceUnhealthy": "Resource unhealthy",
+  "workspaceOverview": "Workspace overview",
+  "overviewDescription": "Observed states from this device. Open an instance to connect.",
+  "overviewMonitored": "{count, plural, =1{1 monitored} other{{count} monitored}}",
+  "@overviewMonitored": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "overviewAttention": "{count, plural, =1{1 needs attention} other{{count} need attention}}",
+  "@overviewAttention": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "overviewStale": "{count, plural, =1{1 outdated} other{{count} outdated}}",
+  "@overviewStale": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "overviewRecentEvents": "Recent events",
+  "overviewEventsDescription": "Latest 20 monitoring events from the last 30 days in this workspace.",
+  "overviewNoEvents": "No recent events. Enable monitoring to record changes.",
+  "overviewNotMonitored": "Monitoring off",
+  "overviewLastCheck": "Last check: {time}",
+  "@overviewLastCheck": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "overviewLoadError": "Could not load monitoring data. Refresh to try again."
 }

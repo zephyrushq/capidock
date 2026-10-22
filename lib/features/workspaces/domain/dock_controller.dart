@@ -19,6 +19,13 @@ class DockController extends ChangeNotifier {
   bool isLoading = true;
   bool isSaving = false;
   String? loadError;
+  bool _showingOverview = true;
+  bool get showingOverview => _showingOverview;
+
+  void showOverview() {
+    _showingOverview = true;
+    notifyListeners();
+  }
 
   List<DockWorkspace> get workspaces => List.unmodifiable(_workspaces);
   DockWorkspace? get activeWorkspace =>
@@ -67,6 +74,7 @@ class DockController extends ChangeNotifier {
       final next = saved ?? <DockWorkspace>[];
       _workspaces = List.of(next);
       _workspaceId = _workspaces.firstOrNull?.id;
+      _showingOverview = true;
     } catch (_) {
       if (_locked || current != _generation) return;
       // Never replace unreadable user data with an empty onboarding state.
@@ -79,12 +87,14 @@ class DockController extends ChangeNotifier {
 
   void selectWorkspace(String id) {
     if (!_workspaces.any((w) => w.id == id)) return;
+    if (_workspaceId != id) _showingOverview = true;
     _workspaceId = id;
     notifyListeners();
   }
 
   void select(String id) {
     if (!instances.any((i) => i.id == id)) return;
+    _showingOverview = false;
     _selectedByWorkspace[_workspaceId!] = id;
     notifyListeners();
   }
@@ -94,10 +104,10 @@ class DockController extends ChangeNotifier {
       id: 'workspace-${DateTime.now().microsecondsSinceEpoch}',
       name: _validName(name),
     );
-    await _persist([
-      ..._workspaces,
-      workspace,
-    ], () => _workspaceId = workspace.id);
+    await _persist([..._workspaces, workspace], () {
+      _workspaceId = workspace.id;
+      _showingOverview = true;
+    });
   }
 
   /// Add imported copies atomically. Fresh IDs prevent imported credentials from
@@ -123,7 +133,10 @@ class DockController extends ChangeNotifier {
         )
         .toList();
     await _persist([..._workspaces, ...copies], () {
-      if (copies.isNotEmpty) _workspaceId = copies.first.id;
+      if (copies.isNotEmpty) {
+        _workspaceId = copies.first.id;
+        _showingOverview = true;
+      }
     });
   }
 
@@ -140,6 +153,7 @@ class DockController extends ChangeNotifier {
     await _persist([workspace], () {
       _workspaceId = workspace.id;
       _selectedByWorkspace[workspace.id] = instance.id;
+      _showingOverview = false;
     });
   }
 
@@ -153,7 +167,10 @@ class DockController extends ChangeNotifier {
     _workspace(id);
     await _persist(_workspaces.where((w) => w.id != id).toList(), () {
       _selectedByWorkspace.remove(id);
-      if (_workspaceId == id) _workspaceId = _workspaces.firstOrNull?.id;
+      if (_workspaceId == id) {
+        _workspaceId = _workspaces.firstOrNull?.id;
+        _showingOverview = true;
+      }
     });
   }
 
@@ -179,6 +196,7 @@ class DockController extends ChangeNotifier {
       () {
         _workspaceId = workspace.id;
         _selectedByWorkspace[workspace.id] = instance.id;
+        _showingOverview = false;
       },
     );
   }
@@ -232,6 +250,7 @@ class DockController extends ChangeNotifier {
         }
         _workspaceId = target.id;
         _selectedByWorkspace[target.id] = id;
+        _showingOverview = false;
       },
     );
   }

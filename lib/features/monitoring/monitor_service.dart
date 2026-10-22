@@ -151,6 +151,25 @@ class MonitorService {
           MonitorState.fromJson(Map<String, dynamic>.from(v as Map)),
         ),
       );
+
+  /// Only expose observations for the current credentials and configuration.
+  Future<(MonitorConfig, Map<String, MonitorState>)> workspaceSnapshot(
+    List<ServerInstance> instances,
+  ) => bridge.transaction(() async {
+    final settings = await config();
+    final saved = await history();
+    final visible = <String, MonitorState>{};
+    for (final instance in instances) {
+      final state = saved[instance.id];
+      if (settings.ids.contains(instance.id) &&
+          instance.hasCredentials &&
+          state != null &&
+          state.fingerprint == await _fingerprint(instance)) {
+        visible[instance.id] = state;
+      }
+    }
+    return (settings, visible);
+  });
   Future<void> save(MonitorConfig config) async {
     await bridge.transaction(() async {
       MonitorConfig.fromJson(config.toJson());

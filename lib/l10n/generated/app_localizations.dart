@@ -2420,6 +2420,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resource unhealthy'**
   String get monitorResourceUnhealthy;
+
+  /// No description provided for @workspaceOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace overview'**
+  String get workspaceOverview;
+
+  /// No description provided for @overviewDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Observed states from this device. Open an instance to connect.'**
+  String get overviewDescription;
+
+  /// No description provided for @overviewMonitored.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 monitored} other{{count} monitored}}'**
+  String overviewMonitored(int count);
+
+  /// No description provided for @overviewAttention.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 needs attention} other{{count} need attention}}'**
+  String overviewAttention(int count);
+
+  /// No description provided for @overviewStale.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 outdated} other{{count} outdated}}'**
+  String overviewStale(int count);
+
+  /// No description provided for @overviewRecentEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent events'**
+  String get overviewRecentEvents;
+
+  /// No description provided for @overviewEventsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest 20 monitoring events from the last 30 days in this workspace.'**
+  String get overviewEventsDescription;
+
+  /// No description provided for @overviewNoEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent events. Enable monitoring to record changes.'**
+  String get overviewNoEvents;
+
+  /// No description provided for @overviewNotMonitored.
+  ///
+  /// In en, this message translates to:
+  /// **'Monitoring off'**
+  String get overviewNotMonitored;
+
+  /// No description provided for @overviewLastCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Last check: {time}'**
+  String overviewLastCheck(String time);
+
+  /// No description provided for @overviewLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load monitoring data. Refresh to try again.'**
+  String get overviewLoadError;
 }
 
 class _AppLocalizationsDelegate

@@ -1318,6 +1318,69 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get monitorResourceUnhealthy => 'Recurso con problemas';
+
+  @override
+  String get workspaceOverview => 'Vista general del workspace';
+
+  @override
+  String get overviewDescription =>
+      'Estados observados desde este dispositivo. Abre una instancia para conectar.';
+
+  @override
+  String overviewMonitored(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count supervisadas',
+      one: '1 supervisada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewAttention(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count requieren atención',
+      one: '1 requiere atención',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewStale(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count desactualizadas',
+      one: '1 desactualizada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get overviewRecentEvents => 'Eventos recientes';
+
+  @override
+  String get overviewEventsDescription =>
+      'Últimos 20 eventos de supervisión de los últimos 30 días en este workspace.';
+
+  @override
+  String get overviewNoEvents =>
+      'No hay eventos recientes. Activa la supervisión para registrar cambios.';
+
+  @override
+  String get overviewNotMonitored => 'Supervisión desactivada';
+
+  @override
+  String overviewLastCheck(String time) {
+    return 'Última comprobación: $time';
+  }
+
+  @override
+  String get overviewLoadError =>
+      'No se pudo cargar la supervisión. Actualiza para volver a intentarlo.';
 }
 
 /// The translations for Spanish Castilian, as used in Spain (`es_ES`).
@@ -2633,4 +2696,67 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get monitorResourceUnhealthy => 'Recurso con problemas';
+
+  @override
+  String get workspaceOverview => 'Vista general del workspace';
+
+  @override
+  String get overviewDescription =>
+      'Estados observados desde este dispositivo. Abre una instancia para conectar.';
+
+  @override
+  String overviewMonitored(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count supervisadas',
+      one: '1 supervisada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewAttention(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count requieren atención',
+      one: '1 requiere atención',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewStale(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count desactualizadas',
+      one: '1 desactualizada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get overviewRecentEvents => 'Eventos recientes';
+
+  @override
+  String get overviewEventsDescription =>
+      'Últimos 20 eventos de supervisión de los últimos 30 días en este workspace.';
+
+  @override
+  String get overviewNoEvents =>
+      'No hay eventos recientes. Activa la supervisión para registrar cambios.';
+
+  @override
+  String get overviewNotMonitored => 'Supervisión desactivada';
+
+  @override
+  String overviewLastCheck(String time) {
+    return 'Última comprobación: $time';
+  }
+
+  @override
+  String get overviewLoadError =>
+      'No se pudo cargar la supervisión. Actualiza para volver a intentarlo.';
 }

@@ -385,5 +385,44 @@
   "monitorDeploymentCancelled": "Deployment cancelado",
   "monitorResourceChanged": "Estado del recurso modificado",
   "monitorDeploymentFailed": "El despliegue ha fallado",
-  "monitorResourceUnhealthy": "Recurso con problemas"
+  "monitorResourceUnhealthy": "Recurso con problemas",
+  "workspaceOverview": "Vista general del workspace",
+  "overviewDescription": "Estados observados desde este dispositivo. Abre una instancia para conectar.",
+  "overviewMonitored": "{count, plural, =1{1 supervisada} other{{count} supervisadas}}",
+  "@overviewMonitored": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "overviewAttention": "{count, plural, =1{1 requiere atención} other{{count} requieren atención}}",
+  "@overviewAttention": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "overviewStale": "{count, plural, =1{1 desactualizada} other{{count} desactualizadas}}",
+  "@overviewStale": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "overviewRecentEvents": "Eventos recientes",
+  "overviewEventsDescription": "Últimos 20 eventos de supervisión de los últimos 30 días en este workspace.",
+  "overviewNoEvents": "No hay eventos recientes. Activa la supervisión para registrar cambios.",
+  "overviewNotMonitored": "Supervisión desactivada",
+  "overviewLastCheck": "Última comprobación: {time}",
+  "@overviewLastCheck": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "overviewLoadError": "No se pudo cargar la supervisión. Actualiza para volver a intentarlo."
 }

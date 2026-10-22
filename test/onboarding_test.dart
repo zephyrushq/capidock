@@ -1,10 +1,12 @@
 import 'package:capidock/app.dart';
+import 'package:capidock/features/monitoring/monitor_service.dart';
 import 'package:capidock/l10n/locale_controller.dart';
 import 'package:capidock/features/workspaces/domain/dock_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'test_support.dart';
+import 'monitor_support.dart';
 import 'widget_test.dart' as helpers;
 
 Future<void> next(WidgetTester tester) async {
@@ -76,6 +78,10 @@ void main() {
         await tester.pumpWidget(
           CapidockApp(
             controller: reopened,
+            monitorService: MonitorService(
+              secrets: MemorySecretStore(),
+              bridge: FakeMonitorBridge(),
+            ),
             localeController: LocaleController(
               preferences: MemoryPreferences(),
             ),

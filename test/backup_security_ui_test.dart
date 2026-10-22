@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:capidock/core/security/device_lock.dart';
+import 'package:capidock/features/monitoring/monitor_service.dart';
 import 'package:capidock/core/security/security_controls.dart';
 import 'package:capidock/features/backups/presentation/backup_page.dart';
 import 'package:capidock/features/settings/settings_page.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'settings_access_test.dart' show ToggleAuthenticator;
 import 'test_support.dart';
+import 'monitor_support.dart';
 
 void main() {
   for (final outcome in ['accepted', 'denied', 'timeout']) {
@@ -32,6 +34,10 @@ void main() {
           controller: controller,
           locales: locales,
           authenticator: auth,
+          monitoring: MonitorService(
+            secrets: MemorySecretStore(),
+            bridge: FakeMonitorBridge(),
+          ),
         ),
       );
       await tester.tap(find.text('Unlock'));

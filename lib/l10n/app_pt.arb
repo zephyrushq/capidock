@@ -385,5 +385,44 @@
   "monitorDeploymentCancelled": "Deployment cancelado",
   "monitorResourceChanged": "Estado do recurso alterado",
   "monitorDeploymentFailed": "Deployment falhou",
-  "monitorResourceUnhealthy": "Recurso com problemas"
+  "monitorResourceUnhealthy": "Recurso com problemas",
+  "workspaceOverview": "Visão geral do workspace",
+  "overviewDescription": "Estados observados neste dispositivo. Abra uma instância para ligar.",
+  "overviewMonitored": "{count, plural, =1{1 monitorizada} other{{count} monitorizadas}}",
+  "@overviewMonitored": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "overviewAttention": "{count, plural, =1{1 precisa de atenção} other{{count} precisam de atenção}}",
+  "@overviewAttention": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "overviewStale": "{count, plural, =1{1 desatualizada} other{{count} desatualizadas}}",
+  "@overviewStale": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "overviewRecentEvents": "Eventos recentes",
+  "overviewEventsDescription": "Últimos 20 eventos de monitorização dos últimos 30 dias neste workspace.",
+  "overviewNoEvents": "Sem eventos recentes. Ative a monitorização para registar alterações.",
+  "overviewNotMonitored": "Monitorização desativada",
+  "overviewLastCheck": "Última verificação: {time}",
+  "@overviewLastCheck": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "overviewLoadError": "Não foi possível carregar a monitorização. Atualize para tentar novamente."
 }

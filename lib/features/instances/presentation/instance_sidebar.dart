@@ -14,12 +14,14 @@ class InstanceSidebar extends StatefulWidget {
     required this.onAdd,
     required this.onSettings,
     required this.onManageWorkspaces,
+    required this.onOverview,
   });
   final DockController controller;
   final ValueChanged<String> onSelect;
   final VoidCallback onAdd;
   final VoidCallback onSettings;
   final VoidCallback onManageWorkspaces;
+  final VoidCallback onOverview;
 
   @override
   State<InstanceSidebar> createState() => _InstanceSidebarState();
@@ -94,6 +96,13 @@ class _InstanceSidebarState extends State<InstanceSidebar> {
                 ),
               ),
             ),
+          ),
+          ListTile(
+            key: const ValueKey('sidebar-workspace-overview'),
+            selected: widget.controller.showingOverview,
+            leading: const Icon(Icons.dashboard_outlined),
+            title: Text(context.l10n.workspaceOverview),
+            onTap: widget.onOverview,
           ),
           Padding(
             padding: const EdgeInsets.all(12),
@@ -224,9 +233,13 @@ class _InstanceSidebarState extends State<InstanceSidebar> {
           Padding(
             padding: const EdgeInsets.only(bottom: 5),
             child: Semantics(
-              selected: widget.controller.selected?.id == instance.id,
+              selected:
+                  !widget.controller.showingOverview &&
+                  widget.controller.selected?.id == instance.id,
               child: Material(
-                color: widget.controller.selected?.id == instance.id
+                color:
+                    !widget.controller.showingOverview &&
+                        widget.controller.selected?.id == instance.id
                     ? const Color(0xFF2E2243)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(10),
@@ -244,7 +257,9 @@ class _InstanceSidebarState extends State<InstanceSidebar> {
                         Icon(
                           Icons.tag_rounded,
                           size: 21,
-                          color: widget.controller.selected?.id == instance.id
+                          color:
+                              !widget.controller.showingOverview &&
+                                  widget.controller.selected?.id == instance.id
                               ? DockColors.purple
                               : DockColors.muted,
                         ),
@@ -258,7 +273,9 @@ class _InstanceSidebarState extends State<InstanceSidebar> {
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color:
-                                  widget.controller.selected?.id == instance.id
+                                  !widget.controller.showingOverview &&
+                                      widget.controller.selected?.id ==
+                                          instance.id
                                   ? DockColors.text
                                   : DockColors.muted,
                             ),

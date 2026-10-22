@@ -72,6 +72,9 @@ the AI-generated artwork's provenance is recorded in the
 
 ## Current features
 
+- Workspace overview with tappable instance cards, last observed monitoring
+  states and check times, stale-data indicators, and the latest 20 events from
+  that workspace's retained monitoring history.
 - **Workspaces → SSH / Coolify instances**, with a Discord-inspired rail, channel search, moving instances, and workspace management.
 - Welcome screen whenever no workspaces exist: name the workspace, name the first instance, then choose and configure SSH or Coolify. Creation is saved atomically; an interrupted setup leaves no partial workspace.
 - Encrypted local storage for workspace names, addresses, usernames, passwords, private keys, passphrases, and API tokens. Android uses `flutter_secure_storage` with AES-GCM and an Android Keystore-protected key. No Capidock account, backend, telemetry, or synchronization.
@@ -98,6 +101,22 @@ Coolify starts with [GET /api/v1/resources](https://coolify.io/docs/api/endpoint
 ## Navigation and connection lifecycle
 
 Open the sidebar on your phone. The left rail shows your workspaces; **+** creates another. Selecting a workspace shows its instances. **New instance (`Nova instância`)** adds a channel to that workspace.
+
+Saved workspaces open on **Workspace overview**. Cards open the corresponding
+instance; the dashboard button in the header or the overview entry in the
+sidebar returns to the overview. Monitoring can be configured directly from
+this screen. Refreshing the overview reads saved observations without starting
+network probes or enabling monitoring. States are observed from this device,
+with a last-check timestamp and a stale indicator after twice the configured
+background interval. Disabled monitoring, pending checks and read failures are
+shown separately. Recent events are scoped to the current workspace, sorted
+newest first and limited to 20 entries from the last 30 days. Editing an
+instance's access details hides observations for its previous configuration.
+
+Dashboard previews: [phone](docs/previews/workspace-dashboard-390.png) and
+[tablet](docs/previews/workspace-dashboard-1024.png). These previews use
+test-only monitoring observations. Regenerate them with `FLUTTER_ROOT` set and
+`flutter test tool/testing/workspace_overview_preview_test.dart`.
 
 Tap the workspace name or **Manage workspaces (`Gerir workspaces`)** to rename or remove a workspace. With at least two workspaces, **⋯ → Move to workspace (`Mover para workspace`)** moves an instance and its credentials together.
 

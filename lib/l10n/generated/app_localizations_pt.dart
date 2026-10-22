@@ -1317,6 +1317,69 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get monitorResourceUnhealthy => 'Recurso com problemas';
+
+  @override
+  String get workspaceOverview => 'Visão geral do workspace';
+
+  @override
+  String get overviewDescription =>
+      'Estados observados neste dispositivo. Abra uma instância para ligar.';
+
+  @override
+  String overviewMonitored(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count monitorizadas',
+      one: '1 monitorizada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewAttention(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count precisam de atenção',
+      one: '1 precisa de atenção',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewStale(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count desatualizadas',
+      one: '1 desatualizada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get overviewRecentEvents => 'Eventos recentes';
+
+  @override
+  String get overviewEventsDescription =>
+      'Últimos 20 eventos de monitorização dos últimos 30 dias neste workspace.';
+
+  @override
+  String get overviewNoEvents =>
+      'Sem eventos recentes. Ative a monitorização para registar alterações.';
+
+  @override
+  String get overviewNotMonitored => 'Monitorização desativada';
+
+  @override
+  String overviewLastCheck(String time) {
+    return 'Última verificação: $time';
+  }
+
+  @override
+  String get overviewLoadError =>
+      'Não foi possível carregar a monitorização. Atualize para tentar novamente.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -2631,6 +2694,69 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get monitorResourceUnhealthy => 'Recurso com problemas';
+
+  @override
+  String get workspaceOverview => 'Visão geral do workspace';
+
+  @override
+  String get overviewDescription =>
+      'Estados observados neste dispositivo. Abra uma instância para conectar.';
+
+  @override
+  String overviewMonitored(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count monitoradas',
+      one: '1 monitorada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewAttention(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count precisam de atenção',
+      one: '1 precisa de atenção',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewStale(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count desatualizadas',
+      one: '1 desatualizada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get overviewRecentEvents => 'Eventos recentes';
+
+  @override
+  String get overviewEventsDescription =>
+      'Últimos 20 eventos de monitoramento dos últimos 30 dias neste workspace.';
+
+  @override
+  String get overviewNoEvents =>
+      'Sem eventos recentes. Ative o monitoramento para registrar alterações.';
+
+  @override
+  String get overviewNotMonitored => 'Monitoramento desativado';
+
+  @override
+  String overviewLastCheck(String time) {
+    return 'Última verificação: $time';
+  }
+
+  @override
+  String get overviewLoadError =>
+      'Não foi possível carregar o monitoramento. Atualize para tentar novamente.';
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).
@@ -3945,4 +4071,67 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get monitorResourceUnhealthy => 'Recurso com problemas';
+
+  @override
+  String get workspaceOverview => 'Visão geral do workspace';
+
+  @override
+  String get overviewDescription =>
+      'Estados observados neste dispositivo. Abra uma instância para ligar.';
+
+  @override
+  String overviewMonitored(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count monitorizadas',
+      one: '1 monitorizada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewAttention(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count precisam de atenção',
+      one: '1 precisa de atenção',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overviewStale(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count desatualizadas',
+      one: '1 desatualizada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get overviewRecentEvents => 'Eventos recentes';
+
+  @override
+  String get overviewEventsDescription =>
+      'Últimos 20 eventos de monitorização dos últimos 30 dias neste workspace.';
+
+  @override
+  String get overviewNoEvents =>
+      'Sem eventos recentes. Ative a monitorização para registar alterações.';
+
+  @override
+  String get overviewNotMonitored => 'Monitorização desativada';
+
+  @override
+  String overviewLastCheck(String time) {
+    return 'Última verificação: $time';
+  }
+
+  @override
+  String get overviewLoadError =>
+      'Não foi possível carregar a monitorização. Atualize para tentar novamente.';
 }
