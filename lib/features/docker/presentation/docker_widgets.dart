@@ -18,6 +18,8 @@ String dockerError(BuildContext context, Object error) {
     DockerFailure.disconnected ||
     DockerFailure.cancelled => strings.terminalDisconnected,
     DockerFailure.failed => strings.dockerFailed,
+    DockerFailure.nameConflict => strings.dockerCreateNameConflict,
+    DockerFailure.imageUnavailable => strings.dockerCreateImageUnavailable,
   };
 }
 

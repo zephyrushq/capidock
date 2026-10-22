@@ -3,7 +3,7 @@
 Creates fresh credentials in a private directory. Never exposes a shell: the
 only accepted operations are a read-only probe, a synthetic container listing,
 a fixed container PTY command and a printf challenge. With --docker-container,
-additional allowlisted commands access only that disposable real container.
+additional allowlisted commands access only owned disposable real fixtures.
 Run with --config /tmp/<private-directory>/connection.json, then use that path
 as SSH_TEST_CONFIG when running test/ssh_transport_test.dart.
 """
@@ -26,9 +26,13 @@ import asyncssh
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--config', type=Path, required=True)
 parser.add_argument('--docker-container', help='Optional isolated real Docker container ID')
+parser.add_argument('--docker-create-name', help='Optional disposable creation fixture name')
 args = parser.parse_args()
 if args.docker_container and not re.fullmatch(r'[a-f0-9]{64}', args.docker_container):
     parser.error('Expected an immutable Docker container ID')
+if args.docker_create_name and not re.fullmatch(r'capidock-created-[a-f0-9]{12}', args.docker_create_name):
+    parser.error('Invalid Docker creation fixture name')
+docker_targets = {args.docker_container} if args.docker_container else set()
 args.config.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
 password = secrets.token_urlsafe(32)
 passphrase = secrets.token_urlsafe(32)
@@ -61,8 +65,9 @@ class Server(asyncssh.SSHServer):
 
 
 async def real_docker(process):
-    """Allowlisted Docker operations confined to one disposable container."""
+    """Allowlisted Docker operations confined to owned disposable fixtures."""
     target = args.docker_container
+    targets = docker_targets
     command = process.command or ''
     terminal_prefix = f'docker exec -it {target} '
     if command in (terminal_prefix + 'sh', terminal_prefix + 'bash'):
@@ -107,25 +112,50 @@ async def real_docker(process):
     if merge_logs:
         argv = argv[:-1]
     valid = False
-    if argv[:5] == ['docker', 'ps', '-a', '--no-trunc', '--format'] and len(argv) == 6:
+    creation = False
+    payload = None
+    if argv[:2] == ['docker', 'create'] and args.docker_create_name:
+        # Only one inert Alpine fixture, with owned mounts and loopback ports.
+        options = argv[2:-1]
+        if len(options) % 2 or argv[-1] != 'alpine:3.21':
+            process.exit(1)
+            return True
+        pairs = list(zip(options[::2], options[1::2]))
+        expected = [('--name', args.docker_create_name), ('--env-file', '/dev/stdin')]
+        valid = pairs[:2] == expected and all(
+            (key == '--publish' and value == '127.0.0.1:18080:80/tcp') or
+            (key == '--mount' and value == f'type=volume,source={args.docker_create_name}-data,target=/data')
+            for key, value in pairs[2:])
+        if valid:
+            creation = True
+            payload = (await process.stdin.read()).encode()
+            if len(payload) > 65536:
+                process.exit(1)
+                return True
+            argv[2:2] = ['--label', f'capidock.smoke.parent={target}']
+    elif argv[:5] == ['docker', 'ps', '-a', '--no-trunc', '--format'] and len(argv) == 6:
         # Never enumerate unrelated containers on the developer's Docker host.
-        argv[2:2] = ['--filter', f'id={target}']
+        argv[2:2] = [part for identity in targets for part in ('--filter', f'id={identity}')]
         valid = True
     elif argv[:5] == ['docker', 'inspect', '--type', 'container', '--format'] and len(argv) == 7:
-        valid = argv[-1] == target
+        valid = argv[-1] in targets
     elif argv[:5] == ['docker', 'stats', '--no-stream', '--no-trunc', '--format'] and len(argv) == 7:
-        valid = argv[-1] == target
+        valid = argv[-1] in targets
     elif argv[:5] == ['docker', 'logs', '--tail', '200', '--timestamps'] and len(argv) == 6:
-        valid = argv[-1] == target and merge_logs
+        valid = argv[-1] in targets and merge_logs
     elif len(argv) == 3 and argv[0] == 'docker' and argv[1] in ('start', 'stop', 'restart'):
-        valid = argv[-1] == target
+        valid = argv[-1] in targets
     if not valid:
         process.stderr.write('Outside Docker smoke-test scope\n')
         process.exit(1)
         return True
-    child = await asyncio.create_subprocess_exec(*argv, stdout=asyncio.subprocess.PIPE,
+    child = await asyncio.create_subprocess_exec(*argv, stdin=asyncio.subprocess.PIPE if creation else None, stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.STDOUT if merge_logs else asyncio.subprocess.PIPE)
-    stdout, stderr = await child.communicate()
+    stdout, stderr = await child.communicate(payload)
+    if creation and child.returncode == 0:
+        identity = stdout.decode().strip()
+        if re.fullmatch(r'[a-f0-9]{64}', identity):
+            targets.add(identity)
     process.stdout.write(stdout.decode(errors='replace'))
     if stderr:
         process.stderr.write(stderr.decode(errors='replace'))
@@ -193,7 +223,7 @@ async def main():
         server_host_keys=[asyncssh.generate_private_key('ssh-ed25519')],
         process_factory=handle,
         sftp_factory=lambda channel: asyncssh.SFTPServer(channel, chroot=str(remote_root)))
-    config = dict(dockerId=args.docker_container, port=server.get_port(), username='capidock-test', password=password,
+    config = dict(dockerId=args.docker_container, dockerCreateName=args.docker_create_name, port=server.get_port(), username='capidock-test', password=password,
         privateKey=client_key.export_private_key('openssh', passphrase=passphrase).decode(),
         passphrase=passphrase)
     fd = os.open(args.config, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)

@@ -314,6 +314,11 @@ class SshConnection extends ChangeNotifier {
           drain(session.stdout, stdout),
           drain(session.stderr, stderr),
           session.done,
+          if (command.input != null)
+            () async {
+              session!.write(utf8.encode(command.input!));
+              await session.stdin.close();
+            }(),
         ], eagerError: true),
       ).timeout(command.timeout);
       if (!_active(generation)) {

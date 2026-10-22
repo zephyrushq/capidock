@@ -5,6 +5,7 @@ import 'package:capidock/features/connections/data/host_key_store.dart';
 import 'package:capidock/features/connections/data/ssh_connection.dart';
 import 'package:capidock/features/docker/data/docker_client.dart';
 import 'package:capidock/features/docker/data/docker_command.dart';
+import 'package:capidock/features/docker/data/docker_create_spec.dart';
 import 'package:capidock/features/instances/domain/server_instance.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -15,7 +16,7 @@ const configPath = String.fromEnvironment('DOCKER_SSH_TEST_CONFIG');
 
 void main() {
   test(
-    'Real Docker over SSH lists, inspects, measures, logs and controls one isolated container',
+    'Real Docker over SSH manages and creates isolated containers',
     () async {
       final config = jsonDecode(
         File(configPath).readAsStringSync(),
@@ -86,6 +87,55 @@ void main() {
       expect((await client.details(id)).running, isTrue);
       await client.act(DockerOperation.restart, id);
       expect((await client.details(id)).running, isTrue);
+      final createdName = config['dockerCreateName'] as String;
+      const environmentValue =
+          r"literal ' quote $(printf SHOULD_NOT_RUN) `id` = trailing ";
+      final spec = DockerCreateSpec(
+        image: 'alpine:3.21',
+        name: createdName,
+        ports: [
+          DockerPortMapping(
+            hostAddress: '127.0.0.1',
+            hostPort: 18080,
+            containerPort: 80,
+          ),
+        ],
+        environment: [
+          DockerEnvironment('CAPIDOCK_TEST_VALUE', environmentValue),
+          DockerEnvironment('CAPIDOCK_EMPTY', ''),
+        ],
+        mounts: [
+          DockerMount(
+            type: DockerMountType.volume,
+            source: '$createdName-data',
+            target: '/data',
+          ),
+        ],
+      );
+      final createdId = await client.create(spec);
+      final created = await client.details(createdId);
+      expect(created.state, 'created');
+      expect(created.running, isFalse);
+      expect(created.ports.keys, contains('80/tcp'));
+      expect(created.mounts.single['destination'], '/data');
+      final inspected = await Process.run('docker', ['inspect', createdId]);
+      expect(inspected.exitCode, 0);
+      final data =
+          (jsonDecode(inspected.stdout as String) as List).single as Map;
+      expect(
+        (data['Config'] as Map)['Env'],
+        contains('CAPIDOCK_TEST_VALUE=$environmentValue'),
+      );
+      expect((data['Config'] as Map)['Env'], contains('CAPIDOCK_EMPTY='));
+      expect(
+        (data['HostConfig'] as Map)['PortBindings']['80/tcp'][0]['HostIp'],
+        '127.0.0.1',
+      );
+      expect(
+        (data['HostConfig'] as Map)['PortBindings']['80/tcp'][0]['HostPort'],
+        '18080',
+      );
+      expect((await client.containers()).map((c) => c.id), contains(createdId));
       final second = await client.terminal(id, 'sh');
       addTearDown(second.dispose);
       ssh.disconnect();

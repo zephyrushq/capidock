@@ -4,6 +4,7 @@ import '../../connections/data/ssh_connection.dart';
 import '../../connections/data/ssh_terminal_channel.dart';
 import 'docker_command.dart';
 import 'docker_models.dart';
+import 'docker_create_spec.dart';
 
 class DockerClient {
   DockerClient(this.connection);
@@ -21,20 +22,29 @@ class DockerClient {
   }
 
   Future<String> _run(DockerOperation operation, [String? id]) async {
+    return _execute(DockerCommand(operation, id: id));
+  }
+
+  Future<String> _execute(DockerCommand command) async {
     if (_disposed) throw const DockerException(DockerFailure.cancelled);
     final token = _cancellation;
     try {
-      final result = await connection.executeDocker(
-        DockerCommand(operation, id: id),
-        token,
-      );
+      final result = await connection.executeDocker(command, token);
       if (_disposed || token.cancelled) {
         throw const DockerException(DockerFailure.cancelled);
       }
       if (result.exitCode != 0) {
         final message = '${result.stderr}\n${result.stdout}'.toLowerCase();
         throw DockerException(
-          result.exitCode == 127
+          command.operation == DockerOperation.create &&
+                  message.contains('already in use')
+              ? DockerFailure.nameConflict
+              : command.operation == DockerOperation.create &&
+                    (message.contains('pull access denied') ||
+                        message.contains('manifest unknown') ||
+                        message.contains('repository does not exist'))
+              ? DockerFailure.imageUnavailable
+              : result.exitCode == 127
               ? DockerFailure.notInstalled
               : message.contains('permission denied')
               ? DockerFailure.permission
@@ -87,6 +97,13 @@ class DockerClient {
     }
     await _run(operation, id);
   }
+
+  Future<String> create(DockerCreateSpec spec) =>
+      _parse(_execute(DockerCommand.create(spec)), (raw) {
+        final id = raw.trim();
+        validateContainerId(id);
+        return id;
+      });
 
   Future<SshTerminalChannel> terminal(String id, String shell) async {
     final token = _cancellation;

@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../test/docker_test_support.dart';
+import '../../test/docker_create_ui_test.dart' as creation;
 
 void main() {
   testWidgets(
@@ -82,6 +83,30 @@ void main() {
       }
 
       await capture('containers');
+      await tester.tap(find.byKey(const ValueKey('docker-create-container')));
+      await tester.pumpAndSettle();
+      await creation.identity(tester);
+      await creation.tap(tester, 'docker-add-port');
+      await creation.enter(tester, 'docker-port-host-0', '8080');
+      await creation.enter(tester, 'docker-port-target-0', '80');
+      await creation.tap(tester, 'docker-add-env');
+      await creation.enter(tester, 'docker-env-name-0', 'TOKEN');
+      await creation.enter(tester, 'docker-env-value-0', 'preview-only');
+      await creation.tap(tester, 'docker-add-mount');
+      await creation.enter(tester, 'docker-mount-source-0', 'web-data');
+      await creation.enter(tester, 'docker-mount-target-0', '/data');
+      tester
+          .state<ScrollableState>(find.byType(Scrollable).first)
+          .position
+          .jumpTo(0);
+      await tester.pumpAndSettle();
+      await capture('create');
+      await creation.tap(tester, 'docker-review-create');
+      await capture('create-review');
+      await tester.tap(find.text('Cancelar'));
+      await tester.pumpAndSettle();
+      Navigator.of(tester.element(find.byType(Scaffold).last)).pop();
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(ValueKey('docker-container-$dockerId')));
       await tester.pumpAndSettle();
       await capture('details');

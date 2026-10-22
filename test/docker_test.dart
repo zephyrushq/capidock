@@ -16,7 +16,7 @@ void main() {
     'Only full immutable IDs and fixed operations reach Docker commands',
     () {
       for (final operation in DockerOperation.values.where(
-        (v) => v != DockerOperation.list,
+        (v) => v != DockerOperation.list && v != DockerOperation.create,
       )) {
         for (final id in [
           'web',

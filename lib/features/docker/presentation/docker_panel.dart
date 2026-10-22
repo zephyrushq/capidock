@@ -9,6 +9,7 @@ import '../data/docker_client.dart';
 import '../data/docker_models.dart';
 import 'docker_container_page.dart';
 import 'docker_widgets.dart';
+import 'docker_create_page.dart';
 
 class DockerPanel extends StatefulWidget {
   const DockerPanel({
@@ -100,6 +101,31 @@ class _DockerPanelState extends State<DockerPanel> {
     }
   }
 
+  Future<void> _create() async {
+    final id = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => DockerCreatePage(connection: widget.connection),
+      ),
+    );
+    if (!mounted || !_connected) return;
+    await _load();
+    if (!mounted || !_connected || id == null) return;
+    final created = _containers.where((c) => c.id == id).firstOrNull;
+    if (created != null) {
+      await Navigator.push<void>(
+        context,
+        MaterialPageRoute(
+          builder: (_) => DockerContainerPage(
+            connection: widget.connection,
+            container: created,
+          ),
+        ),
+      );
+      if (mounted && _connected) _load();
+    }
+  }
+
   @override
   void dispose() {
     _generation++;
@@ -139,6 +165,13 @@ class _DockerPanelState extends State<DockerPanel> {
             label: Text(context.l10n.connectInstance),
           ),
         ] else ...[
+          FilledButton.icon(
+            key: const ValueKey('docker-create-container'),
+            onPressed: _busy ? null : _create,
+            icon: const Icon(Icons.add_box_outlined),
+            label: Text(context.l10n.dockerCreate),
+          ),
+          const SizedBox(height: 12),
           OutlinedButton.icon(
             onPressed: _busy ? null : _load,
             icon: const Icon(Icons.refresh),

@@ -1476,6 +1476,116 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get dockerUnavailable =>
       'O serviço Docker está indisponível. Verifique se está em execução e acessível a este utilizador SSH.';
+
+  @override
+  String get dockerCreate => 'Criar container';
+
+  @override
+  String get dockerCreateName => 'Nome do container';
+
+  @override
+  String get dockerCreateReview => 'Rever criação';
+
+  @override
+  String get dockerCreateStopped =>
+      'O container será criado parado. Pode iniciá-lo nos detalhes.';
+
+  @override
+  String get dockerCreatePullHelp =>
+      'As imagens em falta podem ser descarregadas com o acesso do servidor ao registo. Pode demorar alguns minutos. Sair deste ecrã não garante o cancelamento; verifique a lista antes de tentar novamente.';
+
+  @override
+  String get dockerCreatePortsHelp =>
+      'Adicione o IP e a porta do servidor e a porta do container (1–65535), com TCP ou UDP. O IP predefinido é apenas local; 0.0.0.0 ou :: expõe a porta em todas as interfaces correspondentes do servidor.';
+
+  @override
+  String get dockerCreateHostAddress => 'IP do servidor';
+
+  @override
+  String get dockerCreateHostPort => 'Porta do servidor';
+
+  @override
+  String get dockerCreateContainerPort => 'Porta do container';
+
+  @override
+  String get dockerCreateProtocol => 'Protocolo';
+
+  @override
+  String get dockerCreateEnvironment => 'Variáveis de ambiente';
+
+  @override
+  String get dockerCreateEnvironmentHelp =>
+      'Os valores ficam ocultos e apenas neste rascunho. Use nomes únicos; são permitidos valores vazios. Não são suportados valores com várias linhas.';
+
+  @override
+  String get dockerCreateVariableName => 'Nome da variável';
+
+  @override
+  String get dockerCreateVariableValue => 'Valor';
+
+  @override
+  String get dockerCreateMountsHelp =>
+      'Use um volume Docker ou um caminho absoluto existente no servidor, e um caminho absoluto no container. Os volumes nomeados são criados se não existirem. Montagens com escrita permitem alterar o seu conteúdo.';
+
+  @override
+  String get dockerCreateMountType => 'Tipo de montagem';
+
+  @override
+  String get dockerCreateNamedVolume => 'Volume nomeado';
+
+  @override
+  String get dockerCreateBindMount => 'Caminho do servidor (bind)';
+
+  @override
+  String get dockerCreateMountSource => 'Nome de origem ou caminho no servidor';
+
+  @override
+  String get dockerCreateMountTarget => 'Caminho no container';
+
+  @override
+  String get dockerCreateReadOnly => 'Somente leitura';
+
+  @override
+  String get dockerCreateInvalidImage =>
+      'Indique uma imagem válida, como nginx:alpine ou ghcr.io/equipa/app:tag.';
+
+  @override
+  String get dockerCreateInvalidName =>
+      'Use um nome iniciado por letra ou algarismo, seguido de letras, algarismos, pontos, sublinhados ou hífenes (até 128 caracteres).';
+
+  @override
+  String get dockerCreateInvalidPorts =>
+      'Verifique as portas: IPv4/IPv6 válido, portas de 1 a 65535, TCP/UDP e sem ligações de origem repetidas (até 32).';
+
+  @override
+  String get dockerCreateInvalidEnvironment =>
+      'Use nomes únicos com letras, algarismos e sublinhados, iniciados por letra ou sublinhado. Os valores devem ter uma linha (até 128 variáveis, 8 KiB por valor, 64 KiB no total).';
+
+  @override
+  String get dockerCreateInvalidMounts =>
+      'Verifique as montagens: destinos absolutos únicos diferentes de /, nomes de volume válidos ou caminhos absolutos no servidor, sem segmentos . ou .. (até 32).';
+
+  @override
+  String get dockerCreateExpired =>
+      'O rascunho foi limpo ao sair da aplicação ou desligar o SSH. Se confirmou a criação, verifique a lista antes de tentar novamente.';
+
+  @override
+  String get dockerCreateUncertain =>
+      'Não foi possível confirmar o resultado. O container pode existir. Volte à lista e atualize antes de criar outro container.';
+
+  @override
+  String get dockerCreateBackToList => 'Voltar aos containers';
+
+  @override
+  String get dockerCreateNameConflict =>
+      'Já existe um container com esse nome. Verifique a lista ou escolha outro nome.';
+
+  @override
+  String get dockerCreateImageUnavailable =>
+      'Não foi possível descarregar a imagem. Verifique o nome e o acesso do servidor ao registo.';
+
+  @override
+  String get dockerCreateReadWrite => 'Leitura e escrita';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -2949,6 +3059,116 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get dockerUnavailable =>
       'O serviço Docker está indisponível. Verifique se está em execução e acessível a este usuário SSH.';
+
+  @override
+  String get dockerCreate => 'Criar container';
+
+  @override
+  String get dockerCreateName => 'Nome do container';
+
+  @override
+  String get dockerCreateReview => 'Revisar criação';
+
+  @override
+  String get dockerCreateStopped =>
+      'O container será criado parado. Você pode iniciá-lo nos detalhes.';
+
+  @override
+  String get dockerCreatePullHelp =>
+      'As imagens em falta podem ser baixadas com o acesso do servidor ao registro. Pode demorar alguns minutos. Sair deste tela não garante o cancelamento; verifique a lista antes de tentar novamente.';
+
+  @override
+  String get dockerCreatePortsHelp =>
+      'Adicione o IP e a porta do servidor e a porta do container (1–65535), com TCP ou UDP. O IP padrão é apenas local; 0.0.0.0 ou :: expõe a porta em todas as interfaces correspondentes do servidor.';
+
+  @override
+  String get dockerCreateHostAddress => 'IP do servidor';
+
+  @override
+  String get dockerCreateHostPort => 'Porta do servidor';
+
+  @override
+  String get dockerCreateContainerPort => 'Porta do container';
+
+  @override
+  String get dockerCreateProtocol => 'Protocolo';
+
+  @override
+  String get dockerCreateEnvironment => 'Variáveis de ambiente';
+
+  @override
+  String get dockerCreateEnvironmentHelp =>
+      'Os valores ficam ocultos e apenas neste rascunho. Use nomes únicos; são permitidos valores vazios. Não são suportados valores com várias linhas.';
+
+  @override
+  String get dockerCreateVariableName => 'Nome da variável';
+
+  @override
+  String get dockerCreateVariableValue => 'Valor';
+
+  @override
+  String get dockerCreateMountsHelp =>
+      'Use um volume Docker ou um caminho absoluto existente no servidor, e um caminho absoluto no container. Os volumes nomeados são criados se não existirem. Montagens com escrita permitem alterar o seu conteúdo.';
+
+  @override
+  String get dockerCreateMountType => 'Tipo de montagem';
+
+  @override
+  String get dockerCreateNamedVolume => 'Volume nomeado';
+
+  @override
+  String get dockerCreateBindMount => 'Caminho do servidor (bind)';
+
+  @override
+  String get dockerCreateMountSource => 'Nome de origem ou caminho no servidor';
+
+  @override
+  String get dockerCreateMountTarget => 'Caminho no container';
+
+  @override
+  String get dockerCreateReadOnly => 'Somente leitura';
+
+  @override
+  String get dockerCreateInvalidImage =>
+      'Informe uma imagem válida, como nginx:alpine ou ghcr.io/equipe/app:tag.';
+
+  @override
+  String get dockerCreateInvalidName =>
+      'Use um nome iniciado por letra ou dígito, seguido de letras, dígitos, pontos, sublinhados ou hífens (até 128 caracteres).';
+
+  @override
+  String get dockerCreateInvalidPorts =>
+      'Verifique as portas: IPv4/IPv6 válido, portas de 1 a 65535, TCP/UDP e sem ligações de origem repetidas (até 32).';
+
+  @override
+  String get dockerCreateInvalidEnvironment =>
+      'Use nomes únicos com letras, dígitos e sublinhados, iniciados por letra ou sublinhado. Os valores devem ter uma linha (até 128 variáveis, 8 KiB por valor, 64 KiB no total).';
+
+  @override
+  String get dockerCreateInvalidMounts =>
+      'Verifique as montagens: destinos absolutos únicos diferentes de /, nomes de volume válidos ou caminhos absolutos no servidor, sem segmentos . ou .. (até 32).';
+
+  @override
+  String get dockerCreateExpired =>
+      'O rascunho foi limpo ao sair da aplicativo ou desligar o SSH. Se confirmou a criação, verifique a lista antes de tentar novamente.';
+
+  @override
+  String get dockerCreateUncertain =>
+      'Não foi possível confirmar o resultado. O container pode existir. Volte à lista e atualize antes de criar outro container.';
+
+  @override
+  String get dockerCreateBackToList => 'Voltar aos containers';
+
+  @override
+  String get dockerCreateNameConflict =>
+      'Já existe um container com esse nome. Verifique a lista ou escolha outro nome.';
+
+  @override
+  String get dockerCreateImageUnavailable =>
+      'Não foi possível baixar a imagem. Verifique o nome e o acesso do servidor ao registro.';
+
+  @override
+  String get dockerCreateReadWrite => 'Leitura e escrita';
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).
@@ -4422,4 +4642,114 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   @override
   String get dockerUnavailable =>
       'O serviço Docker está indisponível. Verifique se está em execução e acessível a este utilizador SSH.';
+
+  @override
+  String get dockerCreate => 'Criar container';
+
+  @override
+  String get dockerCreateName => 'Nome do container';
+
+  @override
+  String get dockerCreateReview => 'Rever criação';
+
+  @override
+  String get dockerCreateStopped =>
+      'O container será criado parado. Pode iniciá-lo nos detalhes.';
+
+  @override
+  String get dockerCreatePullHelp =>
+      'As imagens em falta podem ser descarregadas com o acesso do servidor ao registo. Pode demorar alguns minutos. Sair deste ecrã não garante o cancelamento; verifique a lista antes de tentar novamente.';
+
+  @override
+  String get dockerCreatePortsHelp =>
+      'Adicione o IP e a porta do servidor e a porta do container (1–65535), com TCP ou UDP. O IP predefinido é apenas local; 0.0.0.0 ou :: expõe a porta em todas as interfaces correspondentes do servidor.';
+
+  @override
+  String get dockerCreateHostAddress => 'IP do servidor';
+
+  @override
+  String get dockerCreateHostPort => 'Porta do servidor';
+
+  @override
+  String get dockerCreateContainerPort => 'Porta do container';
+
+  @override
+  String get dockerCreateProtocol => 'Protocolo';
+
+  @override
+  String get dockerCreateEnvironment => 'Variáveis de ambiente';
+
+  @override
+  String get dockerCreateEnvironmentHelp =>
+      'Os valores ficam ocultos e apenas neste rascunho. Use nomes únicos; são permitidos valores vazios. Não são suportados valores com várias linhas.';
+
+  @override
+  String get dockerCreateVariableName => 'Nome da variável';
+
+  @override
+  String get dockerCreateVariableValue => 'Valor';
+
+  @override
+  String get dockerCreateMountsHelp =>
+      'Use um volume Docker ou um caminho absoluto existente no servidor, e um caminho absoluto no container. Os volumes nomeados são criados se não existirem. Montagens com escrita permitem alterar o seu conteúdo.';
+
+  @override
+  String get dockerCreateMountType => 'Tipo de montagem';
+
+  @override
+  String get dockerCreateNamedVolume => 'Volume nomeado';
+
+  @override
+  String get dockerCreateBindMount => 'Caminho do servidor (bind)';
+
+  @override
+  String get dockerCreateMountSource => 'Nome de origem ou caminho no servidor';
+
+  @override
+  String get dockerCreateMountTarget => 'Caminho no container';
+
+  @override
+  String get dockerCreateReadOnly => 'Somente leitura';
+
+  @override
+  String get dockerCreateInvalidImage =>
+      'Indique uma imagem válida, como nginx:alpine ou ghcr.io/equipa/app:tag.';
+
+  @override
+  String get dockerCreateInvalidName =>
+      'Use um nome iniciado por letra ou algarismo, seguido de letras, algarismos, pontos, sublinhados ou hífenes (até 128 caracteres).';
+
+  @override
+  String get dockerCreateInvalidPorts =>
+      'Verifique as portas: IPv4/IPv6 válido, portas de 1 a 65535, TCP/UDP e sem ligações de origem repetidas (até 32).';
+
+  @override
+  String get dockerCreateInvalidEnvironment =>
+      'Use nomes únicos com letras, algarismos e sublinhados, iniciados por letra ou sublinhado. Os valores devem ter uma linha (até 128 variáveis, 8 KiB por valor, 64 KiB no total).';
+
+  @override
+  String get dockerCreateInvalidMounts =>
+      'Verifique as montagens: destinos absolutos únicos diferentes de /, nomes de volume válidos ou caminhos absolutos no servidor, sem segmentos . ou .. (até 32).';
+
+  @override
+  String get dockerCreateExpired =>
+      'O rascunho foi limpo ao sair da aplicação ou desligar o SSH. Se confirmou a criação, verifique a lista antes de tentar novamente.';
+
+  @override
+  String get dockerCreateUncertain =>
+      'Não foi possível confirmar o resultado. O container pode existir. Volte à lista e atualize antes de criar outro container.';
+
+  @override
+  String get dockerCreateBackToList => 'Voltar aos containers';
+
+  @override
+  String get dockerCreateNameConflict =>
+      'Já existe um container com esse nome. Verifique a lista ou escolha outro nome.';
+
+  @override
+  String get dockerCreateImageUnavailable =>
+      'Não foi possível descarregar a imagem. Verifique o nome e o acesso do servidor ao registo.';
+
+  @override
+  String get dockerCreateReadWrite => 'Leitura e escrita';
 }

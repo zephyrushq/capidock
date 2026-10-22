@@ -1463,6 +1463,116 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dockerUnavailable =>
       'The Docker daemon is unavailable. Check that it is running and accessible to this SSH user.';
+
+  @override
+  String get dockerCreate => 'Create container';
+
+  @override
+  String get dockerCreateName => 'Container name';
+
+  @override
+  String get dockerCreateReview => 'Review creation';
+
+  @override
+  String get dockerCreateStopped =>
+      'The container will be created stopped. You can start it from its details.';
+
+  @override
+  String get dockerCreatePullHelp =>
+      'Missing images may be downloaded using the server’s registry access. This can take a few minutes. Leaving this screen does not guarantee cancellation; check the container list before retrying.';
+
+  @override
+  String get dockerCreatePortsHelp =>
+      'Add a host IP, host port and container port (1–65535), and TCP or UDP. The default IP is local-only; 0.0.0.0 or :: exposes the port on all corresponding server interfaces.';
+
+  @override
+  String get dockerCreateHostAddress => 'Host IP';
+
+  @override
+  String get dockerCreateHostPort => 'Host port';
+
+  @override
+  String get dockerCreateContainerPort => 'Container port';
+
+  @override
+  String get dockerCreateProtocol => 'Protocol';
+
+  @override
+  String get dockerCreateEnvironment => 'Environment variables';
+
+  @override
+  String get dockerCreateEnvironmentHelp =>
+      'Values are hidden and kept only in this draft. Use unique variable names; empty values are allowed. Multiline values are not supported.';
+
+  @override
+  String get dockerCreateVariableName => 'Variable name';
+
+  @override
+  String get dockerCreateVariableValue => 'Value';
+
+  @override
+  String get dockerCreateMountsHelp =>
+      'Use a Docker volume name or an existing absolute path on the server, and an absolute container path. Named volumes are created if missing. Writable mounts allow the container to modify their contents.';
+
+  @override
+  String get dockerCreateMountType => 'Mount type';
+
+  @override
+  String get dockerCreateNamedVolume => 'Named volume';
+
+  @override
+  String get dockerCreateBindMount => 'Server path (bind)';
+
+  @override
+  String get dockerCreateMountSource => 'Source name or server path';
+
+  @override
+  String get dockerCreateMountTarget => 'Container path';
+
+  @override
+  String get dockerCreateReadOnly => 'Read only';
+
+  @override
+  String get dockerCreateInvalidImage =>
+      'Enter a valid image, for example nginx:alpine or ghcr.io/team/app:tag.';
+
+  @override
+  String get dockerCreateInvalidName =>
+      'Use a container name starting with a letter or digit, followed by letters, digits, dots, underscores or hyphens (up to 128 characters).';
+
+  @override
+  String get dockerCreateInvalidPorts =>
+      'Check port mappings: valid IPv4/IPv6 address, ports from 1 to 65535, TCP/UDP and no duplicate host bindings (up to 32).';
+
+  @override
+  String get dockerCreateInvalidEnvironment =>
+      'Use unique variable names containing letters, digits and underscores, starting with a letter or underscore. Values must be single-line (up to 128 variables, 8 KiB per value, 64 KiB total).';
+
+  @override
+  String get dockerCreateInvalidMounts =>
+      'Check mounts: unique absolute container paths other than /, valid volume names or absolute server paths, and no . or .. path segments (up to 32).';
+
+  @override
+  String get dockerCreateExpired =>
+      'This draft was cleared after leaving the app or disconnecting SSH. If you confirmed creation, check the container list before trying again.';
+
+  @override
+  String get dockerCreateUncertain =>
+      'The result could not be confirmed. The container may exist. Return to the list and refresh before creating another container.';
+
+  @override
+  String get dockerCreateBackToList => 'Back to containers';
+
+  @override
+  String get dockerCreateNameConflict =>
+      'That container name is already in use. Check the list or choose another name.';
+
+  @override
+  String get dockerCreateImageUnavailable =>
+      'The image could not be downloaded. Check its name and the server’s registry access.';
+
+  @override
+  String get dockerCreateReadWrite => 'Read and write';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -2923,6 +3033,116 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   @override
   String get dockerUnavailable =>
       'The Docker daemon is unavailable. Check that it is running and accessible to this SSH user.';
+
+  @override
+  String get dockerCreate => 'Create container';
+
+  @override
+  String get dockerCreateName => 'Container name';
+
+  @override
+  String get dockerCreateReview => 'Review creation';
+
+  @override
+  String get dockerCreateStopped =>
+      'The container will be created stopped. You can start it from its details.';
+
+  @override
+  String get dockerCreatePullHelp =>
+      'Missing images may be downloaded using the server’s registry access. This can take a few minutes. Leaving this screen does not guarantee cancellation; check the container list before retrying.';
+
+  @override
+  String get dockerCreatePortsHelp =>
+      'Add a host IP, host port and container port (1–65535), and TCP or UDP. The default IP is local-only; 0.0.0.0 or :: exposes the port on all corresponding server interfaces.';
+
+  @override
+  String get dockerCreateHostAddress => 'Host IP';
+
+  @override
+  String get dockerCreateHostPort => 'Host port';
+
+  @override
+  String get dockerCreateContainerPort => 'Container port';
+
+  @override
+  String get dockerCreateProtocol => 'Protocol';
+
+  @override
+  String get dockerCreateEnvironment => 'Environment variables';
+
+  @override
+  String get dockerCreateEnvironmentHelp =>
+      'Values are hidden and kept only in this draft. Use unique variable names; empty values are allowed. Multiline values are not supported.';
+
+  @override
+  String get dockerCreateVariableName => 'Variable name';
+
+  @override
+  String get dockerCreateVariableValue => 'Value';
+
+  @override
+  String get dockerCreateMountsHelp =>
+      'Use a Docker volume name or an existing absolute path on the server, and an absolute container path. Named volumes are created if missing. Writable mounts allow the container to modify their contents.';
+
+  @override
+  String get dockerCreateMountType => 'Mount type';
+
+  @override
+  String get dockerCreateNamedVolume => 'Named volume';
+
+  @override
+  String get dockerCreateBindMount => 'Server path (bind)';
+
+  @override
+  String get dockerCreateMountSource => 'Source name or server path';
+
+  @override
+  String get dockerCreateMountTarget => 'Container path';
+
+  @override
+  String get dockerCreateReadOnly => 'Read only';
+
+  @override
+  String get dockerCreateInvalidImage =>
+      'Enter a valid image, for example nginx:alpine or ghcr.io/team/app:tag.';
+
+  @override
+  String get dockerCreateInvalidName =>
+      'Use a container name starting with a letter or digit, followed by letters, digits, dots, underscores or hyphens (up to 128 characters).';
+
+  @override
+  String get dockerCreateInvalidPorts =>
+      'Check port mappings: valid IPv4/IPv6 address, ports from 1 to 65535, TCP/UDP and no duplicate host bindings (up to 32).';
+
+  @override
+  String get dockerCreateInvalidEnvironment =>
+      'Use unique variable names containing letters, digits and underscores, starting with a letter or underscore. Values must be single-line (up to 128 variables, 8 KiB per value, 64 KiB total).';
+
+  @override
+  String get dockerCreateInvalidMounts =>
+      'Check mounts: unique absolute container paths other than /, valid volume names or absolute server paths, and no . or .. path segments (up to 32).';
+
+  @override
+  String get dockerCreateExpired =>
+      'This draft was cleared after leaving the app or disconnecting SSH. If you confirmed creation, check the container list before trying again.';
+
+  @override
+  String get dockerCreateUncertain =>
+      'The result could not be confirmed. The container may exist. Return to the list and refresh before creating another container.';
+
+  @override
+  String get dockerCreateBackToList => 'Back to containers';
+
+  @override
+  String get dockerCreateNameConflict =>
+      'That container name is already in use. Check the list or choose another name.';
+
+  @override
+  String get dockerCreateImageUnavailable =>
+      'The image could not be downloaded. Check its name and the server’s registry access.';
+
+  @override
+  String get dockerCreateReadWrite => 'Read and write';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -4383,4 +4603,114 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String get dockerUnavailable =>
       'The Docker daemon is unavailable. Check that it is running and accessible to this SSH user.';
+
+  @override
+  String get dockerCreate => 'Create container';
+
+  @override
+  String get dockerCreateName => 'Container name';
+
+  @override
+  String get dockerCreateReview => 'Review creation';
+
+  @override
+  String get dockerCreateStopped =>
+      'The container will be created stopped. You can start it from its details.';
+
+  @override
+  String get dockerCreatePullHelp =>
+      'Missing images may be downloaded using the server’s registry access. This can take a few minutes. Leaving this screen does not guarantee cancellation; check the container list before retrying.';
+
+  @override
+  String get dockerCreatePortsHelp =>
+      'Add a host IP, host port and container port (1–65535), and TCP or UDP. The default IP is local-only; 0.0.0.0 or :: exposes the port on all corresponding server interfaces.';
+
+  @override
+  String get dockerCreateHostAddress => 'Host IP';
+
+  @override
+  String get dockerCreateHostPort => 'Host port';
+
+  @override
+  String get dockerCreateContainerPort => 'Container port';
+
+  @override
+  String get dockerCreateProtocol => 'Protocol';
+
+  @override
+  String get dockerCreateEnvironment => 'Environment variables';
+
+  @override
+  String get dockerCreateEnvironmentHelp =>
+      'Values are hidden and kept only in this draft. Use unique variable names; empty values are allowed. Multiline values are not supported.';
+
+  @override
+  String get dockerCreateVariableName => 'Variable name';
+
+  @override
+  String get dockerCreateVariableValue => 'Value';
+
+  @override
+  String get dockerCreateMountsHelp =>
+      'Use a Docker volume name or an existing absolute path on the server, and an absolute container path. Named volumes are created if missing. Writable mounts allow the container to modify their contents.';
+
+  @override
+  String get dockerCreateMountType => 'Mount type';
+
+  @override
+  String get dockerCreateNamedVolume => 'Named volume';
+
+  @override
+  String get dockerCreateBindMount => 'Server path (bind)';
+
+  @override
+  String get dockerCreateMountSource => 'Source name or server path';
+
+  @override
+  String get dockerCreateMountTarget => 'Container path';
+
+  @override
+  String get dockerCreateReadOnly => 'Read only';
+
+  @override
+  String get dockerCreateInvalidImage =>
+      'Enter a valid image, for example nginx:alpine or ghcr.io/team/app:tag.';
+
+  @override
+  String get dockerCreateInvalidName =>
+      'Use a container name starting with a letter or digit, followed by letters, digits, dots, underscores or hyphens (up to 128 characters).';
+
+  @override
+  String get dockerCreateInvalidPorts =>
+      'Check port mappings: valid IPv4/IPv6 address, ports from 1 to 65535, TCP/UDP and no duplicate host bindings (up to 32).';
+
+  @override
+  String get dockerCreateInvalidEnvironment =>
+      'Use unique variable names containing letters, digits and underscores, starting with a letter or underscore. Values must be single-line (up to 128 variables, 8 KiB per value, 64 KiB total).';
+
+  @override
+  String get dockerCreateInvalidMounts =>
+      'Check mounts: unique absolute container paths other than /, valid volume names or absolute server paths, and no . or .. path segments (up to 32).';
+
+  @override
+  String get dockerCreateExpired =>
+      'This draft was cleared after leaving the app or disconnecting SSH. If you confirmed creation, check the container list before trying again.';
+
+  @override
+  String get dockerCreateUncertain =>
+      'The result could not be confirmed. The container may exist. Return to the list and refresh before creating another container.';
+
+  @override
+  String get dockerCreateBackToList => 'Back to containers';
+
+  @override
+  String get dockerCreateNameConflict =>
+      'That container name is already in use. Check the list or choose another name.';
+
+  @override
+  String get dockerCreateImageUnavailable =>
+      'The image could not be downloaded. Check its name and the server’s registry access.';
+
+  @override
+  String get dockerCreateReadWrite => 'Read and write';
 }

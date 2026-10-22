@@ -5,6 +5,7 @@ import 'package:capidock/features/connections/data/host_key_store.dart';
 import 'package:capidock/features/connections/data/ssh_connection.dart';
 import 'package:capidock/features/connections/data/ssh_terminal_channel.dart';
 import 'package:capidock/features/docker/data/docker_command.dart';
+import 'package:capidock/features/docker/data/docker_create_spec.dart';
 import 'package:flutter/foundation.dart';
 import 'package:xterm/xterm.dart';
 
@@ -87,6 +88,8 @@ class FakeDockerConnection extends SshConnection {
   }
   final requests = <DockerCommand>[];
   bool running = true;
+  DockerCreateSpec? createdSpec;
+  final createdId = 'c' * 64;
   String? output;
   DockerException? failure;
   DockerOperation? failingOperation;
@@ -118,14 +121,34 @@ class FakeDockerConnection extends SshConnection {
       DockerOperation.list => [
         jsonEncode(dockerRow(dockerId, 'web', running ? 'running' : 'exited')),
         jsonEncode(dockerRow(dockerStoppedId, 'worker', 'exited')),
+        if (createdSpec != null)
+          jsonEncode({
+            ...dockerRow(createdId, createdSpec!.name, 'created'),
+            'Image': createdSpec!.image,
+            'Status': 'Created',
+          }),
       ].join('\n'),
       DockerOperation.inspect => jsonEncode(
-        dockerDetail(command.id!, running: running && command.id == dockerId),
+        command.id == createdId && createdSpec != null
+            ? {
+                ...dockerDetail(createdId, running: false),
+                'name': '/${createdSpec!.name}',
+                'image': createdSpec!.image,
+                'state': 'created',
+              }
+            : dockerDetail(
+                command.id!,
+                running: running && command.id == dockerId,
+              ),
       ),
       DockerOperation.stats => jsonEncode(dockerStatsRow(command.id!)),
       DockerOperation.logs => '2026-10-22T10:00:00Z hello from stdout\n2026-10-22T10:00:01Z stderr entry\n',
+      DockerOperation.create => createdId,
       _ => command.id!,
     };
+    if (command.operation == DockerOperation.create) {
+      createdSpec = command.creation;
+    }
     if (command.operation == DockerOperation.stop) running = false;
     if (command.operation == DockerOperation.start) running = true;
     return DockerCommandResult(output ?? raw, '', 0);

@@ -2648,6 +2648,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The Docker daemon is unavailable. Check that it is running and accessible to this SSH user.'**
   String get dockerUnavailable;
+
+  /// No description provided for @dockerCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create container'**
+  String get dockerCreate;
+
+  /// No description provided for @dockerCreateName.
+  ///
+  /// In en, this message translates to:
+  /// **'Container name'**
+  String get dockerCreateName;
+
+  /// No description provided for @dockerCreateReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review creation'**
+  String get dockerCreateReview;
+
+  /// No description provided for @dockerCreateStopped.
+  ///
+  /// In en, this message translates to:
+  /// **'The container will be created stopped. You can start it from its details.'**
+  String get dockerCreateStopped;
+
+  /// No description provided for @dockerCreatePullHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing images may be downloaded using the server’s registry access. This can take a few minutes. Leaving this screen does not guarantee cancellation; check the container list before retrying.'**
+  String get dockerCreatePullHelp;
+
+  /// No description provided for @dockerCreatePortsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a host IP, host port and container port (1–65535), and TCP or UDP. The default IP is local-only; 0.0.0.0 or :: exposes the port on all corresponding server interfaces.'**
+  String get dockerCreatePortsHelp;
+
+  /// No description provided for @dockerCreateHostAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Host IP'**
+  String get dockerCreateHostAddress;
+
+  /// No description provided for @dockerCreateHostPort.
+  ///
+  /// In en, this message translates to:
+  /// **'Host port'**
+  String get dockerCreateHostPort;
+
+  /// No description provided for @dockerCreateContainerPort.
+  ///
+  /// In en, this message translates to:
+  /// **'Container port'**
+  String get dockerCreateContainerPort;
+
+  /// No description provided for @dockerCreateProtocol.
+  ///
+  /// In en, this message translates to:
+  /// **'Protocol'**
+  String get dockerCreateProtocol;
+
+  /// No description provided for @dockerCreateEnvironment.
+  ///
+  /// In en, this message translates to:
+  /// **'Environment variables'**
+  String get dockerCreateEnvironment;
+
+  /// No description provided for @dockerCreateEnvironmentHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Values are hidden and kept only in this draft. Use unique variable names; empty values are allowed. Multiline values are not supported.'**
+  String get dockerCreateEnvironmentHelp;
+
+  /// No description provided for @dockerCreateVariableName.
+  ///
+  /// In en, this message translates to:
+  /// **'Variable name'**
+  String get dockerCreateVariableName;
+
+  /// No description provided for @dockerCreateVariableValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get dockerCreateVariableValue;
+
+  /// No description provided for @dockerCreateMountsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a Docker volume name or an existing absolute path on the server, and an absolute container path. Named volumes are created if missing. Writable mounts allow the container to modify their contents.'**
+  String get dockerCreateMountsHelp;
+
+  /// No description provided for @dockerCreateMountType.
+  ///
+  /// In en, this message translates to:
+  /// **'Mount type'**
+  String get dockerCreateMountType;
+
+  /// No description provided for @dockerCreateNamedVolume.
+  ///
+  /// In en, this message translates to:
+  /// **'Named volume'**
+  String get dockerCreateNamedVolume;
+
+  /// No description provided for @dockerCreateBindMount.
+  ///
+  /// In en, this message translates to:
+  /// **'Server path (bind)'**
+  String get dockerCreateBindMount;
+
+  /// No description provided for @dockerCreateMountSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Source name or server path'**
+  String get dockerCreateMountSource;
+
+  /// No description provided for @dockerCreateMountTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Container path'**
+  String get dockerCreateMountTarget;
+
+  /// No description provided for @dockerCreateReadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Read only'**
+  String get dockerCreateReadOnly;
+
+  /// No description provided for @dockerCreateInvalidImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid image, for example nginx:alpine or ghcr.io/team/app:tag.'**
+  String get dockerCreateInvalidImage;
+
+  /// No description provided for @dockerCreateInvalidName.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a container name starting with a letter or digit, followed by letters, digits, dots, underscores or hyphens (up to 128 characters).'**
+  String get dockerCreateInvalidName;
+
+  /// No description provided for @dockerCreateInvalidPorts.
+  ///
+  /// In en, this message translates to:
+  /// **'Check port mappings: valid IPv4/IPv6 address, ports from 1 to 65535, TCP/UDP and no duplicate host bindings (up to 32).'**
+  String get dockerCreateInvalidPorts;
+
+  /// No description provided for @dockerCreateInvalidEnvironment.
+  ///
+  /// In en, this message translates to:
+  /// **'Use unique variable names containing letters, digits and underscores, starting with a letter or underscore. Values must be single-line (up to 128 variables, 8 KiB per value, 64 KiB total).'**
+  String get dockerCreateInvalidEnvironment;
+
+  /// No description provided for @dockerCreateInvalidMounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Check mounts: unique absolute container paths other than /, valid volume names or absolute server paths, and no . or .. path segments (up to 32).'**
+  String get dockerCreateInvalidMounts;
+
+  /// No description provided for @dockerCreateExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This draft was cleared after leaving the app or disconnecting SSH. If you confirmed creation, check the container list before trying again.'**
+  String get dockerCreateExpired;
+
+  /// No description provided for @dockerCreateUncertain.
+  ///
+  /// In en, this message translates to:
+  /// **'The result could not be confirmed. The container may exist. Return to the list and refresh before creating another container.'**
+  String get dockerCreateUncertain;
+
+  /// No description provided for @dockerCreateBackToList.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to containers'**
+  String get dockerCreateBackToList;
+
+  /// No description provided for @dockerCreateNameConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'That container name is already in use. Check the list or choose another name.'**
+  String get dockerCreateNameConflict;
+
+  /// No description provided for @dockerCreateImageUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The image could not be downloaded. Check its name and the server’s registry access.'**
+  String get dockerCreateImageUnavailable;
+
+  /// No description provided for @dockerCreateReadWrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Read and write'**
+  String get dockerCreateReadWrite;
 }
 
 class _AppLocalizationsDelegate
