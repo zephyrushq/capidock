@@ -118,6 +118,8 @@ def main():
             "Connect directly using SSH or the Coolify API.",
             "",
             "Install the `.apk` file. Use `SHA256SUMS` to verify the download.",
+            "For Google Play, upload the `.aab` after comparing the SHA-256 in "
+            "`upload-certificate-info.txt` with your Play Console upload key certificate.",
             "Development builds use a different signature and cannot be updated directly "
             "with this APK. Preserve any important data before uninstalling an existing build.",
             "",

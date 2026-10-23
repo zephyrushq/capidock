@@ -9,15 +9,18 @@ server, user account system, paid service, or personal GitHub token.
 1. Calculates the version from `vMAJOR.MINOR.PATCH` tags and subsequent commits.
 2. Checks signing secrets, installs Flutter/JDK, and resolves the lockfile.
 3. Runs versioning tests, formatting checks, static analysis, and Flutter tests.
-4. Builds and verifies a signed Android release APK (API 24+).
-5. Publishes the tag, commit notes, `capidock-VERSION.apk`,
+4. Builds and verifies a signed Android release APK (API 24+) and AAB.
+5. Publishes the tag, commit notes, `capidock-VERSION.apk`, `capidock-VERSION.aab`,
+   `upload-certificate.pem`, `upload-certificate-info.txt`,
    `capidock-VERSION-source.tar.gz`, `LICENSE`, `LICENSE-TRADEMARKS`, `COPYRIGHT`,
    and `SHA256SUMS` in a GitHub Release. The same files remain available as a
    workflow artifact for 14 days; this retention period does not remove the
    GitHub Release assets.
 
-The APK includes the Android architectures supported by the Flutter build; it is
-not published to Google Play. SSH connects directly to your servers; Coolify resources are read from its API. Credentials remain encrypted locally.
+The APK includes the Android architectures supported by the Flutter build. The
+AAB is available for manual upload to Google Play; the workflow does not publish
+to Play. Both use the same version and existing signing key. SSH connects directly
+to your servers; Coolify resources are read from its API. Credentials remain encrypted locally.
 
 The source archive is generated directly from the commit identified in the notes
 and tag, including lockfiles, scripts, and build instructions. Package managers
@@ -100,6 +103,30 @@ not need permission to write commits to the branch.
 Without all four secrets, publishing fails with a clear error and does not release
 APKs signed with a temporary key. After configuration, use **Re-run all jobs**
 or push another commit to `release`.
+
+## Google Play bundles after moving to a new computer
+
+Keep the existing Android signing secrets in GitHub. Moving computers does not
+require a new key, and replacing the release key prevents ordinary updates to
+APKs already installed from GitHub.
+
+Each new **Android release** includes an obfuscated signed AAB, built with the
+same secrets as its APK. Download `capidock-VERSION.aab` from the GitHub Release
+or its Actions artifact. Its calculated Android `versionCode` must be greater
+than every code previously uploaded to Play, including testing tracks.
+
+Download `upload-certificate-info.txt` from the same release and compare its SHA-256
+with the **upload key certificate** in Play Console's Play App Signing settings.
+If they match, upload the `.aab`. The release also includes the public PEM
+certificate, matching source archive, licenses and checksums.
+Private signing keys and passwords are never included. Debug symbols are retained
+only as a separate encrypted artifact when `CAPIDOCK_SYMBOLS_PASSWORD` is set.
+
+If the certificates differ, this GitHub key is not the upload key currently
+registered in Play. With Play App Signing, request an upload-key reset using
+`upload-certificate.pem`, and wait for it to become active before uploading.
+This preserves the GitHub APK signing key and Google's app signing key.
+See [Android's upload key recovery instructions](https://developer.android.com/studio/publish/app-signing#reset-upload-key).
 
 ## Local development and validation
 

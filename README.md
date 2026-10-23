@@ -36,7 +36,7 @@ If `flutter doctor` reports missing `cmdline-tools`, install **Android SDK Comma
 
 ## Automated releases
 
-Every push to `release` triggers validation and publication of a signed APK in a
+Every push to `release` triggers validation and publication of a signed APK and AAB in a
 GitHub Release. Versions increase according to Conventional Commits (`feat`,
 `fix`, `BREAKING CHANGE`), and the About dialog displays the installed version.
 

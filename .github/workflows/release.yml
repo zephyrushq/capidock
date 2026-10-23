@@ -100,7 +100,7 @@ jobs:
           CAPIDOCK_TEST_PYTHON="$RUNNER_TEMP/ssh-tests/bin/python" bash tool/testing/run_ssh_smoke.sh
           CAPIDOCK_TEST_PYTHON="$RUNNER_TEMP/ssh-tests/bin/python" bash tool/testing/run_docker_smoke.sh
 
-      - name: Build signed APK and package source and notices
+      - name: Build signed APK and AAB and package source and notices
         if: steps.publication.outputs.needed == 'true'
         env:
           RELEASE_VERSION: ${{ steps.version.outputs.version }}
@@ -112,14 +112,20 @@ jobs:
           CAPIDOCK_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           flutter build apk --release --obfuscate --split-debug-info="$RUNNER_TEMP/capidock-symbols" --build-name "$RELEASE_VERSION" --build-number "$BUILD_NUMBER"
+          flutter build appbundle --release --obfuscate --split-debug-info="$RUNNER_TEMP/capidock-bundle-symbols" --build-name "$RELEASE_VERSION" --build-number "$BUILD_NUMBER"
           mkdir -p dist
           cp build/app/outputs/flutter-apk/app-release.apk "dist/capidock-$RELEASE_VERSION.apk"
+          cp build/app/outputs/bundle/release/app-release.aab "dist/capidock-$RELEASE_VERSION.aab"
           apksigner=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -n 1)
           "$apksigner" verify --verbose --print-certs "dist/capidock-$RELEASE_VERSION.apk"
+          jarsigner -J-Duser.language=en -verify "dist/capidock-$RELEASE_VERSION.aab" | tee "$RUNNER_TEMP/bundle-verification.txt"
+          grep -F 'jar verified.' "$RUNNER_TEMP/bundle-verification.txt"
+          keytool -exportcert -rfc -keystore "$CAPIDOCK_KEYSTORE_PATH" -storepass:env CAPIDOCK_KEYSTORE_PASSWORD -alias "$CAPIDOCK_KEY_ALIAS" -file dist/upload-certificate.pem
+          keytool -printcert -file dist/upload-certificate.pem > dist/upload-certificate-info.txt
           git archive --format=tar.gz --prefix="capidock-$RELEASE_VERSION/" --output="dist/capidock-$RELEASE_VERSION-source.tar.gz" "$RELEASE_SHA"
           cp LICENSE LICENSE-TRADEMARKS COPYRIGHT dist/
           cd dist
-          sha256sum "capidock-$RELEASE_VERSION.apk" "capidock-$RELEASE_VERSION-source.tar.gz" LICENSE LICENSE-TRADEMARKS COPYRIGHT > SHA256SUMS
+          sha256sum "capidock-$RELEASE_VERSION.apk" "capidock-$RELEASE_VERSION.aab" upload-certificate.pem upload-certificate-info.txt "capidock-$RELEASE_VERSION-source.tar.gz" LICENSE LICENSE-TRADEMARKS COPYRIGHT > SHA256SUMS
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: steps.publication.outputs.needed == 'true'
@@ -136,7 +142,7 @@ jobs:
           SYMBOLS_PASSWORD: ${{ secrets.CAPIDOCK_SYMBOLS_PASSWORD }}
         run: |
           if [ -n "$SYMBOLS_PASSWORD" ]; then
-            tar -czf "$RUNNER_TEMP/capidock-symbols.tar.gz" -C "$RUNNER_TEMP/capidock-symbols" .
+            tar -czf "$RUNNER_TEMP/capidock-symbols.tar.gz" -C "$RUNNER_TEMP" capidock-symbols capidock-bundle-symbols
             printf '%s' "$SYMBOLS_PASSWORD" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --symmetric --cipher-algo AES256 --output "$RUNNER_TEMP/capidock-symbols.tar.gz.gpg" "$RUNNER_TEMP/capidock-symbols.tar.gz"
             rm -f "$RUNNER_TEMP/capidock-symbols.tar.gz"
           else
